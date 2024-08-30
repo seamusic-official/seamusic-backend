@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: my_db
+    image: postgres:16.2
+    environment:
+      - POSTGRES_DB=${DB_NAME_TEST}
+      - POSTGRES_USER=${DB_USER_TEST}
+      - POSTGRES_PASSWORD=${DB_PASS_TEST}
+    ports:
+      - ${DB_PORT_TEST}:5432
+    restart: always
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
