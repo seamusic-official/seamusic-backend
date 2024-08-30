@@ -29,7 +29,6 @@ coverage.xml
 .python-version
 
 # poetry
-pyproject.toml
 poetry.lock
 
 # Environments
