@@ -1,4 +1,4 @@
-name: Backend CI
+name: check
 
 on: push
 
@@ -17,7 +17,6 @@ jobs:
         run: pip install flake8
       - name: Run flake8
         run: python -m flake8
-        working-directory: ./backend
   mypy:
     runs-on: ubuntu-latest
     steps:
@@ -32,4 +31,3 @@ jobs:
         run: pip install mypy
       - name: Run mypy
         run: python -m mypy -p src --ignore-missing-imports
-        working-directory: ./backend
