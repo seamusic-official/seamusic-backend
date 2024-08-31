@@ -18,13 +18,13 @@ class Settings(BaseSettings):
     spotify_redirect_uri: str = Field(default='', alias='SPOTIFY_REDIRECT_URI')
 
     db_host: str = Field(default='localhost', alias='DB_HOST')
-    db_port: int = Field(default=5432, alias='DB_PORT')
+    db_port: int = 5432
     db_name: str = Field(default='postgres', alias='DB_NAME')
     db_user: str = Field(default='postgres', alias='DB_USER')
     db_pass: str = Field(default='postgres', alias='DB_PASS')
 
     db_host_test: str = Field(default='localhost', alias='DB_HOST_TEST')
-    db_port_test: int = Field(default=5432, alias='DB_PORT_TEST')
+    db_port_test: int = 6000
     db_name_test: str = Field(default='postgres', alias='DB_NAME_TEST')
     db_user_test: str = Field(default='postgres', alias='DB_USER_TEST')
     db_pass_test: str = Field(default='postgres', alias='DB_PASS_TEST')
@@ -50,7 +50,7 @@ class Settings(BaseSettings):
     email_address: EmailStr = Field(default='', alias='EMAIL_ADDRESS')
     email_password: str = Field(default='', alias='EMAIL_PASSWORD')
     smtp_host: str = Field(default='', alias='SMTP_HOST')
-    smtp_port: str = Field(default='', alias='SMTP_PORT')
+    smtp_port: int = Field(default='', alias='SMTP_PORT')
 
 
 settings = Settings()

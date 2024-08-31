@@ -1,9 +1,7 @@
-from __future__ import annotations
-
 from sqlalchemy import BigInteger, ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.core.database import Base
+from src.models.base import Base
 
 
 class OnlyTelegramSubscribeMonth(Base):

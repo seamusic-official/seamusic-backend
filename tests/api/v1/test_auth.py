@@ -11,7 +11,7 @@ password = 'test_password'
 @pytest.mark.parametrize(
     'roles,expected_status_code,username,email_',
     [
-        ([Role.listener, Role.moder], 201, 'test_username2', email),
+        ([Role.listener, Role.admin], 201, 'test_username2', email),
         (['fake_role'], 400, 'test_username3', 'fake_test_email@example.com'),
         ([Role.listener], 403, 'test_username2', email)
     ]

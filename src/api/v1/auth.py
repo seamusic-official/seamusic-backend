@@ -34,7 +34,8 @@ from src.schemas.auth import (
     SUpdateProducerRequest,
     SUpdateProducerResponse,
     SDeleteProducerResponse,
-    SLoginResponse, Artist,
+    SLoginResponse,
+    Artist,
 )
 from src.services.auth import (
     AuthService,
@@ -48,6 +49,7 @@ from src.services.auth import (
 )
 from src.utils.auth import get_current_user
 from src.utils.files import unique_filename, get_file_stream
+
 
 auth_v1 = APIRouter(prefix='/v1/auth')  # included directly in main app to avoid using ExceptionMiddleware
 

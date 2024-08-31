@@ -5,7 +5,6 @@ from src.dtos.database.soundkits import (
     SoundkitsResponseDTO,
     SoundkitResponseDTO,
     CreateSoundkitRequestDTO,
-    CreateSoundkitResponseDTO,
     UpdateSoundkitResponseDTO,
     UpdateSoundkitRequestDTO
 )

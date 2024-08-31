@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Table, ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.core.database import Base
+from src.models.base import Base
+
 
 squad_artist_profile_association = Table(
     "squad_artist_profile_association",
