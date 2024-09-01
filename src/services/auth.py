@@ -30,8 +30,6 @@ from src.repositories.database.tags.base import BaseTagsRepository
 from src.repositories.database.tags.postgres import init_postgres_repository as init_tags_postgres_repository
 from src.repositories.media.s3 import S3Repository, init_s3_repository
 from src.services.base import BaseService
-from src.utils.auth import create_access_token, create_refresh_token, get_hashed_password, authenticate_user
-
 
 @dataclass
 class UsersDatabaseRepositories(DatabaseRepositories):
@@ -96,6 +94,7 @@ class UsersService(BaseService):
         birthday: date,
         tags: list[str],
     ) -> int:
+        from src.utils.auth import get_hashed_password
 
         existing_user: UserResponseDTO | None = await self.repositories.database.users.get_user_by_email(email=email)
         if existing_user:
@@ -305,6 +304,7 @@ class AuthService(BaseService):
 
     @staticmethod
     async def login(email: EmailStr, password: str) -> tuple[str, str, User]:
+        from src.utils.auth import authenticate_user, create_access_token, create_refresh_token
 
         user = await authenticate_user(email=email, password=password)
         if not user:
@@ -317,6 +317,7 @@ class AuthService(BaseService):
 
     @staticmethod
     async def refresh_token(user_id: int) -> tuple[str, str]:
+        from src.utils.auth import authenticate_user, create_access_token, create_refresh_token
 
         access_token = create_access_token({"sub": str(user_id)})
         refresh_token_ = create_refresh_token({"sub": str(user_id)})
@@ -325,6 +326,7 @@ class AuthService(BaseService):
 
     async def spotify_callback(self, code) -> tuple[str, str]:  # type: ignore[no-untyped-def]
         # old functional
+        from src.utils.auth import authenticate_user, create_access_token, create_refresh_token
         access_token = await self.repositories.api.login(code=code)
 
         if access_token:
