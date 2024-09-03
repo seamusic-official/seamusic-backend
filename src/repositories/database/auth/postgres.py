@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from pydantic import EmailStr
-from sqlalchemy import select, delete, func
+from sqlalchemy import select, delete
 
 from src.converters.repositories.database.sqlalchemy import model_to_response_dto, models_to_dto, request_dto_to_model
 from src.dtos.database.auth import (
@@ -43,8 +43,8 @@ class UsersRepository(BaseUsersRepository, SQLAlchemyRepository):
         return UsersResponseDTO(users=models_to_dto(models=users, dto=_User))
 
     async def get_users_count(self) -> int:
-        query = select([func.count()]).select_from(User)
-        return await self.scalar(query)
+        query = select(User.id).column('id')
+        return len(list(await self.scalars(query)))
 
     async def create_user(self, user: CreateUserRequestDTO) -> int:
         model = request_dto_to_model(request_dto=user, model=User)
@@ -77,8 +77,8 @@ class ArtistsRepository(BaseArtistsRepository, SQLAlchemyRepository):
         return ArtistsResponseDTO(artists=models_to_dto(models=artists, dto=Artist))
 
     async def get_artists_count(self) -> int:
-        query = select([func.count()]).select_from(ArtistProfile)
-        return await self.scalar(query)
+        query = select(ArtistProfile.id).column('id')
+        return len(list(await self.scalars(query)))
 
     async def create_artist(self, artist: CreateArtistRequestDTO) -> int:
         model = request_dto_to_model(request_dto=artist, model=ArtistProfile)
@@ -107,8 +107,8 @@ class ProducersRepository(BaseProducersRepository, SQLAlchemyRepository):
         return ProducersResponseDTO(producers=models_to_dto(models=producers, dto=Producer))
 
     async def get_producers_count(self) -> int:
-        query = select([func.count()]).select_from(ProducerProfile)
-        return await self.scalar(query)
+        query = select(ProducerProfile.id).column('id')
+        return len(list(await self.scalars(query)))
 
     async def create_producer(self, producer: CreateProducerRequestDTO) -> int:
         model = request_dto_to_model(request_dto=producer, model=ProducerProfile)

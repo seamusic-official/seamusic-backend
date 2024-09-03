@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from sqlalchemy import select, func
+from sqlalchemy import select
 
 from src.converters.repositories.database.sqlalchemy import request_dto_to_model, model_to_response_dto
 from src.dtos.database.subscriptions import (
@@ -30,8 +30,8 @@ class TelegramAccountRepository(SQLAlchemyRepository, BaseTelegramAccountReposit
         return TelegramAccountsIDSResponseDTO(ids=ids)
 
     async def get_telegram_accounts_ids_count(self) -> int:
-        query = select([func.count()]).select_from(TelegramAccount.telegram_id)
-        return await self.scalar(query)
+        query = select(TelegramAccount.id).column('id')
+        return len(list(await self.scalars(query)))
 
 
 def init_postgres_repository() -> TelegramAccountRepository:

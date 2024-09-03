@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from sqlalchemy import select, insert, func
+from sqlalchemy import select, insert
 
 from src.converters.repositories.database.sqlalchemy import request_dto_to_model, models_to_dto
 from src.dtos.database.tags import AddTagRequestDTO, TagsResponseDTO, Tag as _Tag, AddTagsRequestDTO
@@ -28,8 +28,8 @@ class TagsRepository(SQLAlchemyRepository, BaseTagsRepository):
         return TagsResponseDTO(tags=models_to_dto(models=tags, dto=_Tag))
 
     async def get_listener_tags_count(self, user_id: int) -> int:
-        query = select([func.count()]).select_from(User.tags).filter_by(id=user_id)
-        return await self.scalar(query)
+        query = select(User.tags).filter_by(user_id=user_id).column('id')
+        return len(list(await self.scalars(query)))
 
     async def get_producer_tags(self, producer_id: int, offset: int = 0, limit: int = 10) -> TagsResponseDTO:
         query = select(ProducerProfile.tags).filter_by(id=producer_id).offset(offset).limit(limit).order_by(Tag.updated_at.desc())
@@ -37,8 +37,8 @@ class TagsRepository(SQLAlchemyRepository, BaseTagsRepository):
         return TagsResponseDTO(tags=models_to_dto(models=tags, dto=_Tag))
 
     async def get_producer_tags_count(self, producer_id: int) -> int:
-        query = select([func.count()]).select_from(ProducerProfile.tags).filter_by(id=producer_id)
-        return await self.scalar(query)
+        query = select(ProducerProfile.tags).filter_by(id=producer_id).column('id')
+        return len(list(await self.scalars(query)))
 
     async def get_artist_tags(self, artist_id: int, offset: int = 0, limit: int = 10) -> TagsResponseDTO:
         query = select(ArtistProfile.tags).filter_by(id=artist_id).offset(offset).limit(limit).order_by(Tag.updated_at.desc())
@@ -46,8 +46,8 @@ class TagsRepository(SQLAlchemyRepository, BaseTagsRepository):
         return TagsResponseDTO(tags=models_to_dto(models=tags, dto=_Tag))
 
     async def get_artist_tags_count(self, artist_id: int) -> int:
-        query = select([func.count()]).select_from(ArtistProfile.tags).filter_by(id=artist_id)
-        return await self.scalar(query)
+        query = select(ArtistProfile.tags).filter_by(id=artist_id).column('id')
+        return len(list(await self.scalars(query)))
 
 
 def init_postgres_repository() -> TagsRepository:

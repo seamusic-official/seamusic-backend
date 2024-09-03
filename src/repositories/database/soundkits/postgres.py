@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from sqlalchemy import select, delete, func
+from sqlalchemy import select, delete
 
 from src.converters.repositories.database.sqlalchemy import request_dto_to_model, models_to_dto, model_to_response_dto
 from src.dtos.database.soundkits import (
@@ -23,8 +23,8 @@ class SoundkitsRepository(SQLAlchemyRepository, BaseSoundkitsRepository):
         return SoundkitsResponseDTO(soundkits=models_to_dto(models=soundkits, dto=_Soundkit))
 
     async def get_users_soundkits_count(self, user_id: int) -> int:
-        query = select([func.count()]).select_from(Soundkit).filter_by(user_id=user_id)
-        return await self.scalar(query)
+        query = select(Soundkit.id).filter_by(user_id=user_id).column('id')
+        return len(list(await self.scalars(query)))
 
     async def get_all_soundkits(self, offset: int = 0, limit: int = 10) -> SoundkitsResponseDTO:
         query = select(Soundkit).offset(offset).limit(limit).order_by(Soundkit.updated_at.desc())
@@ -32,8 +32,8 @@ class SoundkitsRepository(SQLAlchemyRepository, BaseSoundkitsRepository):
         return SoundkitsResponseDTO(soundkits=models_to_dto(models=soundkits, dto=_Soundkit))
 
     async def get_soundkits_count(self) -> int:
-        query = select([func.count()]).select_from(Soundkit)
-        return await self.scalar(query)
+        query = select(Soundkit.id).column('id')
+        return len(list(await self.scalars(query)))
 
     async def get_soundkit_by_id(self, soundkit_id: int) -> SoundkitResponseDTO | None:
         soundkit = await self.get(Soundkit, soundkit_id)
