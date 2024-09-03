@@ -16,7 +16,6 @@ from src.schemas.spotify import (
 )
 from src.services.spotify import SpotifyService, get_spotify_service
 
-
 spotify = APIRouter(prefix="/inspiration", tags=["Music & Albums"])
 
 
@@ -88,7 +87,7 @@ async def get_spotify_albums(
         lambda album: SpotifyAlbum(
             id=album.id,
             name=album.name,
-            image_url=jmespath.search(0, album.images),
+            image_url=jmespath.search('0', album.images),
             spotify_url=album.href,
         ),
         response.items
@@ -113,7 +112,7 @@ async def get_spotify_album(
     return SSpotifyAlbumResponse(
         id=album.id,
         name=album.name,
-        image_url=jmespath.search(0, album.images),
+        image_url=jmespath.search('0', album.images),
         spotify_url=album.href,
         release_date=album.release_date,
         artists=list(map(
@@ -122,7 +121,7 @@ async def get_spotify_album(
                     id=artist.id,
                     type=artist.type,
                     name=artist.name,
-                    image_url=jmespath.search(0, artist.images),
+                    image_url=jmespath.search('0', artist.images),
                     popularity=artist.popularity,
                 ),
             album.artists
@@ -166,7 +165,7 @@ async def get_spotify_artist(
         external_urls=artist.external_urls,
         type=artist.type,
         name=artist.name,
-        image_url=jmespath.search(0, artist.images),
+        image_url=jmespath.search('0', artist.images),
         popularity=artist.popularity,
     )
 
@@ -211,7 +210,7 @@ async def search(
             lambda album: SpotifyAlbum(
                 id=album.id,
                 name=album.name,
-                image_url=jmespath.search(0, album.images),
+                image_url=jmespath.search('0', album.images),
                 spotify_url=album.href,
             ),
             result.albums

@@ -26,4 +26,9 @@ class STelegramAccountResponse(BaseModel):
 
 
 class STelegramAccountsIDResponse(BaseModel):
-    ids: list[int]
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
+    items: list[int]

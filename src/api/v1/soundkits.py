@@ -2,17 +2,20 @@ from fastapi import UploadFile, File, APIRouter, Depends, status
 
 from src.dtos.database.soundkits import UpdateSoundkitRequestDTO
 from src.schemas.auth import User
+from src.schemas.base import Page
 from src.schemas.soundkits import (
     Soundkit,
     SSoundkitResponse,
     SUpdateSoundkitRequest,
     SSoundkitDeleteResponse,
-    SSoundkitsResponse, SCreateSoundkitResponse, SUpdateSoundkitResponse,
+    SAllSoundkitsResponse,
+    SCreateSoundkitResponse,
+    SUpdateSoundkitResponse,
+    SMySoundkitsResponse,
 )
 from src.services.soundkits import SoundkitsService, get_soundkits_service
 from src.utils.auth import get_current_user
 from src.utils.files import unique_filename, get_file_stream
-
 
 soundkits = APIRouter(prefix="/soundkits", tags=["Soundkits"])
 
@@ -21,14 +24,15 @@ soundkits = APIRouter(prefix="/soundkits", tags=["Soundkits"])
     path="/my",
     summary="soundkits by current user",
     status_code=status.HTTP_200_OK,
-    response_model=SSoundkitsResponse,
+    response_model=SMySoundkitsResponse,
 )
 async def get_user_soundkits(
+    page: Page,
     user: User = Depends(get_current_user),
     service: SoundkitsService = Depends(get_soundkits_service),
-) -> SSoundkitsResponse:
+) -> SMySoundkitsResponse:
 
-    response = await service.get_user_soundkits(user_id=user.id)
+    response = await service.get_user_soundkits(user_id=user.id, start=page.start, size=page.size)
 
     soundkits_ = list(map(
         lambda soundkit: Soundkit(
@@ -41,23 +45,35 @@ async def get_user_soundkits(
             prod_by=soundkit.prod_by,
             playlist_id=soundkit.playlist_id,
             user_id=soundkit.user_id,
-            beat_pack_id=soundkit.beat_pack_id,
+            beat_pack_id=soundkit.beatpack_id,
         ),
         response.soundkits
     ))
 
-    return SSoundkitsResponse(soundkits=soundkits_)
+    total = await service.get_user_soundkits_count(user_id=user.id)
+
+    return SMySoundkitsResponse(
+        total=total,
+        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+        has_next=page.start + page.size < total,
+        has_previous=page.start - page.size >= 0,
+        size=page.size,
+        items=soundkits_,
+    )
 
 
 @soundkits.get(
     path="/",
     summary="Get all soundkits",
     status_code=status.HTTP_200_OK,
-    response_model=SSoundkitsResponse,
+    response_model=SAllSoundkitsResponse,
 )
-async def all_soundkits(service: SoundkitsService = Depends(get_soundkits_service)) -> SSoundkitsResponse:
+async def all_soundkits(
+    page: Page,
+    service: SoundkitsService = Depends(get_soundkits_service),
+) -> SAllSoundkitsResponse:
 
-    response = await service.get_all_soundkits()
+    response = await service.get_all_soundkits(start=page.start, size=page.size)
 
     soundkits_ = list(map(
         lambda soundkit: Soundkit(
@@ -70,12 +86,21 @@ async def all_soundkits(service: SoundkitsService = Depends(get_soundkits_servic
             prod_by=soundkit.prod_by,
             playlist_id=soundkit.playlist_id,
             user_id=soundkit.user_id,
-            beat_pack_id=soundkit.beat_pack_id,
+            beat_pack_id=soundkit.beatpack_id,
         ),
         response.soundkits
     ))
 
-    return SSoundkitsResponse(soundkits=soundkits_)
+    total = await service.get_all_soundkits_count()
+
+    return SAllSoundkitsResponse(
+        total=total,
+        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+        has_next=page.start + page.size < total,
+        has_previous=page.start - page.size >= 0,
+        size=page.size,
+        items=soundkits_,
+    )
 
 
 @soundkits.get(

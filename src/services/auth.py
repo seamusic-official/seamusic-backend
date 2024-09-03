@@ -7,25 +7,29 @@ from pydantic import EmailStr
 from src.dtos.database.auth import (
     ArtistResponseDTO,
     ArtistsResponseDTO,
+    CreateArtistRequestDTO,
     CreateUserRequestDTO,
+    CreateProducerRequestDTO,
     ProducerResponseDTO,
     ProducersResponseDTO,
-    UserResponseDTO,
-    UsersResponseDTO,
     UpdateArtistRequestDTO,
     UpdateProducerRequestDTO,
-    UpdateUserRequestDTO, User, CreateArtistRequestDTO, CreateProducerRequestDTO,
+    UpdateUserRequestDTO,
+    User,
+    UserResponseDTO,
+    UsersResponseDTO,
 )
 from src.dtos.database.tags import AddTagsRequestDTO, Tag
 from src.enums.auth import Role, AccessLevel
-from src.exceptions.services import NotFoundException, ServerError, NoRightsException
+from src.exceptions.services import NotFoundException, ServerError, InvalidRequestException
 from src.repositories import Repositories, DatabaseRepositories, BaseMediaRepository
 from src.repositories.api.spotify.base import BaseSpotifyRepository
 from src.repositories.database.auth.base import BaseUsersRepository, BaseProducersRepository, BaseArtistsRepository
 from src.repositories.database.auth.postgres import (
-    init_users_postgres_repository,
     init_artists_postgres_repository,
-    init_producers_postgres_repository, )
+    init_producers_postgres_repository,
+    init_users_postgres_repository,
+)
 from src.repositories.database.tags.base import BaseTagsRepository
 from src.repositories.database.tags.postgres import init_postgres_repository as init_tags_postgres_repository
 from src.repositories.media.s3 import S3Repository, init_s3_repository
@@ -98,8 +102,9 @@ class UsersService(BaseService):
     ) -> int:
 
         existing_user: UserResponseDTO | None = await self.repositories.database.users.get_user_by_email(email=email)
+
         if existing_user:
-            raise NoRightsException
+            raise InvalidRequestException('User with this email already exists.')
 
         superuser = await self.repositories.database.users.get_user_by_id(user_id=1)
         if not superuser:
@@ -149,8 +154,8 @@ class UsersService(BaseService):
 
         return user
 
-    async def get_all_users(self) -> UsersResponseDTO:
-        return await self.repositories.database.users.get_users()
+    async def get_all_users(self, start: int = 1, size: int = 10) -> UsersResponseDTO:
+        return await self.repositories.database.users.get_users(offset=start - 1, limit=size)
 
     async def update_user_picture(
         self,
@@ -168,6 +173,9 @@ class UsersService(BaseService):
 
         updated_user = UpdateUserRequestDTO(picture_url=picture_url)
         await self.repositories.database.users.update_user(user=updated_user)
+
+    async def get_users_count(self) -> int:
+        return await self.repositories.database.users.get_users_count()
 
     async def update_user(
         self,
@@ -215,8 +223,11 @@ class ArtistsService(BaseService):
 
         return artist
 
-    async def get_all_artists(self) -> ArtistsResponseDTO:
-        return await self.repositories.database.artists.get_artists()
+    async def get_all_artists(self, start: int = 1, size: int = 10) -> ArtistsResponseDTO:
+        return await self.repositories.database.artists.get_artists(offset=start - 1, limit=size)
+
+    async def get_artists_count(self) -> int:
+        return await self.repositories.database.artists.get_artists_count()
 
     async def update_artist(
         self,
@@ -267,8 +278,11 @@ class ProducersService(BaseService):
 
         return producer
 
-    async def get_all_producers(self) -> ProducersResponseDTO:
-        return await self.repositories.database.producers.get_producers()
+    async def get_all_producers(self, start: int = 1, size: int = 10) -> ProducersResponseDTO:
+        return await self.repositories.database.producers.get_producers(offset=start - 1, limit=size)
+
+    async def get_producers_count(self) -> int:
+        return await self.repositories.database.producers.get_producers_count()
 
     async def update_producer(
         self,

@@ -5,18 +5,26 @@ from src.dtos.database.beatpacks import (
     BeatpackResponseDTO,
     BeatpacksResponseDTO,
     CreateBeatpackRequestDTO,
-    UpdateBeatpackRequestDTO
+    UpdateBeatpackRequestDTO,
 )
 
 
 @dataclass
 class BaseBeatpacksRepository(ABC):
     @abstractmethod
-    async def get_user_beatpacks(self, user_id: int) -> BeatpacksResponseDTO:
+    async def get_user_beatpacks(self, user_id: int, offset: int = 0, limit: int = 10) -> BeatpacksResponseDTO:
         ...
 
     @abstractmethod
-    async def get_all_beatpacks(self) -> BeatpacksResponseDTO:
+    async def get_user_beatpacks_count(self, user_id: int) -> int:
+        ...
+
+    @abstractmethod
+    async def get_all_beatpacks(self, offset: int = 0, limit: int = 10) -> BeatpacksResponseDTO:
+        ...
+
+    @abstractmethod
+    async def get_beatpacks_count(self) -> int:
         ...
 
     @abstractmethod

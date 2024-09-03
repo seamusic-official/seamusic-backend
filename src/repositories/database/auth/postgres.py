@@ -1,23 +1,25 @@
 from dataclasses import dataclass
 
 from pydantic import EmailStr
-from sqlalchemy import select, delete
+from sqlalchemy import select, delete, func
 
 from src.converters.repositories.database.sqlalchemy import model_to_response_dto, models_to_dto, request_dto_to_model
 from src.dtos.database.auth import (
+    Artist,
+    ArtistResponseDTO,
+    ArtistsResponseDTO,
+    CreateArtistRequestDTO,
+    CreateProducerRequestDTO,
+    CreateUserRequestDTO,
+    Producer,
+    ProducerResponseDTO,
+    ProducersResponseDTO,
+    UpdateArtistRequestDTO,
+    UpdateProducerRequestDTO,
+    UpdateUserRequestDTO,
     User as _User,
     UserResponseDTO,
     UsersResponseDTO,
-    UpdateUserRequestDTO,
-    ArtistResponseDTO,
-    ArtistsResponseDTO,
-    UpdateArtistRequestDTO,
-    ProducerResponseDTO,
-    ProducersResponseDTO,
-    UpdateProducerRequestDTO,
-    CreateUserRequestDTO,
-    Artist,
-    Producer, CreateProducerRequestDTO, CreateArtistRequestDTO,
 )
 from src.models.auth import User, ArtistProfile, ProducerProfile
 from src.repositories.database.auth.base import BaseUsersRepository, BaseArtistsRepository, BaseProducersRepository
@@ -35,10 +37,14 @@ class UsersRepository(BaseUsersRepository, SQLAlchemyRepository):
         user = await self.scalar(query)
         return model_to_response_dto(model=user, response_dto=UserResponseDTO)
 
-    async def get_users(self) -> UsersResponseDTO:
-        query = select(User)
+    async def get_users(self, offset: int = 0, limit: int = 10) -> UsersResponseDTO:
+        query = select(User).offset(offset).limit(limit).order_by(User.updated_at.desc())
         users = list(await self.scalars(query))
         return UsersResponseDTO(users=models_to_dto(models=users, dto=_User))
+
+    async def get_users_count(self) -> int:
+        query = select([func.count()]).select_from(User)
+        return await self.scalar(query)
 
     async def create_user(self, user: CreateUserRequestDTO) -> int:
         model = request_dto_to_model(request_dto=user, model=User)
@@ -65,10 +71,14 @@ class ArtistsRepository(BaseArtistsRepository, SQLAlchemyRepository):
         artist = await self.get(ArtistProfile, artist_id)
         return model_to_response_dto(model=artist, response_dto=ArtistResponseDTO)
 
-    async def get_artists(self) -> ArtistsResponseDTO:
-        query = select(ArtistProfile)
+    async def get_artists(self, offset: int = 0, limit: int = 10) -> ArtistsResponseDTO:
+        query = select(ArtistProfile).offset(offset).limit(limit).order_by(ArtistProfile.updated_at.desc())
         artists = list(await self.scalars(query))
         return ArtistsResponseDTO(artists=models_to_dto(models=artists, dto=Artist))
+
+    async def get_artists_count(self) -> int:
+        query = select([func.count()]).select_from(ArtistProfile)
+        return await self.scalar(query)
 
     async def create_artist(self, artist: CreateArtistRequestDTO) -> int:
         model = request_dto_to_model(request_dto=artist, model=ArtistProfile)
@@ -91,10 +101,14 @@ class ProducersRepository(BaseProducersRepository, SQLAlchemyRepository):
         producer = await self.get(ProducerProfile, producer_id)
         return model_to_response_dto(model=producer, response_dto=ProducerResponseDTO)
 
-    async def get_producers(self) -> ProducersResponseDTO:
-        query = select(ProducerProfile)
+    async def get_producers(self, offset: int = 0, limit: int = 10) -> ProducersResponseDTO:
+        query = select(ProducerProfile).offset(offset).limit(limit).order_by(ProducerProfile.updated_at.desc())
         producers = list(await self.scalars(query))
         return ProducersResponseDTO(producers=models_to_dto(models=producers, dto=Producer))
+
+    async def get_producers_count(self) -> int:
+        query = select([func.count()]).select_from(ProducerProfile)
+        return await self.scalar(query)
 
     async def create_producer(self, producer: CreateProducerRequestDTO) -> int:
         model = request_dto_to_model(request_dto=producer, model=ProducerProfile)

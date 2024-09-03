@@ -14,12 +14,27 @@ class SAddTagResponse(BaseModel):
 
 
 class SMyListenerTagsResponse(BaseModel):
-    tags: list[Tag]
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
+    items: list[Tag]
 
 
 class SMyProducerTagsResponse(BaseModel):
-    tags: list[Tag]
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
+    items: list[Tag]
 
 
 class SMyArtistTagsResponse(BaseModel):
-    tags: list[Tag]
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
+    items: list[Tag]

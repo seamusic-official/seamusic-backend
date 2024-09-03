@@ -2,7 +2,6 @@ from fastapi import UploadFile, File, APIRouter, Depends, status
 
 from src.enums.type import Type
 from src.schemas.albums import (
-    Album,
     SAddAlbumResponse,
     SAlbumResponse,
     SAllAlbumsResponse,
@@ -15,6 +14,7 @@ from src.schemas.albums import (
     SUpdateAlbumResponse,
 )
 from src.schemas.auth import User
+from src.schemas.base import Page
 from src.services.albums import get_album_service, AlbumService
 from src.utils.auth import get_current_user
 from src.utils.files import unique_filename, get_file_stream
@@ -30,14 +30,19 @@ albums = APIRouter(prefix="/albums", tags=["Albums"])
     responses={status.HTTP_200_OK: {"model": SMyAlbumsResponse}},
 )
 async def get_my_albums(
+    page: Page,
     service: AlbumService = Depends(get_album_service),
     user: User = Depends(get_current_user),
 ) -> SMyAlbumsResponse:
 
-    response = await service.get_user_albums(user_id=user.id)
+    response = await service.get_user_albums(
+        user_id=user.id,
+        start=page.start,
+        size=page.size,
+    )
 
     albums_ = list(map(
-        lambda album: Album(
+        lambda album: SMyAlbumsResponse(
             id=album.id,
             created_at=album.created_at,
             updated_at=album.updated_at,
@@ -51,7 +56,16 @@ async def get_my_albums(
         response.albums
     ))
 
-    return SMyAlbumsResponse(albums=albums_)
+    total = await service.get_user_albums_count(user_id=user.id)
+
+    return SMyAlbumsResponse(
+        total=total,
+        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+        has_next=page.start + page.size < total,
+        has_previous=page.start - page.size >= 0,
+        size=page.size,
+        items=albums_,
+    )
 
 
 @albums.get(
@@ -60,11 +74,18 @@ async def get_my_albums(
     response_model=SAllAlbumsResponse,
     responses={status.HTTP_200_OK: {"model": SAllAlbumsResponse}},
 )
-async def all_albums(service: AlbumService = Depends(get_album_service)) -> SAllAlbumsResponse:
+async def all_albums(
+    page: Page,
+    service: AlbumService = Depends(get_album_service),
+) -> SAllAlbumsResponse:
 
-    response = await service.get_all_albums()
+    response = await service.get_all_albums(
+        start=page.start,
+        size=page.size,
+    )
+
     albums_ = list(map(
-        lambda album: Album(
+        lambda album: SMyAlbumsResponse(
             id=album.id,
             created_at=album.created_at,
             updated_at=album.updated_at,
@@ -73,12 +94,21 @@ async def all_albums(service: AlbumService = Depends(get_album_service)) -> SAll
             picture_url=album.picture_url,
             description=album.description,
             co_prod=album.co_prod,
-            type=album.type,
+            type=Type.album,
         ),
         response.albums
     ))
 
-    return SAllAlbumsResponse(albums=albums_)
+    total = await service.get_all_albums_count()
+
+    return SAllAlbumsResponse(
+        total=total,
+        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+        has_next=page.start + page.size < total,
+        has_previous=page.start - page.size >= 0,
+        size=page.size,
+        items=albums_,
+    )
 
 
 @albums.get(

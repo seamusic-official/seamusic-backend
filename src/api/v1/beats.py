@@ -1,22 +1,21 @@
 from fastapi import UploadFile, File, APIRouter, Depends, status
 
 from src.schemas.auth import User
+from src.schemas.base import Page
 from src.schemas.beats import (
-    Beat,
-    SBeatResponse,
-    SDeleteBeatResponse,
-    SMyBeatsResponse,
-    SBeatsResponse,
-    SCreateBeatResponse,
-    SUpdateBeatPictureResponse,
     SBeatReleaseRequest,
     SBeatReleaseResponse,
+    SBeatResponse,
+    SBeatsResponse,
+    SCreateBeatResponse,
+    SDeleteBeatResponse,
+    SMyBeatsResponse,
+    SUpdateBeatPictureResponse,
 )
 from src.schemas.beats import SBeatUpdateRequest, SBeatUpdateResponse
 from src.services.beats import BeatsService, get_beats_service
 from src.utils.auth import get_current_user
 from src.utils.files import unique_filename, get_file_stream
-
 
 beats = APIRouter(prefix="/beats", tags=["Beats"])
 
@@ -29,14 +28,15 @@ beats = APIRouter(prefix="/beats", tags=["Beats"])
     responses={status.HTTP_200_OK: {"model": SMyBeatsResponse}},
 )
 async def get_user_beats(
+    page: Page,
     user: User = Depends(get_current_user),
-    service: BeatsService = Depends(get_beats_service)
+    service: BeatsService = Depends(get_beats_service),
 ) -> SMyBeatsResponse:
 
-    response = await service.get_user_beats(user_id=user.id)
+    response = await service.get_user_beats(user_id=user.id, start=page.start, size=page.size)
 
     beats_ = list(map(
-        lambda beat: Beat(
+        lambda beat: SBeatResponse(
             id=beat.id,
             title=beat.title,
             description=beat.description,
@@ -51,7 +51,17 @@ async def get_user_beats(
         ),
         response.beats
     ))
-    return SMyBeatsResponse(beats=beats_)
+
+    total = await service.get_user_beats_count(user_id=user.id)
+
+    return SMyBeatsResponse(
+        total=total,
+        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+        has_next=page.start + page.size < total,
+        has_previous=page.start - page.size >= 0,
+        size=page.size,
+        items=beats_,
+    )
 
 
 @beats.get(
@@ -60,12 +70,15 @@ async def get_user_beats(
     response_model=SBeatsResponse,
     responses={status.HTTP_200_OK: {"model": SBeatsResponse}},
 )
-async def all_beats(service: BeatsService = Depends(get_beats_service)) -> SBeatsResponse:
+async def all_beats(
+    page: Page,
+    service: BeatsService = Depends(get_beats_service),
+) -> SBeatsResponse:
 
-    response = await service.get_all_beats()
+    response = await service.get_all_beats(start=page.start, size=page.size)
 
     beats_ = list(map(
-        lambda beat: Beat(
+        lambda beat: SBeatResponse(
             id=beat.id,
             title=beat.title,
             description=beat.description,
@@ -81,7 +94,16 @@ async def all_beats(service: BeatsService = Depends(get_beats_service)) -> SBeat
         response.beats
     ))
 
-    return SBeatsResponse(beats=beats_)
+    total = await service.get_all_beats_count()
+
+    return SBeatsResponse(
+        total=total,
+        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+        has_next=page.start + page.size < total,
+        has_previous=page.start - page.size >= 0,
+        size=page.size,
+        items=beats_,
+    )
 
 
 @beats.get(

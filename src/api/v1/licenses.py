@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, status
 
 from src.models.auth import User
+from src.schemas.base import Page
 from src.schemas.licenses import (
-    License,
     SMyLicensesResponse,
     SLicensesResponse,
     SLicenseResponse,
@@ -25,14 +25,15 @@ licenses = APIRouter(prefix="/licenses", tags=["Licenses"])
     responses={status.HTTP_200_OK: {"model": SMyLicensesResponse}},
 )
 async def get_my_licenses(
+    page: Page,
     user: User = Depends(get_current_user),
     service: LicensesService = Depends(get_licenses_service),
 ) -> SMyLicensesResponse:
 
-    response = await service.get_user_licenses(user_id=user.id)
+    response = await service.get_user_licenses(user_id=user.id, start=page.start, size=page.size)
 
     licenses_ = list(map(
-        lambda license_: License(
+        lambda license_: SLicenseResponse(
             id=license_.id,
             title=license_.title,
             picture_url=license_.picture_url,
@@ -42,7 +43,7 @@ async def get_my_licenses(
             prod_by=license_.prod_by,
             playlist_id=license_.playlist_id,
             user_id=license_.user_id,
-            beat_pack_id=license_.beat_pack_id,
+            beat_pack_id=license_.beatpack_id,
             price=license_.price,
             created_at=license_.created_at,
             updated_at=license_.updated_at,
@@ -50,7 +51,16 @@ async def get_my_licenses(
         response.licenses
     ))
 
-    return SMyLicensesResponse(licenses=licenses_)
+    total = await service.get_user_licenses_count(user_id=user.id)
+
+    return SMyLicensesResponse(
+        total=total,
+        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+        has_next=page.start + page.size < total,
+        has_previous=page.start - page.size >= 0,
+        size=page.size,
+        items=licenses_,
+    )
 
 
 @licenses.get(
@@ -59,12 +69,15 @@ async def get_my_licenses(
     response_model=SLicensesResponse,
     responses={status.HTTP_200_OK: {"model": SLicensesResponse}},
 )
-async def all_licenses(service: LicensesService = Depends(get_licenses_service)) -> SLicensesResponse:
+async def all_licenses(
+    page: Page,
+    service: LicensesService = Depends(get_licenses_service),
+) -> SLicensesResponse:
 
-    response = await service.get_all_licenses()
+    response = await service.get_all_licenses(start=page.start, size=page.size)
 
     licenses_ = list(map(
-        lambda license_: License(
+        lambda license_: SLicenseResponse(
             id=license_.id,
             title=license_.title,
             picture_url=license_.picture_url,
@@ -74,14 +87,24 @@ async def all_licenses(service: LicensesService = Depends(get_licenses_service))
             prod_by=license_.prod_by,
             playlist_id=license_.playlist_id,
             user_id=license_.user_id,
-            beat_pack_id=license_.beat_pack_id,
+            beat_pack_id=license_.beatpack_id,
             price=license_.price,
             created_at=license_.created_at,
             updated_at=license_.updated_at,
         ),
         response.licenses
     ))
-    return SLicensesResponse(licenses=licenses_)
+
+    total = await service.get_licenses_count()
+
+    return SLicensesResponse(
+        total=total,
+        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+        has_next=page.start + page.size < total,
+        has_previous=page.start - page.size >= 0,
+        size=page.size,
+        items=licenses_,
+    )
 
 
 @licenses.get(

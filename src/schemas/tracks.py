@@ -20,14 +20,6 @@ class Track(BaseModel):
     updated_at: datetime
 
 
-class SMyTracksResponse(BaseModel):
-    tracks: list[Track]
-
-
-class SAllTracksResponse(BaseModel):
-    tracks: list[Track]
-
-
 class STrackResponse(BaseModel):
     id: int
     name: str
@@ -41,6 +33,24 @@ class STrackResponse(BaseModel):
     picture_url: str
     created_at: datetime
     updated_at: datetime
+
+
+class SMyTracksResponse(BaseModel):
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
+    items: list[STrackResponse]
+
+
+class SAllTracksResponse(BaseModel):
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
+    items: list[STrackResponse]
 
 
 class SAddTracksResponse(BaseModel):

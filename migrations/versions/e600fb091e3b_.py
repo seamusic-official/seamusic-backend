@@ -101,7 +101,7 @@ def downgrade() -> None:
         "beats",
         sa.Column("prod_by", sa.VARCHAR(), autoincrement=False, nullable=True),
     )
-    op.drop_constraint(None, "beatpacks", type_="foreignkey")
+    op.drop_constraint(None, "beatpacks", type_="foreignkey")  # type: ignore
     op.drop_column("beatpacks", "user_id")
     op.add_column(
         "albums",

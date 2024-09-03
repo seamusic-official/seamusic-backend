@@ -29,11 +29,17 @@ class BeatpacksRepositories(Repositories):
 class BeatpackService:
     respositories: BeatpacksRepositories
 
-    async def get_user_beatpacks(self, user_id: int) -> BeatpacksResponseDTO:
-        return await self.respositories.database.beatpacks.get_user_beatpacks(user_id=user_id)
+    async def get_user_beatpacks(self, user_id: int, start: int = 1, size: int = 10) -> BeatpacksResponseDTO:
+        return await self.respositories.database.beatpacks.get_user_beatpacks(user_id=user_id, offset=start - 1, limit=size)
 
-    async def get_all_beatpacks(self) -> BeatpacksResponseDTO:
-        return await self.respositories.database.beatpacks.get_all_beatpacks()
+    async def get_user_beatpacks_count(self, user_id: int) -> int:
+        return await self.respositories.database.beatpacks.get_user_beatpacks_count(user_id=user_id)
+
+    async def get_all_beatpacks(self, start: int = 1, size: int = 10) -> BeatpacksResponseDTO:
+        return await self.respositories.database.beatpacks.get_all_beatpacks(offset=start - 1, limit=size)
+
+    async def get_beatpacks_count(self) -> int:
+        return await self.respositories.database.beatpacks.get_beatpacks_count()
 
     async def get_one_beatpack(self, beatpack_id: int) -> BeatpackResponseDTO:
         beatpack = await self.respositories.database.beatpacks.get_one_beatpack(beatpack_id=beatpack_id)

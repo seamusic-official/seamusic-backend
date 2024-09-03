@@ -35,8 +35,8 @@ from src.schemas.auth import (
     SUpdateProducerResponse,
     SDeleteProducerResponse,
     SLoginResponse,
-    Artist,
 )
+from src.schemas.base import Page
 from src.services.auth import (
     AuthService,
     ArtistsService,
@@ -49,7 +49,6 @@ from src.services.auth import (
 )
 from src.utils.auth import get_current_user
 from src.utils.files import unique_filename, get_file_stream
-
 
 auth_v1 = APIRouter(prefix='/v1/auth')  # included directly in main app to avoid using ExceptionMiddleware
 
@@ -82,11 +81,15 @@ async def get_me(user: User = Depends(get_current_user)) -> SMeResponse:
     status_code=status.HTTP_200_OK,
     responses={status.HTTP_200_OK: {'model': SUsersResponse}},
 )
-async def get_users(service: UsersService = Depends(get_users_service)) -> SUsersResponse:
-    response = await service.get_all_users()
+async def get_users(
+    page: Page,
+    service: UsersService = Depends(get_users_service),
+) -> SUsersResponse:
 
-    users_: list[User] = list(map(
-        lambda user: User(
+    response = await service.get_all_users(start=page.start, size=page.size)
+
+    users_ = list(map(
+        lambda user: SUserResponse(
             id=user.id,
             username=user.username,
             email=user.email,
@@ -96,7 +99,16 @@ async def get_users(service: UsersService = Depends(get_users_service)) -> SUser
         response.users
     ))
 
-    return SUsersResponse(users=users_)
+    total = await service.get_users_count()
+
+    return SUsersResponse(
+        total=total,
+        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+        has_next=page.start + page.size < total,
+        has_previous=page.start - page.size >= 0,
+        size=page.size,
+        items=users_,
+    )
 
 
 @users.get(
@@ -213,26 +225,32 @@ async def get_me_as_artist(
     status_code=status.HTTP_200_OK,
     responses={status.HTTP_200_OK: {'model': SArtistsResponse}},
 )
-async def get_artists(service: ArtistsService = Depends(get_artists_service)) -> SArtistsResponse:
+async def get_artists(
+    page: Page,
+    service: ArtistsService = Depends(get_artists_service),
+) -> SArtistsResponse:
 
-    response = await service.get_all_artists()
+    response = await service.get_all_artists(start=page.start, size=page.size)
 
     artists_ = list(map(
-        lambda artist: Artist(
+        lambda artist: SArtistResponse(
             id=artist.id,
-            user=User(
-                id=artist.user.id,
-                username=artist.user.username,
-                email=artist.user.email,
-                picture_url=artist.user.picture_url,
-                birthday=artist.user.birthday,
-            ),
-            description=artist.description
+            user=artist.user,
+            description=artist.description,
         ),
-        response.artists
+        response.artists,
     ))
 
-    return SArtistsResponse(artists=artists_)
+    total = await service.get_artists_count()
+
+    return SArtistsResponse(
+        total=total,
+        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+        has_next=page.start + page.size < total,
+        has_previous=page.start - page.size >= 0,
+        size=page.size,
+        items=artists_,
+    )
 
 
 @artists.get(

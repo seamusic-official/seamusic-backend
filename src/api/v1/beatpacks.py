@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends, status
 
+from src.dtos.database.beats import Beat as _Beat
 from src.enums.type import Type
 from src.schemas.auth import User
+from src.schemas.base import Page
 from src.schemas.beatpacks import (
     SBeatpackResponse,
     SCreateBeatpackRequest,
@@ -11,10 +13,8 @@ from src.schemas.beatpacks import (
     SBeatpacksResponse,
     SCreateBeatpackResponse,
     SEditBeatpackRequest,
-    Beatpack,
 )
-from src.schemas.beats import Beat
-from src.dtos.database.beats import Beat as _Beat
+from src.schemas.beats import Beat, SBeatResponse
 from src.services.beatpacks import BeatpackService, get_beatpack_service
 from src.utils.auth import get_current_user
 
@@ -28,14 +28,15 @@ beatpacks = APIRouter(prefix="/beatpacks", tags=["Beatpacks"])
     responses={status.HTTP_200_OK: {"model": SMyBeatpacksResponse}},
 )
 async def get_my_beatpacks(
+    page: Page,
     user: User = Depends(get_current_user),
-    service: BeatpackService = Depends(get_beatpack_service)
+    service: BeatpackService = Depends(get_beatpack_service),
 ) -> SMyBeatpacksResponse:
 
-    response = await service.get_user_beatpacks(user_id=user.id)
+    response = await service.get_user_beatpacks(user_id=user.id, start=page.start, size=page.size)
 
     beatpacks_ = list(map(
-        lambda beatpack: Beatpack(
+        lambda beatpack: SBeatpacksResponse(
             title=beatpack.title,
             description=beatpack.description,
             user_id=beatpack.user_id,
@@ -50,7 +51,7 @@ async def get_my_beatpacks(
                 beatpack.users
             )),
             beats=list(map(
-                lambda beat: Beat(
+                lambda beat: SBeatResponse(
                     id=beat.id,
                     title=beat.title,
                     description=beat.description,
@@ -69,7 +70,16 @@ async def get_my_beatpacks(
         response.beatpacks
     ))
 
-    return SMyBeatpacksResponse(beatpacks=beatpacks_)
+    total = await service.get_user_beatpacks_count(user_id=user.id)
+
+    return SMyBeatpacksResponse(
+        total=total,
+        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+        has_next=page.start + page.size < total,
+        has_previous=page.start - page.size >= 0,
+        size=page.size,
+        items=beatpacks_,
+    )
 
 
 @beatpacks.get(
@@ -78,12 +88,15 @@ async def get_my_beatpacks(
     response_model=SBeatpacksResponse,
     responses={status.HTTP_200_OK: {"model": SBeatpacksResponse}},
 )
-async def all_beatpacks(service: BeatpackService = Depends(get_beatpack_service)) -> SBeatpacksResponse:
+async def all_beatpacks(
+    page: Page,
+    service: BeatpackService = Depends(get_beatpack_service),
+) -> SBeatpacksResponse:
 
-    response = await service.get_all_beatpacks()
+    response = await service.get_all_beatpacks(start=page.start, size=page.size)
 
     beatpacks_ = list(map(
-        lambda beatpack: Beatpack(
+        lambda beatpack: SBeatpackResponse(
             title=beatpack.title,
             description=beatpack.description,
             user_id=beatpack.user_id,
@@ -98,7 +111,7 @@ async def all_beatpacks(service: BeatpackService = Depends(get_beatpack_service)
                 beatpack.users
             )),
             beats=list(map(
-                lambda beat: Beat(
+                lambda beat: SBeatResponse(
                     id=beat.id,
                     title=beat.title,
                     description=beat.description,
@@ -117,7 +130,16 @@ async def all_beatpacks(service: BeatpackService = Depends(get_beatpack_service)
         response.beatpacks
     ))
 
-    return SBeatpacksResponse(beatpacks=beatpacks_)
+    total = await service.get_beatpacks_count()
+
+    return SBeatpacksResponse(
+        total=total,
+        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+        has_next=page.start + page.size < total,
+        has_previous=page.start - page.size >= 0,
+        size=page.size,
+        items=beatpacks_,
+    )
 
 
 @beatpacks.get(

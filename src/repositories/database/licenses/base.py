@@ -12,11 +12,19 @@ from src.dtos.database.licenses import (
 @dataclass
 class BaseLicensesRepository(ABC):
     @abstractmethod
-    async def get_user_licenses(self, user_id: int) -> LicensesResponseDTO:
+    async def get_user_licenses(self, user_id: int, offset: int = 0, limit: int = 10) -> LicensesResponseDTO:
         ...
 
     @abstractmethod
-    async def get_all_licenses(self) -> LicensesResponseDTO:
+    async def get_user_licenses_count(self, user_id: int) -> int:
+        ...
+
+    @abstractmethod
+    async def get_all_licenses(self, offset: int = 0, limit: int = 10) -> LicensesResponseDTO:
+        ...
+
+    @abstractmethod
+    async def get_licenses_count(self) -> int:
         ...
 
     @abstractmethod

@@ -8,11 +8,19 @@ from src.dtos.database.beats import BeatsResponseDTO
 @dataclass
 class BaseBeatsRepository(ABC):
     @abstractmethod
-    async def get_user_beats(self, user_id: int) -> BeatsResponseDTO:
+    async def get_user_beats(self, user_id: int, offset: int = 0, limit: int = 10) -> BeatsResponseDTO:
         ...
 
     @abstractmethod
-    async def all_beats(self) -> BeatsResponseDTO:
+    async def get_user_beats_count(self, user_id: int) -> int:
+        ...
+
+    @abstractmethod
+    async def all_beats(self, offset: int = 0, limit: int = 10) -> BeatsResponseDTO:
+        ...
+
+    @abstractmethod
+    async def get_beats_count(self) -> int:
         ...
 
     @abstractmethod

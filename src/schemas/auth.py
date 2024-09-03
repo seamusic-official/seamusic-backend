@@ -1,8 +1,10 @@
 from datetime import date, datetime
+from typing import Literal
 
 from pydantic import BaseModel, EmailStr, Field
 
 from src.enums.auth import Role
+from src.enums.type import Type
 from src.schemas.base import DetailMixin
 
 
@@ -10,9 +12,10 @@ class User(BaseModel):
     id: int
     username: str
     email: str
-    password: str | None = None
+    password: str
     picture_url: str
     birthday: datetime
+    type: Literal[Type.user] = Type.user
 
 
 class SUserResponse(BaseModel):
@@ -21,6 +24,7 @@ class SUserResponse(BaseModel):
     email: str
     picture_url: str
     birthday: datetime
+    type: Literal[Type.user] = Type.user
 
 
 class SMeResponse(BaseModel):
@@ -29,10 +33,16 @@ class SMeResponse(BaseModel):
     email: str
     picture_url: str
     birthday: datetime
+    type: Literal[Type.user] = Type.user
 
 
 class SUsersResponse(BaseModel):
-    users: list[User]
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
+    items: list[SUserResponse]
 
 
 class SUpdateUserPictureResponse(BaseModel, DetailMixin):
@@ -57,22 +67,30 @@ class Artist(BaseModel):
     id: int
     user: User
     description: str | None = None
+    type: Literal[Type.artist] = Type.artist
 
 
 class SArtistResponse(BaseModel):
     id: int
     user: User
     description: str | None = None
+    type: Literal[Type.artist] = Type.artist
 
 
 class SMeAsArtistResponse(BaseModel):
     id: int
     user: User
     description: str | None = None
+    type: Literal[Type.artist] = Type.artist
 
 
 class SArtistsResponse(BaseModel):
-    artists: list[Artist]
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
+    items: list[SArtistResponse]
 
 
 class SUpdateArtistRequest(BaseModel):
@@ -91,12 +109,14 @@ class Producer(BaseModel):
     id: int
     user: User
     description: str | None = None
+    type: Literal[Type.producer] = Type.producer
 
 
 class SProducerResponse(BaseModel):
     id: int
     user: User
     description: str | None = None
+    type: Literal[Type.producer] = Type.producer
 
 
 class SMeAsProducerResponse(BaseModel):
@@ -106,7 +126,12 @@ class SMeAsProducerResponse(BaseModel):
 
 
 class SProducersResponse(BaseModel):
-    producers: list[Producer]
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
+    items: list[Producer]
 
 
 class SUpdateProducerRequest(BaseModel):
@@ -142,15 +167,15 @@ class SLoginRequest(BaseModel):
 class SLoginResponse(BaseModel):
     access_token: str
     refresh_token: str
-    user: User
+    user: SUserResponse
 
 
 class SRefreshTokenResponse(BaseModel):
-    accessToken: str
-    refreshToken: str
+    access_token: str
+    refresh_token: str
 
 
 class SSpotifyCallbackResponse(BaseModel):
     access_token: str
     refresh_token: str
-    user: User
+    user: SUserResponse
