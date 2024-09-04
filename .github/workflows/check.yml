@@ -16,7 +16,7 @@ jobs:
       - name: Install flake8
         run: pip install flake8
       - name: Run flake8
-        run: python -m flake8
+        run: python -m flake8 --filename=./project.toml
   mypy:
     runs-on: ubuntu-latest
     steps:
