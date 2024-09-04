@@ -1,12 +1,8 @@
-name: check
-
+name: flake8_workflow
 on:
   push:
     branches:
       - 'devops'
-
-
-
 jobs:
   flake8:
     runs-on: ubuntu-latest
