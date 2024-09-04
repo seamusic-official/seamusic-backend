@@ -22,4 +22,4 @@ jobs:
         pip install flake8
     - name: run flake8
       run: |
-        python -m flake8 --config-toml=./project.toml
+        python -m flake8 --filename=./project.toml
