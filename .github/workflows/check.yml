@@ -31,3 +31,4 @@ jobs:
         run: pip install mypy
       - name: Run mypy
         run: python -m mypy -p src --ignore-missing-imports
+        #
