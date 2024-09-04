@@ -20,9 +20,9 @@ jobs:
         uses: mirko-felice/list-files-action@v3.0.5
         with:
           repo: ${{ github.repository }}
-          ref: ${{ github.ref }}
+          ref: devops
           path: "."
-          ext: ".yml"
+          # ext: ".yml"
   Test:
     needs: list-files
     strategy:
@@ -32,4 +32,4 @@ jobs:
     steps:
       - name: Output results
         run: |
-          echo ${{ matrix.paths }}
+          ls -alh
