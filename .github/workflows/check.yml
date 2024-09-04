@@ -30,5 +30,4 @@ jobs:
       - name: Install mypy
         run: pip install mypy
       - name: Run mypy
-        run: python -m mypy -p src --ignore-missing-imports
-        #
+        run: python -m mypy -p src --ignore-missing-imports python -m flake8 --config-file=./project.toml
