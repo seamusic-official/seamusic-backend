@@ -2,10 +2,10 @@ name: Test
 
 on:
   push:
-    tags-ignore:
-      - '*'
+    # tags-ignore:
+    #   - '*'
     branches:
-      - 'master'
+      - 'devops'
   pull_request:
   workflow_dispatch:
 
