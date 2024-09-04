@@ -18,19 +18,16 @@ class Settings(BaseSettings):
     spotify_redirect_uri: str = Field(default='', alias='SPOTIFY_REDIRECT_URI')
 
     db_host: str = Field(default='localhost', alias='DB_HOST')
-    db_port: int = 5432
+    db_port: int = Field(default=5432, alias='DB_PORT')
     db_name: str = Field(default='postgres', alias='DB_NAME')
     db_user: str = Field(default='postgres', alias='DB_USER')
     db_pass: str = Field(default='postgres', alias='DB_PASS')
 
     db_host_test: str = Field(default='localhost', alias='DB_HOST_TEST')
-    db_port_test: int = 6000
+    db_port_test: int = Field(default=5600, alias='DB_PORT_TEST')
     db_name_test: str = Field(default='postgres', alias='DB_NAME_TEST')
     db_user_test: str = Field(default='postgres', alias='DB_USER_TEST')
     db_pass_test: str = Field(default='postgres', alias='DB_PASS_TEST')
-
-    db_url: str = f'postgresql+asyncpg://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}'
-    db_url_test: str = f'postgresql+asyncpg://{db_user_test}:{db_pass_test}@{db_host_test}:{db_port_test}/{db_name_test}'
 
     redis_host: str = Field(default='localhost', alias='REDIS_HOST')
     redis_port: int = Field(default=6379, alias='REDIS_PORT')
@@ -47,10 +44,24 @@ class Settings(BaseSettings):
 
     bucket_name: str = Field(default='', alias='BUCKET_NAME')
 
-    email_address: EmailStr = Field(default='', alias='EMAIL_ADDRESS')
+    email_address: EmailStr = Field(default='seamusimgmt@gmail.com', alias='EMAIL_ADDRESS')
     email_password: str = Field(default='', alias='EMAIL_PASSWORD')
     smtp_host: str = Field(default='', alias='SMTP_HOST')
-    smtp_port: int = Field(default='', alias='SMTP_PORT')
+    smtp_port: str = Field(default='', alias='SMTP_PORT')
 
+    @property
+    def db_url(self) -> str:
+        return f"postgresql+asyncpg://{self.db_user}:{self.db_pass}@{self.db_host}:{self.db_port}/{self.db_name}"
+    @property
+    def db_url_test(self) -> str:
+        return f'postgresql+asyncpg://{self.db_user_test}:{self.db_pass_test}@{self.db_host_test}:{self.db_port_test}/{self.db_name_test}'
+    
 
 settings = Settings()
+
+print(f"DB Host: {settings.db_host}")
+print(f"DB Port: {settings.db_port}")  # This should print an integer
+print(f"DB Name: {settings.db_name}")
+print(f"DB User: {settings.db_user}")
+print(f"DB Password: {settings.db_pass}")
+print(f"Database URL: {settings.db_url}")
