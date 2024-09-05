@@ -155,7 +155,7 @@ class SRegisterUserRequest(BaseModel):
     tags: list[str] = list()
 
 
-class SRegisterUserResponse(BaseModel, DetailMixin):
+class SRegisterUserResponse(BaseModel):
     id: int
 
 

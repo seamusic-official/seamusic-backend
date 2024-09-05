@@ -1,4 +1,4 @@
-name: flake8_workflow
+name: check
 on:
   push
 
@@ -27,7 +27,13 @@ jobs:
           architecture: x64
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Install mypy
-        run: pip install mypy
+      - name: Install and configure Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.5.1
+          virtualenvs-create: true
+          virtualenvs-in-project: false
+      - name: Install dependencies
+        run: poetry install
       - name: Run mypy
-        run: python -m mypy -p src --ignore-missing-imports --config-file=pyproject.toml
+        run: poetry run mypy -p src --ignore-missing-imports --config-file=pyproject.toml
