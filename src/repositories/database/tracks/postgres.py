@@ -29,7 +29,7 @@ class TracksRepository(SQLAlchemyRepository, BaseTracksRepository):
         return TracksResponseDTO(tracks=models_to_dto(models=tracks, dto=_Track))
 
     async def get_users_tracks_count(self, user_id: int) -> int:
-        query = select(Track.id).filter_by(user_id=user_id).column('id')
+        query = select(Track.id).filter_by(user_id=user_id)
         return len(list(await self.scalars(query)))
 
     async def get_all_tracks(self, offset: int = 0, limit: int = 10) -> TracksResponseDTO:
@@ -38,7 +38,7 @@ class TracksRepository(SQLAlchemyRepository, BaseTracksRepository):
         return TracksResponseDTO(tracks=models_to_dto(models=tracks, dto=_Track))
 
     async def get_tracks_count(self) -> int:
-        query = select(Track.id).column('id')
+        query = select(Track.id)
         return len(list(await self.scalars(query)))
 
     async def get_track_by_id(self, track_id: int) -> TrackResponseDTO | None:

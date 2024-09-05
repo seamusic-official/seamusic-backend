@@ -4,7 +4,6 @@ from src.dtos.database.soundkits import UpdateSoundkitRequestDTO
 from src.schemas.auth import User
 from src.schemas.base import Page
 from src.schemas.soundkits import (
-    Soundkit,
     SSoundkitResponse,
     SUpdateSoundkitRequest,
     SSoundkitDeleteResponse,
@@ -35,17 +34,18 @@ async def get_user_soundkits(
     response = await service.get_user_soundkits(user_id=user.id, start=page.start, size=page.size)
 
     soundkits_ = list(map(
-        lambda soundkit: Soundkit(
+        lambda soundkit: SSoundkitResponse(
             id=soundkit.id,
-            title=soundkit.title,
-            picture=soundkit.picture_url,
+            name=soundkit.name,
+            picture_url=soundkit.picture_url,
             description=soundkit.description,
-            file_path=soundkit.file_path,
+            file_url=soundkit.file_url,
             co_prod=soundkit.co_prod,
             prod_by=soundkit.prod_by,
-            playlist_id=soundkit.playlist_id,
             user_id=soundkit.user_id,
-            beat_pack_id=soundkit.beatpack_id,
+            created_at=soundkit.created_at,
+            updated_at=soundkit.updated_at,
+            is_available=soundkit.is_available,
         ),
         response.soundkits
     ))
@@ -76,17 +76,18 @@ async def all_soundkits(
     response = await service.get_all_soundkits(start=page.start, size=page.size)
 
     soundkits_ = list(map(
-        lambda soundkit: Soundkit(
+        lambda soundkit: SSoundkitResponse(
             id=soundkit.id,
-            title=soundkit.title,
-            picture=soundkit.picture_url,
+            name=soundkit.name,
+            picture_url=soundkit.picture_url,
             description=soundkit.description,
-            file_path=soundkit.file_path,
+            file_url=soundkit.file_url,
             co_prod=soundkit.co_prod,
             prod_by=soundkit.prod_by,
-            playlist_id=soundkit.playlist_id,
             user_id=soundkit.user_id,
-            beat_pack_id=soundkit.beatpack_id,
+            created_at=soundkit.created_at,
+            updated_at=soundkit.updated_at,
+            is_available=soundkit.is_available,
         ),
         response.soundkits
     ))

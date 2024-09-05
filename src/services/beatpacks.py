@@ -62,7 +62,7 @@ class BeatpackService:
         self,
         beatpack_id: int,
         user_id: int,
-        beats: list[Beat],
+        beat_ids: list[int] | None = None,
         title: str | None = None,
         description: str | None = None,
     ) -> int:
@@ -76,7 +76,7 @@ class BeatpackService:
             updated_beatpack = UpdateBeatpackRequestDTO(
                 title=title,
                 description=description,
-                beats=beats
+                beat_ids=beat_ids,
             )
             return await self.respositories.database.beatpacks.update_beatpack(beatpack=updated_beatpack)
 

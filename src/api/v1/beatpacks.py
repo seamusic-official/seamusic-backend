@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Depends, status
 
-from src.dtos.database.beats import Beat as _Beat
-from src.enums.type import Type
-from src.schemas.auth import User
+from src.schemas.auth import User, SUserResponse
 from src.schemas.base import Page
 from src.schemas.beatpacks import (
     SBeatpackResponse,
@@ -14,7 +12,7 @@ from src.schemas.beatpacks import (
     SCreateBeatpackResponse,
     SEditBeatpackRequest,
 )
-from src.schemas.beats import Beat, SBeatResponse
+from src.schemas.beats import SBeatResponse
 from src.services.beatpacks import BeatpackService, get_beatpack_service
 from src.utils.auth import get_current_user
 
@@ -36,12 +34,12 @@ async def get_my_beatpacks(
     response = await service.get_user_beatpacks(user_id=user.id, start=page.start, size=page.size)
 
     beatpacks_ = list(map(
-        lambda beatpack: SBeatpacksResponse(
+        lambda beatpack: SBeatpackResponse(
             title=beatpack.title,
             description=beatpack.description,
             user_id=beatpack.user_id,
             users=list(map(
-                lambda user_: User(
+                lambda user_: SUserResponse(
                     id=user_.id,
                     username=user_.username,
                     email=user_.email,
@@ -101,7 +99,7 @@ async def all_beatpacks(
             description=beatpack.description,
             user_id=beatpack.user_id,
             users=list(map(
-                lambda user_: User(
+                lambda user_: SUserResponse(
                     id=user_.id,
                     username=user_.username,
                     email=user_.email,
@@ -159,7 +157,7 @@ async def get_one(
         description=beatpack.description,
         user_id=beatpack.user_id,
         users=list(map(
-            lambda user_: User(
+            lambda user_: SUserResponse(
                 id=user_.id,
                 username=user_.username,
                 email=user_.email,
@@ -169,7 +167,7 @@ async def get_one(
             beatpack.users
         )),
         beats=list(map(
-            lambda beat: Beat(
+            lambda beat: SBeatResponse(
                 id=beat.id,
                 title=beat.title,
                 description=beat.description,
@@ -222,23 +220,7 @@ async def update_beatpacks(
         title=data.title,
         description=data.description,
         beatpack_id=beatpack_id,
-        beats=list(map(
-            lambda beat: _Beat(
-                id=beat.id,
-                title=beat.title,
-                description=beat.description,
-                picture_url=beat.picture_url,
-                file_url=beat.file_url,
-                co_prod=beat.co_prod,
-                prod_by=beat.prod_by,
-                user_id=beat.user_id,
-                is_available=beat.is_available,
-                created_at=beat.created_at,
-                updated_at=beat.updated_at,
-                type=Type.beat,
-            ),
-            data.beats
-        )),
+        beat_ids=data.beat_ids,
         user_id=user.id,
     )
 

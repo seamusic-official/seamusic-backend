@@ -29,7 +29,6 @@ from src.schemas.auth import (
     SUpdateArtistResponse,
     SDeleteArtistResponse,
     SProducersResponse,
-    Producer,
     SMeAsProducerResponse,
     SUpdateProducerRequest,
     SUpdateProducerResponse,
@@ -208,7 +207,7 @@ async def get_me_as_artist(
     return SMeAsArtistResponse(
         id=artist_id,
         description=artist.description,
-        user=User(
+        user=SUserResponse(
             id=artist.user.id,
             username=artist.user.username,
             email=artist.user.email,
@@ -235,7 +234,13 @@ async def get_artists(
     artists_ = list(map(
         lambda artist: SArtistResponse(
             id=artist.id,
-            user=artist.user,
+            user=SUserResponse(
+                id=artist.user.id,
+                username=artist.user.username,
+                email=artist.user.email,
+                picture_url=artist.user.picture_url,
+                birthday=artist.user.birthday,
+            ),
             description=artist.description,
         ),
         response.artists,
@@ -269,7 +274,7 @@ async def get_one_artist(
     return SArtistResponse(
         id=artist.id,
         description=artist.description,
-        user=User(
+        user=SUserResponse(
             id=artist.user.id,
             username=artist.user.username,
             email=artist.user.email,
@@ -334,7 +339,7 @@ async def get_me_as_producer(
     return SMeAsProducerResponse(
         id=producer.id,
         description=producer.description,
-        user=User(
+        user=SUserResponse(
             id=producer.user.id,
             username=producer.user.username,
             email=producer.user.email,
@@ -351,15 +356,18 @@ async def get_me_as_producer(
     response_model=SProducersResponse,
     responses={status.HTTP_200_OK: {'model': SProducersResponse}},
 )
-async def get_all_producers(service: ProducersService = Depends(get_producers_service)) -> SProducersResponse:
+async def get_all_producers(
+    page: Page,
+    service: ProducersService = Depends(get_producers_service),
+) -> SProducersResponse:
 
-    response = await service.get_all_producers()
+    response = await service.get_all_producers(start=page.start, size=page.size)
 
     producers_ = list(map(
-        lambda producer: Producer(
+        lambda producer: SProducerResponse(
             id=producer.id,
             description=producer.description,
-            user=User(
+            user=SUserResponse(
                 id=producer.user.id,
                 username=producer.user.username,
                 email=producer.user.email,
@@ -370,7 +378,16 @@ async def get_all_producers(service: ProducersService = Depends(get_producers_se
         response.producers
     ))
 
-    return SProducersResponse(producers=producers_)
+    total = await service.get_producers_count()
+
+    return SProducersResponse(
+        total=total,
+        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+        has_next=page.start + page.size < total,
+        has_previous=page.start - page.size >= 0,
+        size=page.size,
+        items=producers_,
+    )
 
 
 @producers.get(
@@ -390,7 +407,7 @@ async def get_one_producer(
     return SProducerResponse(
         id=producer.id,
         description=producer.description,
-        user=User(
+        user=SUserResponse(
             id=producer.user.id,
             username=producer.user.username,
             email=producer.user.email,
@@ -484,7 +501,7 @@ async def login(
     return SLoginResponse(
         access_token=access_token,
         refresh_token=refresh_token_,
-        user=User(
+        user=SUserResponse(
             id=user.id,
             username=user.username,
             email=user.email,
@@ -508,8 +525,8 @@ async def refresh_token(
 
     access_token, refresh_token_ = await service.refresh_token(user_id=user.id)
     return SRefreshTokenResponse(
-        accessToken=access_token,
-        refreshToken=refresh_token_
+        access_token=access_token,
+        refresh_token=refresh_token_
     )
 
 
@@ -530,5 +547,11 @@ async def spotify_callback(
     return SSpotifyCallbackResponse(
         access_token=access_token,
         refresh_token=access_token,
-        user=user
+        user=SUserResponse(
+            id=user.id,
+            username=user.username,
+            email=user.email,
+            picture_url=user.picture_url,
+            birthday=user.birthday,
+        )
     )

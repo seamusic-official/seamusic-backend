@@ -44,7 +44,7 @@ class AlbumResponseDTO(BaseResponseDTO):
     picture_url: str
     description: str
     co_prod: str
-    type: Type
+    type: Literal[Type.album] = Type.album
     user_id: int
     created_at: datetime
     updated_at: datetime

@@ -31,7 +31,7 @@ class SoundkitResponseDTO(BaseResponseDTO):
 
 
 class SoundkitsResponseDTO(BaseResponseDTO):
-    soundkits: list[Soundkit]
+    soundkits: list[SoundkitResponseDTO]
 
 
 class CreateSoundkitRequestDTO(BaseRequestDTO):

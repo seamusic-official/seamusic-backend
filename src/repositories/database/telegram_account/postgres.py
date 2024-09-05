@@ -30,7 +30,7 @@ class TelegramAccountRepository(SQLAlchemyRepository, BaseTelegramAccountReposit
         return TelegramAccountsIDSResponseDTO(ids=ids)
 
     async def get_telegram_accounts_ids_count(self) -> int:
-        query = select(TelegramAccount.id).column('id')
+        query = select(TelegramAccount.id)
         return len(list(await self.scalars(query)))
 
 

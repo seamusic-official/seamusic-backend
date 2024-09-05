@@ -36,7 +36,7 @@ class AlbumRepository(SQLAlchemyRepository, BaseAlbumRepository):
         return AlbumsResponseDTO(albums=models_to_dto(models=albums, dto=AlbumResponseDTO))
 
     async def get_albums_count(self) -> int:
-        query = select(Album.id).column('id')
+        query = select(Album.id)
         return len(list(await self.scalars(query)))
 
     async def get_user_albums(self, user_id: int, offset: int = 0, limit: int = 10) -> AlbumsResponseDTO:
@@ -45,7 +45,7 @@ class AlbumRepository(SQLAlchemyRepository, BaseAlbumRepository):
         return AlbumsResponseDTO(albums=models_to_dto(models=albums, dto=AlbumResponseDTO))
 
     async def get_user_albums_count(self, user_id: int) -> int:
-        query = select(Album.id).filter_by(user_id=user_id).column('id')
+        query = select(Album.id).filter_by(user_id=user_id)
         return len(list(await self.scalars(query)))
 
     async def delete_album(self, album_id: int, user_id: int) -> None:
