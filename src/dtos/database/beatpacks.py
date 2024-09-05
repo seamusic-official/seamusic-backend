@@ -32,4 +32,4 @@ class CreateBeatpackRequestDTO(BaseRequestDTO):
 class UpdateBeatpackRequestDTO(BaseRequestDTO):
     title: str | None = None
     description: str | None = None
-    beats: list[Beat] = list()
+    beat_ids: list[int] | None = None

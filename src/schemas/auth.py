@@ -72,14 +72,14 @@ class Artist(BaseModel):
 
 class SArtistResponse(BaseModel):
     id: int
-    user: User
+    user: SUserResponse
     description: str | None = None
     type: Literal[Type.artist] = Type.artist
 
 
 class SMeAsArtistResponse(BaseModel):
     id: int
-    user: User
+    user: SUserResponse
     description: str | None = None
     type: Literal[Type.artist] = Type.artist
 
@@ -114,14 +114,14 @@ class Producer(BaseModel):
 
 class SProducerResponse(BaseModel):
     id: int
-    user: User
+    user: SUserResponse
     description: str | None = None
     type: Literal[Type.producer] = Type.producer
 
 
 class SMeAsProducerResponse(BaseModel):
     id: int
-    user: User
+    user: SUserResponse
     description: str | None = None
 
 
@@ -131,7 +131,7 @@ class SProducersResponse(BaseModel):
     has_next: bool
     has_previous: bool
     size: int
-    items: list[Producer]
+    items: list[SProducerResponse]
 
 
 class SUpdateProducerRequest(BaseModel):

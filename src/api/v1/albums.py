@@ -42,12 +42,12 @@ async def get_my_albums(
     )
 
     albums_ = list(map(
-        lambda album: SMyAlbumsResponse(
+        lambda album: SAlbumResponse(
             id=album.id,
             created_at=album.created_at,
             updated_at=album.updated_at,
             is_available=album.is_available,
-            title=album.title,
+            title=album.name,
             picture_url=album.picture_url,
             description=album.description,
             co_prod=album.co_prod,
@@ -85,12 +85,12 @@ async def all_albums(
     )
 
     albums_ = list(map(
-        lambda album: SMyAlbumsResponse(
+        lambda album: SAlbumResponse(
             id=album.id,
             created_at=album.created_at,
             updated_at=album.updated_at,
             is_available=album.is_available,
-            title=album.title,
+            title=album.name,
             picture_url=album.picture_url,
             description=album.description,
             co_prod=album.co_prod,

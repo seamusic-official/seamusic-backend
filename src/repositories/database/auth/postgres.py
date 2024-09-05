@@ -43,7 +43,7 @@ class UsersRepository(BaseUsersRepository, SQLAlchemyRepository):
         return UsersResponseDTO(users=models_to_dto(models=users, dto=_User))
 
     async def get_users_count(self) -> int:
-        query = select(User.id).column('id')
+        query = select(User.id)
         return len(list(await self.scalars(query)))
 
     async def create_user(self, user: CreateUserRequestDTO) -> int:
@@ -77,7 +77,7 @@ class ArtistsRepository(BaseArtistsRepository, SQLAlchemyRepository):
         return ArtistsResponseDTO(artists=models_to_dto(models=artists, dto=Artist))
 
     async def get_artists_count(self) -> int:
-        query = select(ArtistProfile.id).column('id')
+        query = select(ArtistProfile.id)
         return len(list(await self.scalars(query)))
 
     async def create_artist(self, artist: CreateArtistRequestDTO) -> int:
@@ -107,7 +107,7 @@ class ProducersRepository(BaseProducersRepository, SQLAlchemyRepository):
         return ProducersResponseDTO(producers=models_to_dto(models=producers, dto=Producer))
 
     async def get_producers_count(self) -> int:
-        query = select(ProducerProfile.id).column('id')
+        query = select(ProducerProfile.id)
         return len(list(await self.scalars(query)))
 
     async def create_producer(self, producer: CreateProducerRequestDTO) -> int:

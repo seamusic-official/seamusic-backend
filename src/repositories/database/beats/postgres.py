@@ -20,7 +20,7 @@ class BeatsRepository(BaseBeatsRepository, SQLAlchemyRepository):
         return BeatsResponseDTO(beats=models_to_dto(models=beats, dto=_Beat))
 
     async def get_user_beats_count(self, user_id: int) -> int:
-        query = select(Beat.id).filter_by(user_id=user_id).column('id')
+        query = select(Beat.id).filter_by(user_id=user_id)
         return len(list(await self.scalars(query)))
 
     async def all_beats(self, offset: int = 0, limit: int = 10) -> BeatsResponseDTO:
@@ -29,7 +29,7 @@ class BeatsRepository(BaseBeatsRepository, SQLAlchemyRepository):
         return BeatsResponseDTO(beats=models_to_dto(models=beats, dto=_Beat))
 
     async def get_beats_count(self) -> int:
-        query = select(Beat.id).column('id')
+        query = select(Beat.id)
         return len(list(await self.scalars(query)))
 
     async def get_beat_by_id(self, beat_id: int) -> BeatResponseDTO | None:

@@ -21,10 +21,10 @@ class Soundkit(BaseModel):
 class SSoundkitResponse(BaseModel):
     id: int
     name: str
-    co_prod: str
-    prod_by: str
-    description: str
-    picture_url: str
+    co_prod: str | None = None
+    prod_by: str | None = None
+    description: str | None = None
+    picture_url: str | None = None
     file_url: str
     user_id: int
     is_available: bool

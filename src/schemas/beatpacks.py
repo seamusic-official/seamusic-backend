@@ -48,7 +48,7 @@ class SEditBeatpackRequest(BaseModel):
     id: int
     title: str | None = None
     description: str | None = None
-    beats_ids: list[int] | None = None
+    beat_ids: list[int] | None = None
 
 
 class SEditBeatpackResponse(BaseModel):

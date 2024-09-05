@@ -63,7 +63,7 @@ async def get_telegram_accounts_ids(
     service: SubscriptionsService = Depends(get_subscriptions_service),
 ) -> STelegramAccountsIDResponse:
 
-    telegram_ids = await service.get_telegram_accounts_ids(start=page.start, size=page.size)
+    response = await service.get_telegram_accounts_ids(start=page.start, size=page.size)
     total = await service.get_telegram_accounts_count()
 
     return STelegramAccountsIDResponse(
@@ -72,5 +72,5 @@ async def get_telegram_accounts_ids(
         has_next=page.start + page.size < total,
         has_previous=page.start - page.size >= 0,
         size=page.size,
-        items=list(telegram_ids),
+        items=list(response.ids),
     )
