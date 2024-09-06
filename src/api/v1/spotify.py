@@ -29,18 +29,33 @@ spotify = APIRouter(prefix="/inspiration", tags=["Music & Albums"])
 async def get_recommendations(
     page: Page,
     service: SpotifyService = Depends(get_spotify_service),
-) -> SSpotifyTrackResponse:
+) -> SSpotifyTracksResponse:
 
-    track = await service.get_recommendations(start=page.start, size=page.size)
+    response = await service.get_recommendations(start=page.start, size=page.size)
+    
+    tracks = list(map(
+        lambda track: SpotifyTrack(
+            id=track.id,
+            type=SpotifyType.track,
+            name=track.name,
+            preview_url=track.preview_url,
+            image_url=track.image_url,
+            spotify_url=track.href,
+        ),
+        response.tracks
+    ))
 
-    return SSpotifyTrackResponse(
-        id=track.id,
-        type=track.type,
-        name=track.name,
-        preview_url=track.preview_url,
-        image_url=track.image_url,
-        spotify_url=track.href,
-    )
+    total = await service.get_recommendations_count()
+
+    return SSpotifyTracksResponse(
+            total=total,
+            page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+            has_next=page.start + page.size < total,
+            has_previous=page.start - page.size >= 0,
+            size=page.size,
+            tracks=tracks
+        )
+
 
 @spotify.get(
     path="/tracks",
@@ -48,13 +63,13 @@ async def get_recommendations(
     response_model=SSpotifyTracksResponse,
     status_code=status.HTTP_200_OK,
 )
-async def get_spotify_artist_tracks(
+async def get_top_artist_tracks(
     page: Page,
     spotify_artist_id: str,
     service: SpotifyService = Depends(get_spotify_service),
 ) -> SSpotifyTracksResponse:
 
-    response = await service.get_spotify_tracks(artist_id=spotify_artist_id, start=page.start, size=page.size)
+    response = await service.get_top_artist_tracks(artist_id=spotify_artist_id)
 
     tracks = list(map(
         lambda track: SpotifyTrack(
@@ -68,31 +83,16 @@ async def get_spotify_artist_tracks(
         response.tracks
     ))
 
-    return SSpotifyTracksResponse(tracks=tracks)
+    total = await service.get_top_artist_tracks_count(artist_id=spotify_artist_id)
 
-
-@spotify.get(
-    path="/tracks/{track_id}",
-    summary="Get spotify track",
-    status_code=status.HTTP_200_OK,
-    response_model=SSpotifyTracksResponse,
-)
-async def get_spotify_track(
-    page: Page,
-    track_id: str,
-    service: SpotifyService = Depends(get_spotify_service),
-) -> SSpotifyTrackResponse:
-
-    track = await service.get_spotify_track(track_id=track_id, start=page.start, size=page.size)
-
-    return SSpotifyTrackResponse(
-        id=track.id,
-        type=track.type,
-        name=track.name,
-        preview_url=track.preview_url,
-        image_url=track.image_url,
-        spotify_url=track.href,
-    )
+    return SSpotifyTracksResponse(
+        total=total,
+        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+        has_next=page.start + page.size < total,
+        has_previous=page.start - page.size >= 0,
+        size=page.size,
+        tracks=tracks
+        )
 
 
 @spotify.get(
@@ -101,13 +101,13 @@ async def get_spotify_track(
     response_model=SSpotifyAlbumsResponse,
     status_code=status.HTTP_200_OK,
 )
-async def get_spotify_albums(
+async def get_artist_albums(
     page: Page,
     artist_id: str,
     service: SpotifyService = Depends(get_spotify_service),
 ) -> SSpotifyAlbumsResponse:
 
-    response = await service.get_spotify_albums(artist_id=artist_id, start=page.start, size=page.size)
+    response = await service.get_artist_albums(artist_id=artist_id, start=page.start, size=page.size)
 
     albums = list(map(
         lambda album: SpotifyAlbum(
@@ -119,7 +119,16 @@ async def get_spotify_albums(
         response.items
     ))
 
-    return SSpotifyAlbumsResponse(albums=albums)
+    total = await service.get_artist_albums_count(artist_id=artist_id)
+
+    return SSpotifyAlbumsResponse(
+        total=total,
+        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+        has_next=page.start + page.size < total,
+        has_previous=page.start - page.size >= 0,
+        size=page.size,
+        albums=albums
+        )
 
 
 @spotify.get(
@@ -156,6 +165,29 @@ async def get_spotify_album(
         uri=album.uri,
         album_type=album.type,
         total_tracks=album.total_tracks,
+    )
+
+
+@spotify.get(
+    path="/tracks/{track_id}",
+    summary="Get spotify track",
+    status_code=status.HTTP_200_OK,
+    response_model=SSpotifyTracksResponse,
+)
+async def get_spotify_track(
+    track_id: str,
+    service: SpotifyService = Depends(get_spotify_service),
+) -> SSpotifyTrackResponse:
+
+    track = await service.get_spotify_track(track_id=track_id)
+
+    return SSpotifyTrackResponse(
+        id=track.id,
+        type=track.type,
+        name=track.name,
+        preview_url=track.preview_url,
+        image_url=track.image_url,
+        spotify_url=track.href,
     )
 
 
@@ -211,7 +243,14 @@ async def search(
 
     result = await service.get_spotify_search(query=query, type_=type_, start=page.start, size=page.size)
 
+    total = await service.get_spotify_search_count(query=query, type_=type_)
+
     return SSpotifySearchResponse(
+        total=total,
+        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+        has_next=page.start + page.size < total,
+        has_previous=page.start - page.size >= 0,
+        size=page.size,
         tracks=list(map(
             lambda track: SpotifyTrack(
                 id=track.id,
