@@ -43,7 +43,11 @@ class SpotifyRepository(BaseSpotifyRepository, AiohttpRepositpry):
         ) as response:
             return await response.json()
 
-    async def get_tracks(self, artist_id: str) -> SpotifyTracksResponseDTO:
+    async def get_recommendations(self, offset: int = 0, limit: int = 10) -> SpotifyTracksResponseDTO:
+        async with self.session.get(f'{self.base_url}/recommendations?offset={offset}&limit={limit}') as response:  # type: ignore[attr-defined]
+            return SpotifyTracksResponseDTO(**await response.json())
+
+    async def get_top_artist_tracks(self, artist_id: str) -> SpotifyTracksResponseDTO:
         async with self.session.get(f'{self.base_url}/artists/{artist_id}/top-tracks') as response:  # type: ignore[attr-defined]
             return SpotifyTracksResponseDTO(**await response.json())
 
@@ -56,8 +60,8 @@ class SpotifyRepository(BaseSpotifyRepository, AiohttpRepositpry):
         async with self.session.get(f'{self.base_url}/tracks/{track_id}') as response:  # type: ignore[attr-defined]
             return SpotifyTrackResponseDTO(**await response.json()) if response.status != 404 else None
 
-    async def get_albums(self, artist_id: str) -> SpotifyAlbumsResponseDTO:
-        async with self.session.get(f'{self.base_url}/artists/{artist_id}/albums') as response:  # type: ignore[attr-defined]
+    async def get_artist_albums(self, artist_id: str, offset: int = 0, limit: int = 10) -> SpotifyAlbumsResponseDTO:
+        async with self.session.get(f'{self.base_url}/artists/{artist_id}/albums?offset={offset}&limit={limit}') as response:  # type: ignore[attr-defined]
             return SpotifyAlbumsResponseDTO(**await response.json())
 
     async def get_album(self, album_id: str) -> SpotifyAlbumResponseDTO | None:
@@ -68,6 +72,6 @@ class SpotifyRepository(BaseSpotifyRepository, AiohttpRepositpry):
         async with self.session.get(f'{self.base_url}/artists/{artist_id}') as response:  # type: ignore[attr-defined]
             return SpotifyArtistResponseDTO(**await response.json()) if response.status != 404 else None
 
-    async def search(self, query: str, type_: SpotifyType) -> SearchResponseDTO:
-        async with self.session.get(f'{self.base_url}/search?q={query}&type={type_}') as response:  # type: ignore[attr-defined]
+    async def search(self, query: str, type_: SpotifyType, offset: int = 0, limit: int = 10) -> SearchResponseDTO:
+        async with self.session.get(f'{self.base_url}/search?q={query}&type={type_}&offset={offset}&limit={limit}') as response:  # type: ignore[attr-defined]
             return SearchResponseDTO(**await response.json())

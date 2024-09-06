@@ -45,6 +45,11 @@ class SpotifyAlbumTrack(BaseDTO):
 
 
 class SpotifyAlbumTracksResponseDTO(BaseResponseDTO):
+    limit: int
+    next: str
+    offset: int
+    previous: str
+    total: int
     tracks: list[SpotifyAlbumTrack]
 
 
@@ -101,6 +106,11 @@ class SpotifyTrackResponseDTO(BaseResponseDTO):
 
 
 class SpotifyTracksResponseDTO(BaseResponseDTO):
+    limit: int
+    next: str
+    offset: int
+    previous: str
+    total: int
     tracks: list[SpotifyTrack]
 
 
@@ -121,7 +131,6 @@ class SpotifyAlbumResponseDTO(BaseResponseDTO):
 
 
 class SpotifyAlbumsResponseDTO(BaseResponseDTO):
-    href: str
     limit: int
     next: str
     offset: int
@@ -162,6 +171,11 @@ class SearchAlbums(BaseDTO):
 
 
 class SearchResponseDTO(BaseResponseDTO):
+    limit: int
+    next: str
+    offset: int
+    previous: str
+    total: int
     tracks: list[SpotifyTrack] | None = None
     artists: list[SpotifyTrack] | None = None
     albums: list[SpotifyAlbum] | None = None

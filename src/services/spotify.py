@@ -22,8 +22,11 @@ class SpotifyRepositories(Repositories):
 class SpotifyService:
     repositories: SpotifyRepositories
 
-    async def get_spotify_tracks(self, artist_id: str) -> SpotifyTracksResponseDTO:
-        return await self.repositories.api.get_tracks(artist_id=artist_id)
+    async def get_recommendations(self, start: int = 1, size: int = 10) -> SpotifyTracksResponseDTO:
+        return await self.repositories.api.get_recommendations(offset=start - 1, limit=size)
+
+    async def get_top_artist_tracks(self, artist_id: str, start: int = 1, size: int = 10) -> SpotifyTracksResponseDTO:
+        return await self.repositories.api.get_top_artist_tracks(artist_id=artist_id, offset=start - 1, limit=size)
 
     async def get_spotify_track(self, track_id: str) -> SpotifyTrackResponseDTO:
         track = await self.repositories.api.get_track(track_id=track_id)
@@ -33,8 +36,8 @@ class SpotifyService:
 
         return track
 
-    async def get_spotify_albums(self, artist_id: str) -> SpotifyAlbumsResponseDTO:
-        albums = await self.repositories.api.get_albums(artist_id=artist_id)
+    async def get_artist_albums(self, artist_id: str, start: int = 1, size: int = 10) -> SpotifyAlbumsResponseDTO:
+        albums = await self.repositories.api.get_artist_albums(artist_id=artist_id, offset=start - 1, limit=size)
 
         if not albums:
             raise NotFoundException()
@@ -60,8 +63,8 @@ class SpotifyService:
 
         return artist
 
-    async def get_spotify_search(self, query: str, type_: SpotifyType) -> SearchResponseDTO:
-        return await self.repositories.api.search(query=query, type_=type_)
+    async def get_spotify_search(self, query: str, type_: SpotifyType, start: int = 1, size: int = 10) -> SearchResponseDTO:
+        return await self.repositories.api.search(query=query, type_=type_, offset=start - 1, limit=size)
 
 
 def get_spotify_repositories() -> SpotifyRepositories:

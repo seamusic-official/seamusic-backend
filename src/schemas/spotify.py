@@ -15,6 +15,11 @@ class SpotifyTrack(BaseModel):
 
 
 class SSpotifyTracksResponse(BaseModel):
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
     tracks: list[SpotifyTrack]
 
 
@@ -35,6 +40,11 @@ class SpotifyAlbum(BaseModel):
 
 
 class SSpotifyAlbumsResponse(BaseModel):
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
     albums: list[SpotifyAlbum]
 
 
@@ -70,6 +80,11 @@ class SpotifyAlbumTrack(BaseModel):
 
 
 class SSpotifyAlbumTracksResponse(BaseModel):
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
     tracks: list[SpotifyAlbumTrack]
 
 
@@ -87,6 +102,11 @@ class SSpotifyArtistResponse(BaseModel):
 
 
 class SSpotifySearchResponse(BaseModel):
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
     tracks: list[SpotifyTrack] | None = None
     artists: list[SpotifyArtist] | None = None
     albums: list[SpotifyAlbum] | None = None
