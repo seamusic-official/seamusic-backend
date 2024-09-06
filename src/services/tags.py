@@ -34,24 +34,43 @@ class TagsService:
         tag = AddTagRequestDTO(name=name)
         return await self.repositories.database.tags.add_tag(tag=tag)
 
-    async def get_listener_tags(self, user_id: int) -> TagsResponseDTO:
-        return await self.repositories.database.tags.get_listener_tags(user_id=user_id)
+    async def get_listener_tags(self, user_id: int, start: int = 1, size: int = 10) -> TagsResponseDTO:
+        return await self.repositories.database.tags.get_listener_tags(user_id=user_id, offset=start - 1, limit=size)
 
-    async def get_producer_tags(self, user_id: int) -> TagsResponseDTO:
+    async def get_listener_tags_count(self, user_id: int) -> int:
+        return await self.repositories.database.tags.get_listener_tags_count(user_id=user_id)
+
+    async def get_producer_tags(self, user_id: int, start: int = 1, size: int = 10) -> TagsResponseDTO:
         producer_id: int | None = await self.repositories.database.producers.get_producer_id_by_user_id(user_id=user_id)
 
         if not producer_id:
-            raise NotFoundException("Artist profile not found")
+            raise NotFoundException("Producer profile not found")
 
-        return await self.repositories.database.tags.get_producer_tags(producer_id=producer_id)
+        return await self.repositories.database.tags.get_producer_tags(producer_id=producer_id, offset=start - 1, limit=size)
 
-    async def get_artist_tags(self, user_id: int) -> TagsResponseDTO:
+    async def get_producer_tags_count(self, user_id: int) -> int:
+        producer_id = await self.repositories.database.producers.get_producer_id_by_user_id(user_id=user_id)
+
+        if not producer_id:
+            raise NotFoundException("Producer profile not found")
+
+        return await self.repositories.database.tags.get_producer_tags_count(producer_id=producer_id)
+
+    async def get_artist_tags(self, user_id: int, start: int = 1, size: int = 10) -> TagsResponseDTO:
         artist_id: int | None = await self.repositories.database.artists.get_artist_id_by_user_id(user_id=user_id)
 
         if not artist_id:
             raise NotFoundException("Artist profile not found")
 
-        return await self.repositories.database.tags.get_artist_tags(artist_id=artist_id)
+        return await self.repositories.database.tags.get_artist_tags(artist_id=artist_id, offset=start - 1, limit=size)
+
+    async def get_artist_tags_count(self, user_id: int) -> int:
+        artist_id = await self.repositories.database.producers.get_producer_id_by_user_id(user_id=user_id)
+
+        if not artist_id:
+            raise NotFoundException("Producer profile not found")
+
+        return await self.repositories.database.tags.get_artist_tags_count(artist_id=artist_id)
 
 
 def get_tags_repositories() -> TagsRepositories:

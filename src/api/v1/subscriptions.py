@@ -1,7 +1,12 @@
 from fastapi import APIRouter, Depends, status
 
-from src.schemas.subscriptions import STelegramAccountResponse, STelegramAccountsIDResponse, OnlyTelegramSubscribeYear, \
-    OnlyTelegramSubscribeMonth
+from src.schemas.base import Page
+from src.schemas.subscriptions import (
+    OnlyTelegramSubscribeMonth,
+    OnlyTelegramSubscribeYear,
+    STelegramAccountResponse,
+    STelegramAccountsIDResponse,
+)
 from src.services.subscriptions import SubscriptionsService, get_subscriptions_service
 
 subscription = APIRouter(prefix="/subscription", tags=["Subscription"])
@@ -54,9 +59,18 @@ async def get_telegram_account(
     responses={status.HTTP_200_OK: {"model": STelegramAccountsIDResponse}},
 )
 async def get_telegram_accounts_ids(
-    service: SubscriptionsService = Depends(get_subscriptions_service)
+    page: Page,
+    service: SubscriptionsService = Depends(get_subscriptions_service),
 ) -> STelegramAccountsIDResponse:
 
-    telegram_ids = await service.get_telegram_accounts_ids()
+    response = await service.get_telegram_accounts_ids(start=page.start, size=page.size)
+    total = await service.get_telegram_accounts_count()
 
-    return STelegramAccountsIDResponse(ids=list(telegram_ids.ids))
+    return STelegramAccountsIDResponse(
+        total=total,
+        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+        has_next=page.start + page.size < total,
+        has_previous=page.start - page.size >= 0,
+        size=page.size,
+        items=list(response.ids),
+    )

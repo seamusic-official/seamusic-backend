@@ -6,10 +6,11 @@ from passlib.context import CryptContext
 from pydantic import EmailStr
 
 from src.core.config import settings
+from src.dtos.database.auth import User as _User
 from src.exceptions.api import UnauthorizedException
 from src.schemas.auth import User
-from src.dtos.database.auth import User as _User
 from src.services.auth import UsersService
+
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

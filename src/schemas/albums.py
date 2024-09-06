@@ -1,4 +1,5 @@
 import datetime
+from typing import Literal
 
 from pydantic import BaseModel
 
@@ -15,15 +16,7 @@ class Album(BaseModel):
     picture_url: str | None = None
     description: str
     co_prod: str | None = None
-    type: Type = Type.album
-
-
-class SMyAlbumsResponse(BaseModel):
-    albums: list[Album]
-
-
-class SAllAlbumsResponse(BaseModel):
-    albums: list[Album]
+    type: Literal[Type.album] = Type.album
 
 
 class SAlbumResponse(BaseModel):
@@ -35,7 +28,25 @@ class SAlbumResponse(BaseModel):
     picture_url: str
     description: str
     co_prod: str
-    type: Type = Type.album
+    type: Literal[Type.album] = Type.album
+
+
+class SMyAlbumsResponse(BaseModel):
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
+    items: list[SAlbumResponse] = list()
+
+
+class SAllAlbumsResponse(BaseModel):
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
+    items: list[SAlbumResponse] = list()
 
 
 class SAddAlbumResponse(BaseModel):
@@ -52,7 +63,7 @@ class SReleaseAlbumsRequest(BaseModel):
     picture_url: str
     description: str
     co_prod: str
-    type: str = "album"
+    type: Literal[Type.album] = Type.album
 
 
 class SReleaseAlbumsResponse(BaseModel):
@@ -64,7 +75,7 @@ class SUpdateAlbumRequest(BaseModel):
     description: str
     co_prod: str
     prod_by: str
-    type: str = "album"
+    type: Literal[Type.album] = Type.album
 
 
 class SUpdateAlbumResponse(BaseModel):

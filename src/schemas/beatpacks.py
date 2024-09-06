@@ -1,32 +1,38 @@
+from typing import Literal
+
 from pydantic import BaseModel
 
-from src.schemas.auth import User
+from src.enums.type import Type
+from src.schemas.auth import SUserResponse
 from src.schemas.base import DetailMixin
-from src.schemas.beats import Beat
-
-
-class Beatpack(BaseModel):
-    title: str
-    description: str
-    user_id: int
-    users: list[User]
-    beats: list[Beat]
+from src.schemas.beats import SBeatResponse
 
 
 class SBeatpackResponse(BaseModel):
     title: str
     description: str
     user_id: int
-    users: list[User]
-    beats: list[Beat]
+    users: list[SUserResponse]
+    beats: list[SBeatResponse]
+    type: Literal[Type.beatpack] = Type.beatpack
 
 
 class SBeatpacksResponse(BaseModel):
-    beatpacks: list[Beatpack]
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
+    items: list[SBeatpackResponse]
 
 
 class SMyBeatpacksResponse(BaseModel):
-    beatpacks: list[Beatpack]
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
+    items: list[SBeatpackResponse]
 
 
 class SCreateBeatpackRequest(BaseModel):
@@ -42,7 +48,7 @@ class SEditBeatpackRequest(BaseModel):
     id: int
     title: str | None = None
     description: str | None = None
-    beats: list[Beat]
+    beat_ids: list[int] | None = None
 
 
 class SEditBeatpackResponse(BaseModel):

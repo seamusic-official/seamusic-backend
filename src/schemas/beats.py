@@ -1,8 +1,10 @@
 from datetime import datetime
+from typing import Literal
 
 from pydantic import BaseModel
 
 from src.dtos.database.base import BaseRequestDTO
+from src.enums.type import Type
 from src.schemas.base import DetailMixin
 
 
@@ -18,6 +20,7 @@ class Beat(BaseModel):
     is_available: bool
     created_at: datetime
     updated_at: datetime
+    type: Literal[Type.beat] = Type.beat
 
 
 class SCreateBeatRequest(BaseRequestDTO):
@@ -26,7 +29,7 @@ class SCreateBeatRequest(BaseRequestDTO):
     co_prod: str | None = None
 
 
-class SBeatResponse(Beat):
+class SBeatResponse(BaseModel):
     id: int
     title: str
     description: str | None = None
@@ -38,14 +41,25 @@ class SBeatResponse(Beat):
     is_available: bool
     created_at: datetime
     updated_at: datetime
+    type: Literal[Type.beat] = Type.beat
 
 
 class SBeatsResponse(BaseModel):
-    beats: list[Beat]
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
+    items: list[SBeatResponse]
 
 
 class SMyBeatsResponse(BaseModel):
-    beats: list[Beat]
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
+    items: list[SBeatResponse]
 
 
 class SCreateBeatResponse(BaseModel):

@@ -24,11 +24,17 @@ class TracksRepositories(Repositories):
 class TracksService:
     repositories: TracksRepositories
 
-    async def get_user_tracks(self, user_id: int) -> TracksResponseDTO:
-        return await self.repositories.database.tracks.get_user_tracks(user_id=user_id)
+    async def get_user_tracks(self, user_id: int, start: int = 1, size: int = 10) -> TracksResponseDTO:
+        return await self.repositories.database.tracks.get_user_tracks(user_id=user_id, offset=start - 1, limit=size)
 
-    async def all_tracks(self) -> TracksResponseDTO:
-        return await self.repositories.database.tracks.get_all_tracks()
+    async def get_user_tracks_count(self, user_id: int) -> int:
+        return await self.repositories.database.tracks.get_users_tracks_count(user_id=user_id)
+
+    async def all_tracks(self, start: int = 1, size: int = 10) -> TracksResponseDTO:
+        return await self.repositories.database.tracks.get_all_tracks(offset=start - 1, limit=size)
+
+    async def get_tracks_count(self) -> int:
+        return await self.repositories.database.tracks.get_tracks_count()
 
     async def get_one_track(self, track_id: int) -> TrackResponseDTO:
         track = await self.repositories.database.tracks.get_track_by_id(track_id=track_id)

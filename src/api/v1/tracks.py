@@ -1,8 +1,8 @@
 from fastapi import UploadFile, File, APIRouter, Depends, status
 
 from src.schemas.auth import User
+from src.schemas.base import Page
 from src.schemas.tracks import (
-    Track,
     STrackResponse,
     SMyTracksResponse,
     SAddTracksResponse,
@@ -11,12 +11,12 @@ from src.schemas.tracks import (
     SReleaseTrackResponse,
     SUpdateTrackResponse,
     SUpdateTrackRequest,
-    SDeleteTrackResponse, SAllTracksResponse,
+    SDeleteTrackResponse,
+    SAllTracksResponse,
 )
 from src.services.tracks import TracksService, get_tracks_service
 from src.utils.auth import get_current_user
 from src.utils.files import unique_filename, get_file_stream
-
 
 tracks = APIRouter(prefix="/tracks", tags=["Tracks"])
 
@@ -28,14 +28,14 @@ tracks = APIRouter(prefix="/tracks", tags=["Tracks"])
     responses={status.HTTP_200_OK: {"model": SMyTracksResponse}},
 )
 async def get_my_tracks(
+    page: Page,
     user: User = Depends(get_current_user),
-    service: TracksService = Depends(get_tracks_service)
+    service: TracksService = Depends(get_tracks_service),
 ) -> SMyTracksResponse:
 
-    response = await service.get_user_tracks(user_id=user.id)
-
-    return SMyTracksResponse(tracks=list(map(
-        lambda track: Track(
+    response = await service.get_user_tracks(user_id=user.id, start=page.start, size=page.size)
+    tracks_ = list(map(
+        lambda track: STrackResponse(
             id=track.id,
             name=track.name,
             prod_by=track.prod_by,
@@ -50,7 +50,17 @@ async def get_my_tracks(
             updated_at=track.updated_at,
         ),
         response.tracks
-    )))
+    ))
+    total = await service.get_user_tracks_count(user_id=user.id)
+
+    return SMyTracksResponse(
+        total=total,
+        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+        has_next=page.start + page.size < total,
+        has_previous=page.start - page.size >= 0,
+        size=page.size,
+        items=tracks_,
+    )
 
 
 @tracks.get(
@@ -60,13 +70,13 @@ async def get_my_tracks(
     responses={status.HTTP_200_OK: {"model": SMyTracksResponse}},
 )
 async def all_tracks(
-    service: TracksService = Depends(get_tracks_service)
+    page: Page,
+    service: TracksService = Depends(get_tracks_service),
 ) -> SAllTracksResponse:
 
-    response = await service.all_tracks()
-
-    return SAllTracksResponse(tracks=list(map(
-        lambda track: Track(
+    response = await service.all_tracks(start=page.start, size=page.size)
+    tracks_ = list(map(
+        lambda track: STrackResponse(
             id=track.id,
             name=track.name,
             prod_by=track.prod_by,
@@ -81,7 +91,17 @@ async def all_tracks(
             updated_at=track.updated_at,
         ),
         response.tracks
-    )))
+    ))
+    total = await service.get_tracks_count()
+
+    return SAllTracksResponse(
+        total=total,
+        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+        has_next=page.start + page.size < total,
+        has_previous=page.start - page.size >= 0,
+        size=page.size,
+        items=tracks_,
+    )
 
 
 @tracks.get(

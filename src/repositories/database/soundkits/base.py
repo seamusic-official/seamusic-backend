@@ -12,11 +12,19 @@ from src.dtos.database.soundkits import (
 @dataclass
 class BaseSoundkitsRepository(ABC):
     @abstractmethod
-    async def get_user_soundkits(self, user_id: int) -> SoundkitsResponseDTO:
+    async def get_user_soundkits(self, user_id: int, offset: int = 0, limit: int = 10) -> SoundkitsResponseDTO:
         ...
 
     @abstractmethod
-    async def get_all_soundkits(self) -> SoundkitsResponseDTO:
+    async def get_users_soundkits_count(self, user_id: int) -> int:
+        ...
+
+    @abstractmethod
+    async def get_all_soundkits(self, offset: int = 0, limit: int = 10) -> SoundkitsResponseDTO:
+        ...
+
+    @abstractmethod
+    async def get_soundkits_count(self) -> int:
         ...
 
     @abstractmethod

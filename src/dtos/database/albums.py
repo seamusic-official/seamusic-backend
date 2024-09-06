@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Literal
 
 from src.dtos.database.base import BaseResponseDTO, BaseRequestDTO, BaseDTO
 from src.enums.type import Type
@@ -10,7 +11,7 @@ class Album(BaseDTO):
     picture_url: str | None = None
     description: str
     co_prod: str | None = None
-    type: Type
+    type: Literal[Type.album] = Type.album
     user_id: int
     created_at: datetime
     updated_at: datetime
@@ -23,7 +24,7 @@ class CreateAlbumRequestDTO(BaseRequestDTO):
     description: str
     prod_by: str
     co_prod: str | None = None
-    type: Type
+    type: Literal[Type.album] = Type.album
     user_id: int
 
 
@@ -33,7 +34,7 @@ class UpdateAlbumRequestDTO(BaseRequestDTO):
     picture_url: str | None = None
     description: str | None = None
     co_prod: str | None = None
-    type: Type
+    type: Literal[Type.album] = Type.album
     user_id: int
 
 
@@ -43,7 +44,7 @@ class AlbumResponseDTO(BaseResponseDTO):
     picture_url: str
     description: str
     co_prod: str
-    type: Type
+    type: Literal[Type.album] = Type.album
     user_id: int
     created_at: datetime
     updated_at: datetime
@@ -51,4 +52,4 @@ class AlbumResponseDTO(BaseResponseDTO):
 
 
 class AlbumsResponseDTO(BaseResponseDTO):
-    albums: list[Album]
+    albums: list[AlbumResponseDTO]

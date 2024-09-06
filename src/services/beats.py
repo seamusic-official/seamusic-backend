@@ -28,11 +28,17 @@ class BeatsRepositories(Repositories):
 class BeatsService(BaseService):
     repositories: BeatsRepositories
 
-    async def get_user_beats(self, user_id: int) -> BeatsResponseDTO:
-        return await self.repositories.database.beats.get_user_beats(user_id=user_id)
+    async def get_user_beats(self, user_id: int, start: int = 1, size: int = 10) -> BeatsResponseDTO:
+        return await self.repositories.database.beats.get_user_beats(user_id=user_id, offset=start - 1, limit=size)
 
-    async def get_all_beats(self) -> BeatsResponseDTO:
-        return await self.repositories.database.beats.all_beats()
+    async def get_user_beats_count(self, user_id: int) -> int:
+        return await self.repositories.database.beats.get_user_beats_count(user_id=user_id)
+
+    async def get_all_beats(self, start: int = 1, size: int = 10) -> BeatsResponseDTO:
+        return await self.repositories.database.beats.all_beats(offset=start - 1, limit=size)
+
+    async def get_all_beats_count(self) -> int:
+        return await self.repositories.database.beats.get_beats_count()
 
     async def get_beat_by_id(self, beat_id: int) -> BeatResponseDTO:
         beat = await self.repositories.database.beats.get_beat_by_id(beat_id=beat_id)

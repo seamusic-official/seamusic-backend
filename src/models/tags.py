@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Table, ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.core.database import Base
+from src.models.base import Base
 
 
 producer_tags_association = Table(

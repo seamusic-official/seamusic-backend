@@ -3,20 +3,11 @@ from datetime import datetime
 from sqlalchemy import DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.core.database import Base
 from src.enums.auth import Role, AccessLevel
 from src.models.albums import Album, artist_profile_album_association
-from src.models.squads import (
-    Squad,
-    squad_producer_profile_association,
-    squad_artist_profile_association,
-)
-from src.models.tags import (
-    Tag,
-    artist_tags_association,
-    producer_tags_association,
-    listener_tags_association,
-)
+from src.models.base import Base
+from src.models.squads import Squad, squad_producer_profile_association, squad_artist_profile_association
+from src.models.tags import Tag, artist_tags_association, producer_tags_association, listener_tags_association
 from src.models.tracks import Track, artist_profile_track_association
 
 
@@ -77,7 +68,7 @@ class ProducerProfile(Base):
         secondary=producer_tags_association,
         back_populates="producer_profiles"
     )
-    squads: Mapped[list["Squad"]] = relationship(  # type: ignore[name-defined]
+    squads: Mapped[list["Squad"]] = (relationship(  # type: ignore[name-defined]
         secondary=squad_producer_profile_association,
         back_populates="producer_profiles"
-    )
+    ))

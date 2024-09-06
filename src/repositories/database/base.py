@@ -3,7 +3,9 @@ from dataclasses import dataclass
 from typing import Iterable, Any
 
 from sqlalchemy.sql import Executable
-from src.core.database import sessionmaker, Base
+
+from src.core.database import sessionmaker
+from src.models.base import Base
 
 
 @dataclass
@@ -43,3 +45,8 @@ class SQLAlchemyRepository(BaseDatabaseRepository):
     async def scalars(statement: Executable) -> Iterable:
         async with sessionmaker() as session:
             return await session.scalars(statement)
+    #
+    # @staticmethod
+    # async def query(statement: FunctionFilter) -> Query:
+    #     async with sessionmaker() as session:
+    #         return await session.query(statement)

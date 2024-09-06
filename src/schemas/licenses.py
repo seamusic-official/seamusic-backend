@@ -21,7 +21,7 @@ class License(BaseModel):
     updated_at: datetime
 
 
-class SLicenseResponse(License):
+class SLicenseResponse(BaseModel):
     id: int
     title: str
     picture_url: str | None = None
@@ -38,11 +38,21 @@ class SLicenseResponse(License):
 
 
 class SLicensesResponse(BaseModel):
-    licenses: list[License]
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
+    items: list[SLicenseResponse]
 
 
 class SMyLicensesResponse(BaseModel):
-    licenses: list[License]
+    total: int
+    page: int
+    has_next: bool
+    has_previous: bool
+    size: int
+    items: list[SLicenseResponse]
 
 
 class SCreateLicenseRequest(BaseModel):

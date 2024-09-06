@@ -26,7 +26,23 @@ class BaseSpotifyRepository(BaseAPIRepository):
         ...
 
     @abstractmethod
-    async def get_tracks(self, artist_id: str) -> SpotifyTracksResponseDTO:
+    async def get_recommendations(self, offset: int = 0, limit: int = 10) -> SpotifyTracksResponseDTO:
+        ...
+
+    @abstractmethod
+    async def get_recommendations_count(self) -> int:
+        ...
+
+    @abstractmethod
+    async def get_top_artist_tracks(self, artist_id: str) -> SpotifyTracksResponseDTO:
+        ...
+
+    @abstractmethod
+    async def get_top_artist_tracks_count(self, artist_id: str) -> int:
+        ...
+
+    @abstractmethod
+    async def get_album_tracks(self, album_id: str, offset: int = 0, limit: int = 10) -> SpotifyTracksResponseDTO:
         ...
 
     @abstractmethod
@@ -34,11 +50,11 @@ class BaseSpotifyRepository(BaseAPIRepository):
         ...
 
     @abstractmethod
-    async def get_track(self, track_id: str) -> SpotifyTrackResponseDTO | None:
+    async def get_artist_albums(self, artist_id: str, offset: int = 0, limit: int = 10) -> SpotifyAlbumsResponseDTO:
         ...
 
     @abstractmethod
-    async def get_albums(self, artist_id: str) -> SpotifyAlbumsResponseDTO:
+    async def get_artist_albums_count(self, artist_id: str) -> int:
         ...
 
     @abstractmethod
@@ -50,5 +66,13 @@ class BaseSpotifyRepository(BaseAPIRepository):
         ...
 
     @abstractmethod
-    async def search(self, query: str, type_: SpotifyType) -> SearchResponseDTO:
+    async def get_track(self, track_id: str) -> SpotifyTrackResponseDTO | None:
+        ...
+
+    @abstractmethod
+    async def search(self, query: str, type_: SpotifyType, offset: int = 0, limit: int = 10) -> SearchResponseDTO:
+        ...
+
+    @abstractmethod
+    async def search_count(self, query: str, type_: SpotifyType) -> int:
         ...

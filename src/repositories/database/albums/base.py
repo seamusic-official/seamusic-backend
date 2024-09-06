@@ -12,11 +12,19 @@ class BaseAlbumRepository(ABC):
         ...
 
     @abstractmethod
-    async def get_all_albums(self) -> AlbumsResponseDTO:
+    async def get_all_albums(self, offset: int = 0, limit: int = 10) -> AlbumsResponseDTO:
         ...
 
     @abstractmethod
-    async def get_user_albums(self, user_id: int) -> AlbumsResponseDTO:
+    async def get_albums_count(self) -> int:
+        ...
+
+    @abstractmethod
+    async def get_user_albums(self, user_id: int, offset: int = 0, limit: int = 10) -> AlbumsResponseDTO:
+        ...
+
+    @abstractmethod
+    async def get_user_albums_count(self, user_id: int) -> int:
         ...
 
     @abstractmethod

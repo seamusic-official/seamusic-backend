@@ -3,5 +3,11 @@ from enum import Enum
 
 class Type(str, Enum):
     album = 'album'
-    track = 'track'
+    artist = 'artist'
     beat = 'beat'
+    beatpack = 'beatpack'
+    license = 'license'
+    soundkit = 'soundkit'
+    producer = 'producer'
+    track = 'track'
+    user = 'user'
