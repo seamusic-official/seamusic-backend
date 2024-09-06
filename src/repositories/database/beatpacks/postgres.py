@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from sqlalchemy import select, delete
+from sqlalchemy import select, delete, func
 
 from src.converters.repositories.database.sqlalchemy import request_dto_to_model, model_to_response_dto, models_to_dto
 from src.dtos.database.beatpacks import (
@@ -23,8 +23,8 @@ class BeatpacksRepository(BaseBeatpacksRepository, SQLAlchemyRepository):
         return BeatpacksResponseDTO(beatpacks=models_to_dto(models=beatpacks, dto=_Beatpack))
 
     async def get_user_beatpacks_count(self, user_id: int) -> int:
-        query = select(Beatpack.id).filter_by(user_id=user_id)
-        return len(list(await self.scalars(query)))
+        query = select(func.count(Beatpack.id)).filter_by(user_id=user_id)
+        return await self.scalar(query)
 
     async def get_all_beatpacks(self, offset: int = 0, limit: int = 10) -> BeatpacksResponseDTO:
         query = select(Beatpack).offset(offset).limit(limit).order_by(Beatpack.id.desc())
@@ -32,8 +32,8 @@ class BeatpacksRepository(BaseBeatpacksRepository, SQLAlchemyRepository):
         return BeatpacksResponseDTO(beatpacks=models_to_dto(models=beatpacks, dto=_Beatpack))
 
     async def get_beatpacks_count(self) -> int:
-        query = select(Beatpack.id)
-        return len(list(await self.scalars(query)))
+        query = select(func.count(Beatpack.id))
+        return await self.scalar(query)
 
     async def get_one_beatpack(self, beatpack_id: int) -> BeatpackResponseDTO | None:
         return model_to_response_dto(

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from sqlalchemy import select, delete
+from sqlalchemy import select, delete, func
 
 from src.converters.repositories.database.sqlalchemy import request_dto_to_model, models_to_dto, model_to_response_dto
 from src.dtos.database.tracks import (
@@ -29,8 +29,8 @@ class TracksRepository(SQLAlchemyRepository, BaseTracksRepository):
         return TracksResponseDTO(tracks=models_to_dto(models=tracks, dto=_Track))
 
     async def get_users_tracks_count(self, user_id: int) -> int:
-        query = select(Track.id).filter_by(user_id=user_id)
-        return len(list(await self.scalars(query)))
+        query = select(func.count(Track.id)).filter_by(user_id=user_id)
+        return await self.scalar(query)
 
     async def get_all_tracks(self, offset: int = 0, limit: int = 10) -> TracksResponseDTO:
         query = select(Track).offset(offset).limit(limit).order_by(Track.updated_at.desc())
@@ -38,8 +38,8 @@ class TracksRepository(SQLAlchemyRepository, BaseTracksRepository):
         return TracksResponseDTO(tracks=models_to_dto(models=tracks, dto=_Track))
 
     async def get_tracks_count(self) -> int:
-        query = select(Track.id)
-        return len(list(await self.scalars(query)))
+        query = select(func.count(Track.id))
+        return await self.scalar(query)
 
     async def get_track_by_id(self, track_id: int) -> TrackResponseDTO | None:
         track = await self.get(Track, track_id)

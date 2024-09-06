@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from sqlalchemy import select, delete
+from sqlalchemy import select, delete, func
 
 from src.converters.repositories.database.sqlalchemy import request_dto_to_model, model_to_response_dto, models_to_dto
 from src.dtos.database.licenses import (
@@ -23,8 +23,8 @@ class LicensesRepository(SQLAlchemyRepository, BaseLicensesRepository):
         return LicensesResponseDTO(licenses=models_to_dto(models=licenses, dto=_License))
 
     async def get_user_licenses_count(self, user_id: int) -> int:
-        query = select(License.id).filter_by(user_id=user_id)
-        return len(list(await self.scalars(query)))
+        query = select(func.count(License.id)).filter_by(user_id=user_id)
+        return await self.scalar(query)
 
     async def get_all_licenses(self, offset: int = 0, limit: int = 10) -> LicensesResponseDTO:
         query = select(License).offset(offset).limit(limit).order_by(License.id.desc())
@@ -32,8 +32,8 @@ class LicensesRepository(SQLAlchemyRepository, BaseLicensesRepository):
         return LicensesResponseDTO(licenses=models_to_dto(models=licenses, dto=_License))
 
     async def get_licenses_count(self) -> int:
-        query = select(License.id)
-        return len(list(await self.scalars(query)))
+        query = select(func.count(License.id))
+        return await self.scalar(query)
 
     async def get_license_by_id(self, license_id: int) -> LicenseResponseDTO | None:
         return model_to_response_dto(

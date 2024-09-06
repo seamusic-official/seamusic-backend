@@ -45,3 +45,8 @@ class SQLAlchemyRepository(BaseDatabaseRepository):
     async def scalars(statement: Executable) -> Iterable:
         async with sessionmaker() as session:
             return await session.scalars(statement)
+    #
+    # @staticmethod
+    # async def query(statement: FunctionFilter) -> Query:
+    #     async with sessionmaker() as session:
+    #         return await session.query(statement)

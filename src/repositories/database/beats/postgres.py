@@ -1,4 +1,4 @@
-from sqlalchemy import select, delete
+from sqlalchemy import select, delete, func
 
 from src.converters.repositories.database.sqlalchemy import request_dto_to_model, model_to_response_dto, models_to_dto
 from src.dtos.database.beats import (
@@ -20,8 +20,8 @@ class BeatsRepository(BaseBeatsRepository, SQLAlchemyRepository):
         return BeatsResponseDTO(beats=models_to_dto(models=beats, dto=_Beat))
 
     async def get_user_beats_count(self, user_id: int) -> int:
-        query = select(Beat.id).filter_by(user_id=user_id)
-        return len(list(await self.scalars(query)))
+        query = select(func.count(Beat.id)).filter_by(user_id=user_id)
+        return await self.scalar(query)
 
     async def all_beats(self, offset: int = 0, limit: int = 10) -> BeatsResponseDTO:
         query = select(Beat).offset(offset).limit(limit).order_by(Beat.id.desc())
@@ -29,8 +29,8 @@ class BeatsRepository(BaseBeatsRepository, SQLAlchemyRepository):
         return BeatsResponseDTO(beats=models_to_dto(models=beats, dto=_Beat))
 
     async def get_beats_count(self) -> int:
-        query = select(Beat.id)
-        return len(list(await self.scalars(query)))
+        query = select(func.count(Beat.id))
+        return await self.scalar(query)
 
     async def get_beat_by_id(self, beat_id: int) -> BeatResponseDTO | None:
         return model_to_response_dto(

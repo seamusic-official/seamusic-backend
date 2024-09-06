@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from sqlalchemy import select, delete
+from sqlalchemy import select, delete, func
 
 from src.converters.repositories.database.sqlalchemy import model_to_response_dto, models_to_dto, request_dto_to_model
 from src.dtos.database.albums import (
@@ -36,8 +36,8 @@ class AlbumRepository(SQLAlchemyRepository, BaseAlbumRepository):
         return AlbumsResponseDTO(albums=models_to_dto(models=albums, dto=AlbumResponseDTO))
 
     async def get_albums_count(self) -> int:
-        query = select(Album.id)
-        return len(list(await self.scalars(query)))
+        query = select(func.count(Album.id))
+        return await self.scalar(query)
 
     async def get_user_albums(self, user_id: int, offset: int = 0, limit: int = 10) -> AlbumsResponseDTO:
         query = select(Album).filter_by(user_id=user_id).offset(offset).limit(limit).order_by(Album.updated_at.desc())
@@ -45,8 +45,8 @@ class AlbumRepository(SQLAlchemyRepository, BaseAlbumRepository):
         return AlbumsResponseDTO(albums=models_to_dto(models=albums, dto=AlbumResponseDTO))
 
     async def get_user_albums_count(self, user_id: int) -> int:
-        query = select(Album.id).filter_by(user_id=user_id)
-        return len(list(await self.scalars(query)))
+        query = select(func.count(Album.id)).filter_by(user_id=user_id)
+        return await self.scalar(query)
 
     async def delete_album(self, album_id: int, user_id: int) -> None:
         query = delete(Album).filter_by(id=album_id, user_id=user_id)
