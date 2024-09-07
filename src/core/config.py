@@ -58,7 +58,7 @@ class Settings(BaseSettings):
     @property
     def db_url_test(self) -> str:
         return f'postgresql+asyncpg://{self.db_user_test}:{self.db_pass_test}@{self.db_host_test}:{self.db_port_test}/{self.db_name_test}'
-    
+
 
 settings = Settings()
 

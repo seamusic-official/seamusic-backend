@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import date, datetime
+from datetime import datetime, date
 from io import BytesIO
 
 from pydantic import EmailStr
@@ -34,6 +34,7 @@ from src.repositories.database.tags.base import BaseTagsRepository
 from src.repositories.database.tags.postgres import init_postgres_repository as init_tags_postgres_repository
 from src.repositories.media.s3 import S3Repository, init_s3_repository
 from src.services.base import BaseService
+
 
 @dataclass
 class UsersDatabaseRepositories(DatabaseRepositories):
@@ -92,13 +93,12 @@ class UsersService(BaseService):
     async def create_new_user(
         self,
         username: str,
-        password: str,
         email: EmailStr,
+        hashed_password: str,
         roles: list[Role],
         birthday: date,
         tags: list[str],
     ) -> int:
-        from src.utils.auth import get_hashed_password
 
         existing_user: UserResponseDTO | None = await self.repositories.database.users.get_user_by_email(email=email)
 
@@ -106,21 +106,21 @@ class UsersService(BaseService):
             raise InvalidRequestException('User with this email already exists.')
 
         superuser = await self.repositories.database.users.get_user_by_id(user_id=1)
+
         if not superuser:
             access_level = AccessLevel.superuser
         else:
             access_level = AccessLevel.user
 
-        user = CreateUserRequestDTO(
+        user_id: int = await self.repositories.database.users.create_user(user=CreateUserRequestDTO(
             username=username,
             email=email,
-            password=get_hashed_password(password),
-            access_level=access_level,
+            password=hashed_password,
             roles=roles,
             birthday=birthday,
             tags=tags,
-        )
-        user_id: int = await self.repositories.database.users.create_user(user=user)
+            access_level=access_level,
+        ))
         await self.repositories.database.tags.add_tags(tags=AddTagsRequestDTO(tags=list(map(lambda name: Tag(name=name), tags))))
 
         artist_profile_id: int = await self.repositories.database.artists.create_artist(CreateArtistRequestDTO(
@@ -331,7 +331,7 @@ class AuthService(BaseService):
 
     @staticmethod
     async def refresh_token(user_id: int) -> tuple[str, str]:
-        from src.utils.auth import authenticate_user, create_access_token, create_refresh_token
+        from src.utils.auth import create_access_token, create_refresh_token
 
         access_token = create_access_token({"sub": str(user_id)})
         refresh_token_ = create_refresh_token({"sub": str(user_id)})
@@ -340,7 +340,7 @@ class AuthService(BaseService):
 
     async def spotify_callback(self, code) -> tuple[str, str]:  # type: ignore[no-untyped-def]
         # old functional
-        from src.utils.auth import authenticate_user, create_access_token, create_refresh_token
+        from src.utils.auth import create_access_token, create_refresh_token
         access_token = await self.repositories.api.login(code=code)
 
         if access_token:

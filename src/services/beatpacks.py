@@ -6,7 +6,6 @@ from src.dtos.database.beatpacks import (
     BeatpacksResponseDTO,
     BeatpackResponseDTO
 )
-from src.dtos.database.beats import Beat
 from src.exceptions.services import NotFoundException, NoRightsException
 from src.repositories import DatabaseRepositories, Repositories
 from src.repositories.database.beatpacks.base import BaseBeatpacksRepository

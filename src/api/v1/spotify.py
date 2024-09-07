@@ -32,7 +32,7 @@ async def get_recommendations(
 ) -> SSpotifyTracksResponse:
 
     response = await service.get_recommendations(start=page.start, size=page.size)
-    
+
     tracks = list(map(
         lambda track: SpotifyTrack(
             id=track.id,
@@ -48,13 +48,13 @@ async def get_recommendations(
     total = await service.get_recommendations_count()
 
     return SSpotifyTracksResponse(
-            total=total,
-            page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
-            has_next=page.start + page.size < total,
-            has_previous=page.start - page.size >= 0,
-            size=page.size,
-            tracks=tracks
-        )
+        total=total,
+        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
+        has_next=page.start + page.size < total,
+        has_previous=page.start - page.size >= 0,
+        size=page.size,
+        tracks=tracks
+    )
 
 
 @spotify.get(
@@ -92,7 +92,7 @@ async def get_top_artist_tracks(
         has_previous=page.start - page.size >= 0,
         size=page.size,
         tracks=tracks
-        )
+    )
 
 
 @spotify.get(
@@ -128,7 +128,7 @@ async def get_artist_albums(
         has_previous=page.start - page.size >= 0,
         size=page.size,
         albums=albums
-        )
+    )
 
 
 @spotify.get(

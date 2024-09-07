@@ -3,7 +3,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.base import Base
 
-
 artist_profile_album_association = Table(
     "artist_profile_album_association",
     Base.metadata,
@@ -29,11 +28,11 @@ class Album(Base):
 
     type: Mapped[str] = mapped_column(nullable=True)
 
-    artist_profiles: Mapped["ArtistProfile"] = relationship(  # type: ignore[name-defined]
+    artist_profiles: Mapped["ArtistProfile"] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=artist_profile_album_association, back_populates="albums"
     )
-    tracks: Mapped["Track"] = relationship(  # type: ignore[name-defined]
+    tracks: Mapped["Track"] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=album_track_association, back_populates="albums"
     )
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    user: Mapped["User"] = relationship("User")  # type: ignore[name-defined]
+    user: Mapped["User"] = relationship("User")  # type: ignore[name-defined]  # noqa: F821

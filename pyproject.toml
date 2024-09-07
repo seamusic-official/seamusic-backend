@@ -51,17 +51,6 @@ pytest-mock = "^3.14.0"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.black]
-exclude = [
-    ".git/",
-    ".venv/",
-    ".idea/",
-    ".vscode/",
-    "*cache*",
-    "__init__.py",
-    "migrations/env.py",
-]
-
 [tool.flake8]
 max-line-length = 200
 ignore = ["E731"]

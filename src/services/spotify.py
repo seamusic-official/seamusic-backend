@@ -65,7 +65,7 @@ class SpotifyService:
             raise NotFoundException()
 
         return track
-    
+
     async def get_album_tracks_count(self, album_id: str) -> int:
         return await self.repositories.api.get_album_tracks_count(album_id=album_id)
 
@@ -79,9 +79,10 @@ class SpotifyService:
 
     async def get_spotify_search(self, query: str, type_: SpotifyType, start: int = 1, size: int = 10) -> SearchResponseDTO:
         return await self.repositories.api.search(query=query, type_=type_, offset=start - 1, limit=size)
-    
+
     async def get_spotify_search_count(self, query: str, type_: SpotifyType) -> int:
         return await self.repositories.api.search_count(query=query, type_=type_)
+
 
 def get_spotify_repositories() -> SpotifyRepositories:
     return SpotifyRepositories()

@@ -46,7 +46,7 @@ from src.services.auth import (
     get_producers_service,
     get_auth_service
 )
-from src.utils.auth import get_current_user
+from src.utils.auth import get_current_user, get_hashed_password
 from src.utils.files import unique_filename, get_file_stream
 
 auth_v1 = APIRouter(prefix='/v1/auth')  # included directly in main app to avoid using ExceptionMiddleware
@@ -468,11 +468,11 @@ async def register(
 
     user_id = await service.create_new_user(
         username=user.username,
-        password=user.password,
         email=user.email,
-        roles=user.roles,
+        hashed_password=get_hashed_password(user.password),
         birthday=user.birthday,
-        tags=user.tags
+        roles=user.roles,
+        tags=user.tags,
     )
 
     return SRegisterUserResponse(id=user_id)
@@ -480,7 +480,7 @@ async def register(
 
 @auth_v1.post(
     path='/login',
-    summary='Signin',
+    summary='Sign in',
     response_model=SLoginResponse,
     responses={status.HTTP_200_OK: {'model': SLoginResponse}},
 )
