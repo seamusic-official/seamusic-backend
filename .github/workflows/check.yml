@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: Run flake8
-        run: python -m flake8
+        run: poetry run flake8
   mypy:
     runs-on: ubuntu-latest
     steps:
