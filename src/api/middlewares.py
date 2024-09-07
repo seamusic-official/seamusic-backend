@@ -1,3 +1,5 @@
+from typing import Callable, Any
+
 import pydantic
 from fastapi import Request, Depends, Response
 from sqlalchemy.sql.functions import current_user
@@ -10,7 +12,7 @@ class V1ExceptionsMiddleware:
     async def __call__(  # type: ignore[no-untyped-def]
         self,
         request: Request,
-        call_next,
+        call_next: Callable[[Request], Any],
         user: User | None = Depends(current_user)
     ) -> Response:
 
