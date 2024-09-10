@@ -49,7 +49,7 @@ class Settings(BaseSettings):
     email_address: EmailStr = Field(default='seamusimgmt@gmail.com', alias='EMAIL_ADDRESS')
     email_password: str = Field(default='', alias='EMAIL_PASSWORD')
     smtp_host: str = Field(default='', alias='SMTP_HOST')
-    smtp_port: int = Field(default='', alias='SMTP_PORT')
+    smtp_port: int = Field(default=0, alias='SMTP_PORT')
 
     @property
     def db_url(self) -> str:
