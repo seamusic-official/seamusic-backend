@@ -11,7 +11,7 @@ from src.schemas.base import DetailMixin
 class User(BaseModel):
     id: int
     username: str
-    email: str
+    email: EmailStr
     password: str
     picture_url: str
     birthday: datetime
@@ -21,7 +21,7 @@ class User(BaseModel):
 class SUserResponse(BaseModel):
     id: int
     username: str
-    email: str
+    email: EmailStr
     picture_url: str
     birthday: datetime
     type: Literal[Type.user] = Type.user
@@ -30,7 +30,7 @@ class SUserResponse(BaseModel):
 class SMeResponse(BaseModel):
     id: int
     username: str
-    email: str
+    email: EmailStr
     picture_url: str
     birthday: datetime
     type: Literal[Type.user] = Type.user
