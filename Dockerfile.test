@@ -10,4 +10,4 @@ RUN pip install --upgrade pip
 RUN pip install poetry
 RUN poetry install
 
-CMD ["make", "run-local"]
+CMD ["make", "test-local"]

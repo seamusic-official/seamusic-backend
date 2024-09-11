@@ -1,7 +1,7 @@
 install:
 	poetry install
 
-run:
+run-local:
 	poetry run alembic upgrade head
 	poetry run uvicorn src.api.app:app --host 0.0.0.0 --port 8000 --reload --reload-dir . --log-config=log_config.ini --log-level=debug
 
@@ -32,9 +32,11 @@ downgrade:
 
 test:
 	poetry run docker-compose -f docker-compose.test.yml up --force-recreate --remove-orphans -d
+	poetry run docker-compose stop
+
+test-local:
 	poetry run alembic upgrade head
 	poetry run pytest
-	poetry run docker-compose stop
 
 lint:
 	poetry run flake8
