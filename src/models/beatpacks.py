@@ -5,7 +5,6 @@ from src.models.auth import User
 from src.models.base import Base
 from src.models.beats import Beat
 
-
 beats_to_beatpacks_association_table = Table(
     "beats_to_beatpacks_association_table",
     Base.metadata,
@@ -27,6 +26,6 @@ class Beatpack(Base):
     title: Mapped[str] = mapped_column(String, nullable=False)
     description: Mapped[str] = mapped_column(String, nullable=False)
 
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     users: Mapped[list["User"]] = relationship("User", secondary=user_to_beatpacks_association_table)  # type: ignore[name-defined]
     beats: Mapped[list["Beat"]] = relationship("Beat", secondary=beats_to_beatpacks_association_table)  # type: ignore[name-defined]
