@@ -38,7 +38,7 @@ async def add_tag(
     responses={status.HTTP_200_OK: {"model": SMyListenerTagsResponse}},
 )
 async def get_my_listener_tags(
-    page: Page,
+    page: Page = Depends(Page),
     user: User = Depends(get_current_user),
     service: TagsService = Depends(get_tags_service),
 ) -> SMyListenerTagsResponse:
@@ -66,7 +66,7 @@ async def get_my_listener_tags(
     responses={status.HTTP_200_OK: {"model": SMyProducerTagsResponse}},
 )
 async def get_my_producer_tags(
-    page: Page,
+    page: Page = Depends(Page),
     user: User = Depends(get_current_user),
     service: TagsService = Depends(get_tags_service),
 ) -> SMyProducerTagsResponse:
@@ -94,7 +94,7 @@ async def get_my_producer_tags(
     responses={status.HTTP_200_OK: {"model": SMyArtistTagsResponse}},
 )
 async def get_my_artist_tags(
-    page: Page,
+    page: Page = Depends(Page),
     user: User = Depends(get_current_user),
     service: TagsService = Depends(get_tags_service),
 ) -> SMyArtistTagsResponse:

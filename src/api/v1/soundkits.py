@@ -26,7 +26,7 @@ soundkits = APIRouter(prefix="/soundkits", tags=["Soundkits"])
     response_model=SMySoundkitsResponse,
 )
 async def get_my_soundkits(
-    page: Page,
+    page: Page = Depends(Page),
     user: User = Depends(get_current_user),
     service: SoundkitsService = Depends(get_soundkits_service),
 ) -> SMySoundkitsResponse:
@@ -68,7 +68,7 @@ async def get_my_soundkits(
     response_model=SAllSoundkitsResponse,
 )
 async def all_soundkits(
-    page: Page,
+    page: Page = Depends(Page),
     service: SoundkitsService = Depends(get_soundkits_service),
 ) -> SAllSoundkitsResponse:
 

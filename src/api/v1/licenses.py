@@ -25,7 +25,7 @@ licenses = APIRouter(prefix="/licenses", tags=["Licenses"])
     responses={status.HTTP_200_OK: {"model": SMyLicensesResponse}},
 )
 async def get_my_licenses(
-    page: Page,
+    page: Page = Depends(Page),
     user: User = Depends(get_current_user),
     service: LicensesService = Depends(get_licenses_service),
 ) -> SMyLicensesResponse:
@@ -69,7 +69,7 @@ async def get_my_licenses(
     responses={status.HTTP_200_OK: {"model": SLicensesResponse}},
 )
 async def get_all_licenses(
-    page: Page,
+    page: Page = Depends(Page),
     service: LicensesService = Depends(get_licenses_service),
 ) -> SLicensesResponse:
 

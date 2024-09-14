@@ -81,7 +81,7 @@ async def get_me(user: User = Depends(get_current_user)) -> SMeResponse:
     responses={status.HTTP_200_OK: {'model': SUsersResponse}},
 )
 async def get_users(
-    page: Page,
+    page: Page = Depends(Page),
     service: UsersService = Depends(get_users_service),
 ) -> SUsersResponse:
 
@@ -224,7 +224,7 @@ async def get_me_as_artist(
     responses={status.HTTP_200_OK: {'model': SArtistsResponse}},
 )
 async def get_artists(
-    page: Page,
+    page: Page = Depends(Page),
     service: ArtistsService = Depends(get_artists_service),
 ) -> SArtistsResponse:
 
@@ -355,7 +355,7 @@ async def get_me_as_producer(
     responses={status.HTTP_200_OK: {'model': SProducersResponse}},
 )
 async def get_all_producers(
-    page: Page,
+    page: Page = Depends(Page),
     service: ProducersService = Depends(get_producers_service),
 ) -> SProducersResponse:
 

@@ -28,7 +28,7 @@ tracks = APIRouter(prefix="/tracks", tags=["Tracks"])
     responses={status.HTTP_200_OK: {"model": SMyTracksResponse}},
 )
 async def get_my_tracks(
-    page: Page,
+    page: Page = Depends(Page),
     user: User = Depends(get_current_user),
     service: TracksService = Depends(get_tracks_service),
 ) -> SMyTracksResponse:
@@ -69,7 +69,7 @@ async def get_my_tracks(
     responses={status.HTTP_200_OK: {"model": SMyTracksResponse}},
 )
 async def get_all_tracks(
-    page: Page,
+    page: Page = Depends(Page),
     service: TracksService = Depends(get_tracks_service),
 ) -> SAllTracksResponse:
 

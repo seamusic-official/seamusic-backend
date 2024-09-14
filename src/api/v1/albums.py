@@ -30,7 +30,7 @@ albums = APIRouter(prefix="/albums", tags=["Albums"])
     responses={status.HTTP_200_OK: {"model": SMyAlbumsResponse}},
 )
 async def get_my_albums(
-    page: Page,
+    page: Page = Depends(Page),
     service: AlbumService = Depends(get_album_service),
     user: User = Depends(get_current_user),
 ) -> SMyAlbumsResponse:
@@ -74,7 +74,7 @@ async def get_my_albums(
     responses={status.HTTP_200_OK: {"model": SAllAlbumsResponse}},
 )
 async def get_all_albums(
-    page: Page,
+    page: Page = Depends(Page),
     service: AlbumService = Depends(get_album_service),
 ) -> SAllAlbumsResponse:
 

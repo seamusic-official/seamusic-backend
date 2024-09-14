@@ -28,7 +28,7 @@ spotify = APIRouter(prefix="/inspiration", tags=["Music & Albums"])
     response_model=SSpotifyTracksResponse,
 )
 async def get_recommendations(
-    page: Page,
+    page: Page = Depends(Page),
     service: SpotifyService = Depends(get_spotify_service),
 ) -> SSpotifyTracksResponse:
 
@@ -64,8 +64,8 @@ async def get_recommendations(
     status_code=status.HTTP_200_OK,
 )
 async def get_top_artist_tracks(
-    page: Page,
     spotify_artist_id: str,
+    page: Page = Depends(Page),
     service: SpotifyService = Depends(get_spotify_service),
 ) -> SSpotifyTracksResponse:
 
@@ -101,8 +101,8 @@ async def get_top_artist_tracks(
     status_code=status.HTTP_200_OK,
 )
 async def get_artist_albums(
-    page: Page,
     artist_id: str,
+    page: Page = Depends(Page),
     service: SpotifyService = Depends(get_spotify_service),
 ) -> SSpotifyAlbumsResponse:
 
@@ -233,9 +233,9 @@ async def get_spotify_artist(
     response_model=SSpotifySearchResponse,
 )
 async def search(
-    page: Page,
     query: str,
     type_: SpotifyType,
+    page: Page = Depends(Page),
     service: SpotifyService = Depends(get_spotify_service),
 ) -> SSpotifySearchResponse:
 

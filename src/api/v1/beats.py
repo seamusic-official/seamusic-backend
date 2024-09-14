@@ -28,7 +28,7 @@ beats = APIRouter(prefix="/beats", tags=["Beats"])
     responses={status.HTTP_200_OK: {"model": SMyBeatsResponse}},
 )
 async def get_my_beats(
-    page: Page,
+    page: Page = Depends(Page),
     user: User = Depends(get_current_user),
     service: BeatsService = Depends(get_beats_service),
 ) -> SMyBeatsResponse:
@@ -70,7 +70,7 @@ async def get_my_beats(
     responses={status.HTTP_200_OK: {"model": SBeatsResponse}},
 )
 async def get_all_beats(
-    page: Page,
+    page: Page = Depends(Page),
     service: BeatsService = Depends(get_beats_service),
 ) -> SBeatsResponse:
 

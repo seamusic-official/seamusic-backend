@@ -59,7 +59,7 @@ async def get_telegram_account(
     responses={status.HTTP_200_OK: {"model": STelegramAccountsIDResponse}},
 )
 async def get_telegram_accounts_ids(
-    page: Page,
+    page: Page = Depends(Page),
     service: SubscriptionsService = Depends(get_subscriptions_service),
 ) -> STelegramAccountsIDResponse:
 

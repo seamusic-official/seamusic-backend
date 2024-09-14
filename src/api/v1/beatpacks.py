@@ -26,7 +26,7 @@ beatpacks = APIRouter(prefix="/beatpacks", tags=["Beatpacks"])
     responses={status.HTTP_200_OK: {"model": SMyBeatpacksResponse}},
 )
 async def get_my_beatpacks(
-    page: Page,
+    page: Page = Depends(Page),
     user: User = Depends(get_current_user),
     service: BeatpackService = Depends(get_beatpack_service),
 ) -> SMyBeatpacksResponse:
@@ -86,7 +86,7 @@ async def get_my_beatpacks(
     responses={status.HTTP_200_OK: {"model": SBeatpacksResponse}},
 )
 async def all_beatpacks(
-    page: Page,
+    page: Page = Depends(Page),
     service: BeatpackService = Depends(get_beatpack_service),
 ) -> SBeatpacksResponse:
 
