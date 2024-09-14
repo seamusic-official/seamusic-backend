@@ -5,7 +5,7 @@ from pydantic import BaseModel, EmailStr, Field
 
 from src.enums.auth import Role
 from src.enums.type import Type
-from src.schemas.base import DetailMixin
+from src.schemas.base import DetailMixin, ItemsResponse
 
 
 class User(BaseModel):
@@ -36,13 +36,8 @@ class SMeResponse(BaseModel):
     type: Literal[Type.user] = Type.user
 
 
-class SUsersResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[SUserResponse]
+class SUsersResponse(ItemsResponse[SUserResponse]):
+    pass
 
 
 class SUpdateUserPictureResponse(BaseModel, DetailMixin):
@@ -84,13 +79,8 @@ class SMeAsArtistResponse(BaseModel):
     type: Literal[Type.artist] = Type.artist
 
 
-class SArtistsResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[SArtistResponse]
+class SArtistsResponse(ItemsResponse[SArtistResponse]):
+    pass
 
 
 class SUpdateArtistRequest(BaseModel):
@@ -125,13 +115,8 @@ class SMeAsProducerResponse(BaseModel):
     description: str | None = None
 
 
-class SProducersResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[SProducerResponse]
+class SProducersResponse(ItemsResponse[SProducerResponse]):
+    pass
 
 
 class SUpdateProducerRequest(BaseModel):

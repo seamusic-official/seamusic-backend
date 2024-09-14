@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 from src.dtos.database.base import BaseRequestDTO
 from src.enums.type import Type
-from src.schemas.base import DetailMixin
+from src.schemas.base import DetailMixin, ItemsResponse
 
 
 class Beat(BaseModel):
@@ -44,22 +44,12 @@ class SBeatResponse(BaseModel):
     type: Literal[Type.beat] = Type.beat
 
 
-class SBeatsResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[SBeatResponse]
+class SBeatsResponse(ItemsResponse[SBeatResponse]):
+    pass
 
 
-class SMyBeatsResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[SBeatResponse]
+class SMyBeatsResponse(ItemsResponse[SBeatResponse]):
+    pass
 
 
 class SCreateBeatResponse(BaseModel):
