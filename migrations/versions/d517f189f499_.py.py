@@ -1,16 +1,15 @@
-"""empty message
+"""Add tables
 
 Revision ID: d517f189f499
-Revises: 
+Revises:
 Create Date: 2024-09-14 12:40:54.127731
 
 """
 
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
-
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = "d517f189f499"
