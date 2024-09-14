@@ -2,7 +2,7 @@ from fastapi import UploadFile, File, APIRouter, Depends, status
 
 from src.dtos.database.soundkits import UpdateSoundkitRequestDTO
 from src.schemas.auth import User
-from src.schemas.base import Page
+from src.schemas.base import Page, get_items_response
 from src.schemas.soundkits import (
     SSoundkitResponse,
     SUpdateSoundkitRequest,
@@ -25,7 +25,7 @@ soundkits = APIRouter(prefix="/soundkits", tags=["Soundkits"])
     status_code=status.HTTP_200_OK,
     response_model=SMySoundkitsResponse,
 )
-async def get_user_soundkits(
+async def get_my_soundkits(
     page: Page,
     user: User = Depends(get_current_user),
     service: SoundkitsService = Depends(get_soundkits_service),
@@ -33,7 +33,7 @@ async def get_user_soundkits(
 
     response = await service.get_user_soundkits(user_id=user.id, start=page.start, size=page.size)
 
-    soundkits_ = list(map(
+    items = list(map(
         lambda soundkit: SSoundkitResponse(
             id=soundkit.id,
             name=soundkit.name,
@@ -52,13 +52,12 @@ async def get_user_soundkits(
 
     total = await service.get_user_soundkits_count(user_id=user.id)
 
-    return SMySoundkitsResponse(
-        total=total,
-        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
-        has_next=page.start + page.size < total,
-        has_previous=page.start - page.size >= 0,
+    return get_items_response(
+        start=page.start,
         size=page.size,
-        items=soundkits_,
+        total=total,
+        items=items,
+        response_model=SMySoundkitsResponse,
     )
 
 
@@ -75,7 +74,7 @@ async def all_soundkits(
 
     response = await service.get_all_soundkits(start=page.start, size=page.size)
 
-    soundkits_ = list(map(
+    items = list(map(
         lambda soundkit: SSoundkitResponse(
             id=soundkit.id,
             name=soundkit.name,
@@ -94,13 +93,12 @@ async def all_soundkits(
 
     total = await service.get_all_soundkits_count()
 
-    return SAllSoundkitsResponse(
-        total=total,
-        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
-        has_next=page.start + page.size < total,
-        has_previous=page.start - page.size >= 0,
+    return get_items_response(
+        start=page.start,
         size=page.size,
-        items=soundkits_,
+        total=total,
+        items=items,
+        response_model=SAllSoundkitsResponse,
     )
 
 

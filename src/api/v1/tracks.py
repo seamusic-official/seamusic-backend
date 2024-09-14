@@ -1,7 +1,7 @@
 from fastapi import UploadFile, File, APIRouter, Depends, status
 
 from src.schemas.auth import User
-from src.schemas.base import Page
+from src.schemas.base import Page, get_items_response
 from src.schemas.tracks import (
     STrackResponse,
     SMyTracksResponse,
@@ -34,7 +34,7 @@ async def get_my_tracks(
 ) -> SMyTracksResponse:
 
     response = await service.get_user_tracks(user_id=user.id, start=page.start, size=page.size)
-    tracks_ = list(map(
+    items = list(map(
         lambda track: STrackResponse(
             id=track.id,
             name=track.name,
@@ -53,13 +53,12 @@ async def get_my_tracks(
     ))
     total = await service.get_user_tracks_count(user_id=user.id)
 
-    return SMyTracksResponse(
-        total=total,
-        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
-        has_next=page.start + page.size < total,
-        has_previous=page.start - page.size >= 0,
+    return get_items_response(
+        start=page.start,
         size=page.size,
-        items=tracks_,
+        total=total,
+        items=items,
+        response_model=SMyTracksResponse,
     )
 
 
@@ -69,13 +68,13 @@ async def get_my_tracks(
     response_model=SMyTracksResponse,
     responses={status.HTTP_200_OK: {"model": SMyTracksResponse}},
 )
-async def all_tracks(
+async def get_all_tracks(
     page: Page,
     service: TracksService = Depends(get_tracks_service),
 ) -> SAllTracksResponse:
 
     response = await service.all_tracks(start=page.start, size=page.size)
-    tracks_ = list(map(
+    items = list(map(
         lambda track: STrackResponse(
             id=track.id,
             name=track.name,
@@ -94,13 +93,12 @@ async def all_tracks(
     ))
     total = await service.get_tracks_count()
 
-    return SAllTracksResponse(
-        total=total,
-        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
-        has_next=page.start + page.size < total,
-        has_previous=page.start - page.size >= 0,
+    return get_items_response(
+        start=page.start,
         size=page.size,
-        items=tracks_,
+        total=total,
+        items=items,
+        response_model=SAllTracksResponse,
     )
 
 

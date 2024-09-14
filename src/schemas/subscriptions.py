@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 
+from src.schemas.base import ItemsResponse
+
 
 class TelegramAccount(BaseModel):
     telegram_id: int | None = None
@@ -25,10 +27,5 @@ class STelegramAccountResponse(BaseModel):
     only_telegram_subscribe_month: OnlyTelegramSubscribeMonth | None = None
 
 
-class STelegramAccountsIDResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[int]
+class STelegramAccountsIDResponse(ItemsResponse[int]):
+    pass

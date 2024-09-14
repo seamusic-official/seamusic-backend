@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
-from src.schemas.base import DetailMixin
+from src.schemas.base import DetailMixin, ItemsResponse
 
 
 class Track(BaseModel):
@@ -35,22 +35,12 @@ class STrackResponse(BaseModel):
     updated_at: datetime
 
 
-class SMyTracksResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[STrackResponse]
+class SMyTracksResponse(ItemsResponse[STrackResponse]):
+    pass
 
 
-class SAllTracksResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[STrackResponse]
+class SAllTracksResponse(ItemsResponse[STrackResponse]):
+    pass
 
 
 class SAddTracksResponse(BaseModel):

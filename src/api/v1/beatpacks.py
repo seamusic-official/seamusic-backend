@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, status
 
 from src.schemas.auth import User, SUserResponse
-from src.schemas.base import Page
+from src.schemas.base import Page, get_items_response
 from src.schemas.beatpacks import (
     SBeatpackResponse,
     SCreateBeatpackRequest,
@@ -33,7 +33,7 @@ async def get_my_beatpacks(
 
     response = await service.get_user_beatpacks(user_id=user.id, start=page.start, size=page.size)
 
-    beatpacks_ = list(map(
+    items = list(map(
         lambda beatpack: SBeatpackResponse(
             title=beatpack.title,
             description=beatpack.description,
@@ -70,13 +70,12 @@ async def get_my_beatpacks(
 
     total = await service.get_user_beatpacks_count(user_id=user.id)
 
-    return SMyBeatpacksResponse(
-        total=total,
-        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
-        has_next=page.start + page.size < total,
-        has_previous=page.start - page.size >= 0,
+    return get_items_response(
+        start=page.start,
         size=page.size,
-        items=beatpacks_,
+        total=total,
+        items=items,
+        response_model=SMyBeatpacksResponse,
     )
 
 
@@ -93,7 +92,7 @@ async def all_beatpacks(
 
     response = await service.get_all_beatpacks(start=page.start, size=page.size)
 
-    beatpacks_ = list(map(
+    items = list(map(
         lambda beatpack: SBeatpackResponse(
             title=beatpack.title,
             description=beatpack.description,
@@ -130,13 +129,12 @@ async def all_beatpacks(
 
     total = await service.get_beatpacks_count()
 
-    return SBeatpacksResponse(
-        total=total,
-        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
-        has_next=page.start + page.size < total,
-        has_previous=page.start - page.size >= 0,
+    return get_items_response(
+        start=page.start,
         size=page.size,
-        items=beatpacks_,
+        total=total,
+        items=items,
+        response_model=SMyBeatpacksResponse,
     )
 
 

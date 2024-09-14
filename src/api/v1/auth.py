@@ -35,7 +35,7 @@ from src.schemas.auth import (
     SDeleteProducerResponse,
     SLoginResponse,
 )
-from src.schemas.base import Page
+from src.schemas.base import Page, get_items_response
 from src.services.auth import (
     AuthService,
     ArtistsService,
@@ -87,7 +87,7 @@ async def get_users(
 
     response = await service.get_all_users(start=page.start, size=page.size)
 
-    users_ = list(map(
+    items = list(map(
         lambda user: SUserResponse(
             id=user.id,
             username=user.username,
@@ -100,13 +100,12 @@ async def get_users(
 
     total = await service.get_users_count()
 
-    return SUsersResponse(
-        total=total,
-        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
-        has_next=page.start + page.size < total,
-        has_previous=page.start - page.size >= 0,
+    return get_items_response(
+        start=page.start,
         size=page.size,
-        items=users_,
+        total=total,
+        items=items,
+        response_model=SUsersResponse,
     )
 
 
@@ -231,7 +230,7 @@ async def get_artists(
 
     response = await service.get_all_artists(start=page.start, size=page.size)
 
-    artists_ = list(map(
+    items = list(map(
         lambda artist: SArtistResponse(
             id=artist.id,
             user=SUserResponse(
@@ -248,13 +247,12 @@ async def get_artists(
 
     total = await service.get_artists_count()
 
-    return SArtistsResponse(
-        total=total,
-        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
-        has_next=page.start + page.size < total,
-        has_previous=page.start - page.size >= 0,
+    return get_items_response(
+        start=page.start,
         size=page.size,
-        items=artists_,
+        total=total,
+        items=items,
+        response_model=SArtistsResponse,
     )
 
 
@@ -363,7 +361,7 @@ async def get_all_producers(
 
     response = await service.get_all_producers(start=page.start, size=page.size)
 
-    producers_ = list(map(
+    items = list(map(
         lambda producer: SProducerResponse(
             id=producer.id,
             description=producer.description,
@@ -380,13 +378,12 @@ async def get_all_producers(
 
     total = await service.get_producers_count()
 
-    return SProducersResponse(
-        total=total,
-        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
-        has_next=page.start + page.size < total,
-        has_previous=page.start - page.size >= 0,
+    return get_items_response(
+        start=page.start,
         size=page.size,
-        items=producers_,
+        total=total,
+        items=items,
+        response_model=SProducersResponse,
     )
 
 

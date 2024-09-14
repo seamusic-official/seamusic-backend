@@ -4,7 +4,7 @@ from typing import Literal
 from pydantic import BaseModel
 
 from src.enums.type import Type
-from src.schemas.base import DetailMixin
+from src.schemas.base import DetailMixin, ItemsResponse
 
 
 class Album(BaseModel):
@@ -31,22 +31,12 @@ class SAlbumResponse(BaseModel):
     type: Literal[Type.album] = Type.album
 
 
-class SMyAlbumsResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[SAlbumResponse] = list()
+class SMyAlbumsResponse(ItemsResponse[SAlbumResponse]):
+    pass
 
 
-class SAllAlbumsResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[SAlbumResponse] = list()
+class SAllAlbumsResponse(ItemsResponse[SAlbumResponse]):
+    pass
 
 
 class SAddAlbumResponse(BaseModel):

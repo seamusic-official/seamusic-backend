@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
-from src.schemas.base import DetailMixin
+from src.schemas.base import DetailMixin, ItemsResponse
 
 
 class License(BaseModel):
@@ -37,22 +37,12 @@ class SLicenseResponse(BaseModel):
     updated_at: datetime
 
 
-class SLicensesResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[SLicenseResponse]
+class SLicensesResponse(ItemsResponse[SLicenseResponse]):
+    pass
 
 
-class SMyLicensesResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[SLicenseResponse]
+class SMyLicensesResponse(ItemsResponse[SLicenseResponse]):
+    pass
 
 
 class SCreateLicenseRequest(BaseModel):
