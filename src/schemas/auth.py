@@ -58,13 +58,6 @@ class SDeleteUserResponse(BaseModel, DetailMixin):
     detail: str = "User deleted."
 
 
-class Artist(BaseModel):
-    id: int
-    user: User
-    description: str | None = None
-    type: Literal[Type.artist] = Type.artist
-
-
 class SArtistResponse(BaseModel):
     id: int
     user: SUserResponse
@@ -93,13 +86,6 @@ class SUpdateArtistResponse(BaseModel):
 
 class SDeleteArtistResponse(BaseModel, DetailMixin):
     detail: str = "Artist deleted"
-
-
-class Producer(BaseModel):
-    id: int
-    user: User
-    description: str | None = None
-    type: Literal[Type.producer] = Type.producer
 
 
 class SProducerResponse(BaseModel):

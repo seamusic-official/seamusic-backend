@@ -1,6 +1,6 @@
-from datetime import datetime
+from datetime import date
 
-from sqlalchemy import DateTime, ForeignKey
+from sqlalchemy import ForeignKey, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.enums.auth import Role, AccessLevel
@@ -18,7 +18,7 @@ class User(Base):
     email: Mapped[str] = mapped_column(nullable=False)
     password: Mapped[str] = mapped_column(nullable=False)
     picture_url: Mapped[str] = mapped_column(nullable=True)
-    birthday: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    birthday: Mapped[date] = mapped_column(Date, nullable=False)
 
     artist_profile_id: Mapped[int] = mapped_column(ForeignKey("artist_profiles.id"), nullable=True)
     producer_profile_id: Mapped[int] = mapped_column(ForeignKey("producer_profiles.id"), nullable=True)
@@ -52,17 +52,12 @@ class ArtistProfile(Base):
         secondary=artist_tags_association,
         back_populates="artist_profiles"
     )
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
-    user: Mapped["User"] = relationship("User", foreign_keys='id')  # type: ignore[name-defined]
 
 
 class ProducerProfile(Base):
     __tablename__ = "producer_profiles"
 
     description: Mapped[str] = mapped_column()
-
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    user: Mapped["User"] = relationship("User")  # type: ignore[name-defined]
 
     tags: Mapped[list["Tag"]] = relationship(  # type: ignore[name-defined]
         secondary=producer_tags_association,

@@ -7,18 +7,6 @@ from src.enums.type import Type
 from src.schemas.base import DetailMixin, ItemsResponse
 
 
-class Album(BaseModel):
-    id: int
-    created_at: datetime.datetime
-    updated_at: datetime.datetime
-    is_available: bool
-    title: str
-    picture_url: str | None = None
-    description: str
-    co_prod: str | None = None
-    type: Literal[Type.album] = Type.album
-
-
 class SAlbumResponse(BaseModel):
     id: int
     created_at: datetime.datetime

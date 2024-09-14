@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 0fc36162e117
-Revises:
-Create Date: 2024-09-11 14:26:12.843149
+Revision ID: d517f189f499
+Revises: 
+Create Date: 2024-09-14 12:40:54.127731
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = "0fc36162e117"
+revision: str = "d517f189f499"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -24,7 +24,6 @@ def upgrade() -> None:
     op.create_table(
         "artist_profiles",
         sa.Column("description", sa.String(), nullable=False),
-        sa.Column("user_id", sa.Integer(), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("is_available", sa.Boolean(), nullable=False),
         sa.Column(
@@ -38,10 +37,6 @@ def upgrade() -> None:
             sa.DateTime(),
             server_default=sa.text("now()"),
             nullable=False,
-        ),
-        sa.ForeignKeyConstraint(
-            ["user_id"],
-            ["users.id"],
         ),
         sa.PrimaryKeyConstraint("id"),
     )
@@ -104,7 +99,6 @@ def upgrade() -> None:
     op.create_table(
         "producer_profiles",
         sa.Column("description", sa.String(), nullable=False),
-        sa.Column("user_id", sa.Integer(), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("is_available", sa.Boolean(), nullable=False),
         sa.Column(
@@ -118,10 +112,6 @@ def upgrade() -> None:
             sa.DateTime(),
             server_default=sa.text("now()"),
             nullable=False,
-        ),
-        sa.ForeignKeyConstraint(
-            ["user_id"],
-            ["users.id"],
         ),
         sa.PrimaryKeyConstraint("id"),
     )
@@ -165,12 +155,86 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_table(
+        "artist_tags_association",
+        sa.Column("artist_profile_id", sa.Integer(), nullable=True),
+        sa.Column("tag_id", sa.Integer(), nullable=True),
+        sa.ForeignKeyConstraint(
+            ["artist_profile_id"],
+            ["artist_profiles.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["tag_id"],
+            ["tags.id"],
+        ),
+    )
+    op.create_table(
+        "only_telegram_subscribe_month",
+        sa.Column("subscribe", sa.Boolean(), nullable=False),
+        sa.Column("telegram_account_id", sa.Integer(), nullable=False),
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.Column("is_available", sa.Boolean(), nullable=False),
+        sa.Column(
+            "created_at",
+            sa.DateTime(),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+        sa.ForeignKeyConstraint(
+            ["telegram_account_id"],
+            ["telegram_accounts.id"],
+        ),
+        sa.PrimaryKeyConstraint("id"),
+    )
+    op.create_table(
+        "only_telegram_subscribe_year",
+        sa.Column("subscribe", sa.Boolean(), nullable=False),
+        sa.Column("telegram_account_id", sa.Integer(), nullable=False),
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.Column("is_available", sa.Boolean(), nullable=False),
+        sa.Column(
+            "created_at",
+            sa.DateTime(),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+        sa.ForeignKeyConstraint(
+            ["telegram_account_id"],
+            ["telegram_accounts.id"],
+        ),
+        sa.PrimaryKeyConstraint("id"),
+    )
+    op.create_table(
+        "producer_tags_association",
+        sa.Column("producer_profile_id", sa.Integer(), nullable=True),
+        sa.Column("tag_id", sa.Integer(), nullable=True),
+        sa.ForeignKeyConstraint(
+            ["producer_profile_id"],
+            ["producer_profiles.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["tag_id"],
+            ["tags.id"],
+        ),
+    )
+    op.create_table(
         "users",
         sa.Column("username", sa.String(), nullable=False),
         sa.Column("email", sa.String(), nullable=False),
         sa.Column("password", sa.String(), nullable=False),
         sa.Column("picture_url", sa.String(), nullable=True),
-        sa.Column("birthday", sa.DateTime(), nullable=False),
+        sa.Column("birthday", sa.Date(), nullable=False),
         sa.Column("artist_profile_id", sa.Integer(), nullable=True),
         sa.Column("producer_profile_id", sa.Integer(), nullable=True),
         sa.Column(
@@ -234,19 +298,6 @@ def upgrade() -> None:
             ["users.id"],
         ),
         sa.PrimaryKeyConstraint("id"),
-    )
-    op.create_table(
-        "artist_tags_association",
-        sa.Column("artist_profile_id", sa.Integer(), nullable=True),
-        sa.Column("tag_id", sa.Integer(), nullable=True),
-        sa.ForeignKeyConstraint(
-            ["artist_profile_id"],
-            ["artist_profiles.id"],
-        ),
-        sa.ForeignKeyConstraint(
-            ["tag_id"],
-            ["tags.id"],
-        ),
     )
     op.create_table(
         "beatpacks",
@@ -340,67 +391,6 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(
             ["user_id"],
             ["users.id"],
-        ),
-    )
-    op.create_table(
-        "only_telegram_subscribe_month",
-        sa.Column("subscribe", sa.Boolean(), nullable=False),
-        sa.Column("telegram_account_id", sa.Integer(), nullable=False),
-        sa.Column("id", sa.Integer(), nullable=False),
-        sa.Column("is_available", sa.Boolean(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("now()"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("now()"),
-            nullable=False,
-        ),
-        sa.ForeignKeyConstraint(
-            ["telegram_account_id"],
-            ["telegram_accounts.id"],
-        ),
-        sa.PrimaryKeyConstraint("id"),
-    )
-    op.create_table(
-        "only_telegram_subscribe_year",
-        sa.Column("subscribe", sa.Boolean(), nullable=False),
-        sa.Column("telegram_account_id", sa.Integer(), nullable=False),
-        sa.Column("id", sa.Integer(), nullable=False),
-        sa.Column("is_available", sa.Boolean(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("now()"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("now()"),
-            nullable=False,
-        ),
-        sa.ForeignKeyConstraint(
-            ["telegram_account_id"],
-            ["telegram_accounts.id"],
-        ),
-        sa.PrimaryKeyConstraint("id"),
-    )
-    op.create_table(
-        "producer_tags_association",
-        sa.Column("producer_profile_id", sa.Integer(), nullable=True),
-        sa.Column("tag_id", sa.Integer(), nullable=True),
-        sa.ForeignKeyConstraint(
-            ["producer_profile_id"],
-            ["producer_profiles.id"],
-        ),
-        sa.ForeignKeyConstraint(
-            ["tag_id"],
-            ["tags.id"],
         ),
     )
     op.create_table(
@@ -665,16 +655,16 @@ def downgrade() -> None:
     op.drop_table("tracks")
     op.drop_table("squads")
     op.drop_table("soundkits")
-    op.drop_table("producer_tags_association")
-    op.drop_table("only_telegram_subscribe_year")
-    op.drop_table("only_telegram_subscribe_month")
     op.drop_table("listener_tags_association")
     op.drop_table("licenses")
     op.drop_table("beats")
     op.drop_table("beatpacks")
-    op.drop_table("artist_tags_association")
     op.drop_table("albums")
     op.drop_table("users")
+    op.drop_table("producer_tags_association")
+    op.drop_table("only_telegram_subscribe_year")
+    op.drop_table("only_telegram_subscribe_month")
+    op.drop_table("artist_tags_association")
     op.drop_table("telegram_accounts")
     op.drop_table("tags")
     op.drop_table("producer_profiles")

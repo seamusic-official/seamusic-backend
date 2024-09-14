@@ -5,21 +5,6 @@ from pydantic import BaseModel
 from src.schemas.base import DetailMixin, ItemsResponse
 
 
-class Track(BaseModel):
-    id: int
-    name: str
-    prod_by: str
-    description: str
-    co_prod: str
-    type: str
-    user_id: int
-    is_available: bool
-    file_url: str
-    picture_url: str
-    created_at: datetime
-    updated_at: datetime
-
-
 class STrackResponse(BaseModel):
     id: int
     name: str

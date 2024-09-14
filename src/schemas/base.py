@@ -18,7 +18,7 @@ class Page(BaseModel):
     size: int = 10
 
 
-class ItemsResponse(Generic[ItemType], BaseModel):
+class ItemsResponse(BaseModel, Generic[ItemType]):
     total: int
     page: int
     has_next: bool

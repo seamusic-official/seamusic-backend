@@ -5,19 +5,6 @@ from pydantic import BaseModel
 from src.schemas.base import DetailMixin, ItemsResponse
 
 
-class Soundkit(BaseModel):
-    id: int
-    title: str
-    picture: str | None = None
-    description: str | None = None
-    file_path: str
-    co_prod: str | None = None
-    prod_by: str | None = None
-    playlist_id: int | None = None
-    user_id: int
-    beatpack_id: int | None = None
-
-
 class SSoundkitResponse(BaseModel):
     id: int
     name: str

@@ -5,22 +5,6 @@ from pydantic import BaseModel
 from src.schemas.base import DetailMixin, ItemsResponse
 
 
-class License(BaseModel):
-    id: int
-    title: str
-    picture_url: str | None = None
-    description: str | None = None
-    file_path: str
-    co_prod: str | None = None
-    prod_by: str | None = None
-    playlist_id: int | None = None
-    user_id: int
-    beat_pack_id: int | None = None
-    price: str
-    created_at: datetime
-    updated_at: datetime
-
-
 class SLicenseResponse(BaseModel):
     id: int
     title: str

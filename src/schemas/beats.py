@@ -8,21 +8,6 @@ from src.enums.type import Type
 from src.schemas.base import DetailMixin, ItemsResponse
 
 
-class Beat(BaseModel):
-    id: int
-    title: str
-    description: str | None = None
-    picture_url: str | None = None
-    file_url: str
-    co_prod: str | None = None
-    prod_by: str | None = None
-    user_id: int
-    is_available: bool
-    created_at: datetime
-    updated_at: datetime
-    type: Literal[Type.beat] = Type.beat
-
-
 class SCreateBeatRequest(BaseRequestDTO):
     title: str
     description: str | None = None
