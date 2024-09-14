@@ -1,12 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.api.middlewares import V1AuthExceptionsMiddleware, V1ExceptionsMiddleware
 from src.api.v1 import v1
-from src.api.v1.auth import auth_v1
+from src.api.v1.auth import auth_v1 as _auth_v1
 
 
-def create_app() -> FastAPI:
+def create_app() -> tuple[FastAPI, FastAPI]:
 
     app_ = FastAPI(
         title="SeaMusic",
@@ -24,15 +23,13 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    app_.add_middleware(V1ExceptionsMiddleware)  # type: ignore[arg-type]
 
     auth_v1_app = FastAPI()
-    auth_v1_app.include_router(auth_v1)
-    auth_v1_app.add_middleware(V1AuthExceptionsMiddleware)  # type: ignore
+    auth_v1_app.include_router(_auth_v1)
 
     app_.mount(path='/', app=auth_v1_app)
 
-    return app_
+    return app_, auth_v1_app
 
 
-app = create_app()
+app, auth_v1 = create_app()
