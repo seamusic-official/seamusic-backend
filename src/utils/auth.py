@@ -9,8 +9,7 @@ from src.core.config import settings
 from src.dtos.database.auth import User as _User
 from src.exceptions.api import UnauthorizedException
 from src.schemas.auth import User
-from src.services.auth import UsersService
-
+from src.services.auth import UsersService, get_users_service
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -77,7 +76,7 @@ async def get_refresh_token(request: Request) -> str:
 
 async def get_current_user(
     token: str = Depends(get_refresh_token),
-    service: UsersService = Depends(),
+    service: UsersService = Depends(get_users_service),
 ) -> User:
     try:
         payload = jwt.decode(token, JWT_REFRESH_SECRET_KEY, algorithms=[ALGORITHM])
