@@ -1,7 +1,7 @@
 """empty message
 
 Revision ID: ca67afc70dcd
-Revises: 
+Revises:
 Create Date: 2024-09-17 20:03:52.695171
 
 """
