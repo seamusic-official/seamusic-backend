@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from src.api.v1.albums import albums
-from src.api.v1.auth import users, artists, producers
+from src.api.v1.auth import auth
 from src.api.v1.beatpacks import beatpacks
 from src.api.v1.beats import beats
 from src.api.v1.comments import comments
@@ -14,12 +14,9 @@ from src.api.v1.subscriptions import subscription
 from src.api.v1.tags import tags
 from src.api.v1.tracks import tracks
 
+router = APIRouter()
 
-router = APIRouter(prefix="/v1", tags=["v1"])
-
-router.include_router(users)
-router.include_router(artists)
-router.include_router(producers)
+router.include_router(auth)
 router.include_router(licenses)
 router.include_router(beats)
 router.include_router(beatpacks)

@@ -49,11 +49,14 @@ from src.services.auth import (
 from src.utils.auth import get_current_user, get_hashed_password
 from src.utils.files import unique_filename, get_file_stream
 
-auth_v1 = APIRouter(prefix='/v1/auth')  # included directly in main app to avoid using ExceptionMiddleware
+auth = APIRouter(prefix='/auth')
+users = APIRouter(prefix='/users', tags=['Users'])
+artists = APIRouter(prefix='/artists', tags=['Artists'])
+producers = APIRouter(prefix='/producers', tags=['Producers'])
 
-users = APIRouter(prefix='/auth/users', tags=['Users'])
-artists = APIRouter(prefix='/auth/artists', tags=['Artists'])
-producers = APIRouter(prefix='/auth/producers', tags=['Producers'])
+auth.include_router(users)
+auth.include_router(artists)
+auth.include_router(producers)
 
 
 @users.get(
@@ -452,7 +455,7 @@ async def deactivate_one_producer(
     return SDeleteProducerResponse()
 
 
-@auth_v1.post(
+@auth.post(
     path='/register',
     summary='Create new user',
     response_model=SRegisterUserResponse,
@@ -475,7 +478,7 @@ async def register(
     return SRegisterUserResponse(id=user_id)
 
 
-@auth_v1.post(
+@auth.post(
     path='/login',
     summary='Sign in',
     response_model=SLoginResponse,
@@ -508,7 +511,7 @@ async def login(
     )
 
 
-@auth_v1.post(
+@auth.post(
     path='/refresh',
     response_model=SRefreshTokenResponse,
     summary='Refresh auth token',
@@ -527,7 +530,7 @@ async def refresh_token(
     )
 
 
-@auth_v1.post(
+@auth.post(
     path='/callback',
     response_model=SSpotifyCallbackResponse,
     status_code=status.HTTP_200_OK,
