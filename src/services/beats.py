@@ -4,7 +4,7 @@ from io import BytesIO
 
 from src.dtos.database.beats import BeatsResponseDTO, CreateBeatRequestDTO, UpdateBeatRequestDTO, BeatResponseDTO
 from src.enums.type import Type
-from src.exceptions.services import NoRightsException, NotFoundException
+from src.exceptions import NoRightsException, NotFoundException
 from src.repositories import DatabaseRepositories, Repositories
 from src.repositories.database.beats.base import BaseBeatsRepository
 from src.repositories.database.beats.postgres import init_postgres_repository

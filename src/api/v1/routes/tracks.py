@@ -1,8 +1,8 @@
 from fastapi import UploadFile, File, APIRouter, Depends, status
 
-from src.schemas.auth import User
-from src.schemas.base import Page, get_items_response
-from src.schemas.tracks import (
+from src.api.v1.schemas.auth import User
+from src.api.v1.schemas.base import Page, get_items_response
+from src.api.v1.schemas.tracks import (
     STrackResponse,
     SMyTracksResponse,
     SAddTracksResponse,
@@ -14,8 +14,8 @@ from src.schemas.tracks import (
     SDeleteTrackResponse,
     SAllTracksResponse,
 )
+from src.api.v1.utils.auth import get_current_user
 from src.services.tracks import TracksService, get_tracks_service
-from src.utils.auth import get_current_user
 from src.utils.files import unique_filename, get_file_stream
 
 tracks = APIRouter(prefix="/tracks", tags=["Tracks"])

@@ -2,7 +2,7 @@ import pytest
 from fastapi import UploadFile, Response
 from fastapi.testclient import TestClient
 
-from src.schemas.auth import SUserResponse, SRegisterUserRequest, Role
+from src.api.v1.schemas import SUserResponse, SRegisterUserRequest, Role
 
 email = 'test_email2@example.com'
 password = 'test_password'

@@ -1,9 +1,8 @@
 import jmespath
 from fastapi import APIRouter, status, Depends
 
-from src.enums.spotify import SpotifyType
-from src.schemas.base import Page, get_items_response
-from src.schemas.spotify import (
+from src.api.v1.schemas.base import Page, get_items_response
+from src.api.v1.schemas.spotify import (
     SSpotifyTracksResponse,
     SpotifyTrack,
     SSpotifyTrackResponse,
@@ -15,8 +14,9 @@ from src.schemas.spotify import (
     SSpotifySearchResponse,
     SpotifyArtist,
 )
+from src.api.v1.utils.pages import get_page, get_has_next, get_has_previous
+from src.enums.spotify import SpotifyType
 from src.services.spotify import SpotifyService, get_spotify_service
-from src.utils.pages import get_page, get_has_next, get_has_previous
 
 spotify = APIRouter(prefix="/inspiration", tags=["Music & Albums"])
 

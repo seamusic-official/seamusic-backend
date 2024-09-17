@@ -5,7 +5,7 @@ from src.dtos.database.subscriptions import (
     TelegramAccountResponseDTO,
     TelegramAccountsIDSResponseDTO,
 )
-from src.exceptions.services import NotFoundException
+from src.exceptions import NotFoundException
 from src.repositories import DatabaseRepositories, Repositories
 from src.repositories.database.telegram_account.base import BaseTelegramAccountRepository
 from src.repositories.database.telegram_account.postgres import init_postgres_repository

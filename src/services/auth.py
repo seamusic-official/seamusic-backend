@@ -21,7 +21,7 @@ from src.dtos.database.auth import (
 )
 from src.dtos.database.tags import AddTagsRequestDTO, Tag
 from src.enums.auth import Role, AccessLevel
-from src.exceptions.services import NotFoundException, ServerError, InvalidRequestException
+from src.exceptions import NotFoundException, ServerError, InvalidRequestException
 from src.repositories import Repositories, DatabaseRepositories, BaseMediaRepository
 from src.repositories.api.spotify.base import BaseSpotifyRepository
 from src.repositories.database.auth.base import BaseUsersRepository, BaseProducersRepository, BaseArtistsRepository
@@ -318,7 +318,7 @@ class AuthService(BaseService):
 
     @staticmethod
     async def login(email: EmailStr, password: str) -> tuple[str, str, User]:
-        from src.utils.auth import authenticate_user, create_access_token, create_refresh_token
+        from src.api.v1.utils.auth import authenticate_user, create_access_token, create_refresh_token
 
         user = await authenticate_user(email=email, password=password)
         if not user:
@@ -331,7 +331,7 @@ class AuthService(BaseService):
 
     @staticmethod
     async def refresh_token(user_id: int) -> tuple[str, str]:
-        from src.utils.auth import create_access_token, create_refresh_token
+        from src.api.v1.utils.auth import create_access_token, create_refresh_token
 
         access_token = create_access_token({"sub": str(user_id)})
         refresh_token_ = create_refresh_token({"sub": str(user_id)})
@@ -340,7 +340,7 @@ class AuthService(BaseService):
 
     async def spotify_callback(self, code) -> tuple[str, str]:  # type: ignore[no-untyped-def]
         # old functional
-        from src.utils.auth import create_access_token, create_refresh_token
+        from src.api.v1.utils.auth import create_access_token, create_refresh_token
         access_token = await self.repositories.api.login(code=code)
 
         if access_token:

@@ -1,7 +1,12 @@
-from fastapi import FastAPI
+from typing import Callable, Any
+
+import pydantic
+from fastapi import FastAPI, Request, Depends, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.api.v1 import v1
+from src.api.v1.utils.auth import get_current_user
+from src.models.auth import User
 
 
 def create_app() -> FastAPI:
@@ -28,3 +33,28 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
+
+
+@app.middleware('http')
+async def v1_exceptions_middleware(  # type: ignore[no-untyped-def]
+    request: Request,
+    call_next: Callable[[Request], Any],
+    user: User | None = Depends(get_current_user)
+) -> Response:
+    if not user:
+        raise api.UnauthorizedException(detail="Unauthorized")
+
+    try:
+        response = await call_next(request)
+    except services.InvalidRequestException as e:
+        raise api.InvalidRequestException(detail=e.detail)
+    except pydantic.ValidationError as e:
+        raise api.InvalidRequestException(detail=e.title)
+    except services.NoRightsException as e:
+        raise api.NoRightsException(detail=e.detail)
+    except services.NotFoundException as e:
+        raise api.NotFoundException(detail=e.detail)
+    except services.ServerError as e:
+        raise api.CustomException(status_code=500, detail=e.detail)
+
+    return response

@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Depends, status
 
-from src.models.auth import User
-from src.schemas.base import Page, get_items_response
-from src.schemas.licenses import (
+from src.api.v1.schemas.base import Page, get_items_response
+from src.api.v1.schemas.licenses import (
     SMyLicensesResponse,
     SLicensesResponse,
     SLicenseResponse,
@@ -12,8 +11,9 @@ from src.schemas.licenses import (
     SLicensesDeleteResponse,
     SEditLicenseRequest,
 )
+from src.api.v1.utils.auth import get_current_user
+from src.models.auth import User
 from src.services.licenses import LicensesService, get_licenses_service
-from src.utils.auth import get_current_user
 
 licenses = APIRouter(prefix="/licenses", tags=["Licenses"])
 

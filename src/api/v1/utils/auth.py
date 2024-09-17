@@ -5,10 +5,10 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import EmailStr
 
+from src.api.v1.exceptions import UnauthorizedException
+from src.api.v1.schemas.auth import User
 from src.core.config import settings
 from src.dtos.database.auth import User as _User
-from src.exceptions.api import UnauthorizedException
-from src.schemas.auth import User
 from src.services.auth import UsersService, get_users_service
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -49,7 +49,7 @@ def create_refresh_token(data: dict) -> str:
 async def authenticate_user(
     email: EmailStr,
     password: str,
-    service: UsersService = Depends(get_users_service),
+    service: UsersService = get_users_service(),
 ) -> _User | None:
 
     user = await service.get_user_by_email(email=email)
@@ -68,9 +68,9 @@ async def authenticate_user(
 
 
 async def get_refresh_token(request: Request) -> str:
-    token = request.cookies.get("refreshToken")
+    token = request.cookies.get("refresh_token")
     if not token:
-        raise UnauthorizedException()
+        raise UnauthorizedException(detail="Refresh token not found")
     return token
 
 

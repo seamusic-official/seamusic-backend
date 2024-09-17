@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, status
 
-from src.schemas.base import Page, get_items_response
-from src.schemas.subscriptions import (
+from src.api.v1.schemas.base import Page, get_items_response
+from src.api.v1.schemas.subscriptions import (
     OnlyTelegramSubscribeMonth,
     OnlyTelegramSubscribeYear,
     STelegramAccountResponse,

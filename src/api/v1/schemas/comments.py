@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, EmailStr, ConfigDict
 
-from src.schemas.base import DetailMixin
+from src.api.v1.schemas.base import DetailMixin
 
 
 class SCommentDeleteResponse(BaseModel, DetailMixin):

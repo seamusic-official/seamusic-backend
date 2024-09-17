@@ -1,9 +1,8 @@
 from fastapi import UploadFile, File, APIRouter, Depends, status
 
-from src.dtos.database.soundkits import UpdateSoundkitRequestDTO
-from src.schemas.auth import User
-from src.schemas.base import Page, get_items_response
-from src.schemas.soundkits import (
+from src.api.v1.schemas.auth import User
+from src.api.v1.schemas.base import Page, get_items_response
+from src.api.v1.schemas.soundkits import (
     SSoundkitResponse,
     SUpdateSoundkitRequest,
     SSoundkitDeleteResponse,
@@ -12,8 +11,9 @@ from src.schemas.soundkits import (
     SUpdateSoundkitResponse,
     SMySoundkitsResponse,
 )
+from src.api.v1.utils.auth import get_current_user
+from src.dtos.database.soundkits import UpdateSoundkitRequestDTO
 from src.services.soundkits import SoundkitsService, get_soundkits_service
-from src.utils.auth import get_current_user
 from src.utils.files import unique_filename, get_file_stream
 
 soundkits = APIRouter(prefix="/soundkits", tags=["Soundkits"])

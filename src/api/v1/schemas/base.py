@@ -3,7 +3,7 @@ from typing import TypeVar, Generic
 
 from pydantic import BaseModel
 
-from src.utils.pages import get_page, get_has_next, get_has_previous
+from src.api.v1.utils.pages import get_page, get_has_next, get_has_previous
 
 ItemType = TypeVar("ItemType")
 

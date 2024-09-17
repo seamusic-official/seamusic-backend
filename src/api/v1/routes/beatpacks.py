@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, status
 
-from src.schemas.auth import User, SUserResponse
-from src.schemas.base import Page, get_items_response
-from src.schemas.beatpacks import (
+from src.api.v1.schemas.auth import User, SUserResponse
+from src.api.v1.schemas.base import Page, get_items_response
+from src.api.v1.schemas.beatpacks import (
     SBeatpackResponse,
     SCreateBeatpackRequest,
     SEditBeatpackResponse,
@@ -12,9 +12,9 @@ from src.schemas.beatpacks import (
     SCreateBeatpackResponse,
     SEditBeatpackRequest,
 )
-from src.schemas.beats import SBeatResponse
+from src.api.v1.schemas.beats import SBeatResponse
+from src.api.v1.utils.auth import get_current_user
 from src.services.beatpacks import BeatpackService, get_beatpack_service
-from src.utils.auth import get_current_user
 
 beatpacks = APIRouter(prefix="/beatpacks", tags=["Beatpacks"])
 

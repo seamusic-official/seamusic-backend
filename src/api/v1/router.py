@@ -1,18 +1,18 @@
 from fastapi import APIRouter
 
-from src.api.v1.albums import albums
-from src.api.v1.auth import auth
-from src.api.v1.beatpacks import beatpacks
-from src.api.v1.beats import beats
-from src.api.v1.comments import comments
-from src.api.v1.licenses import licenses
-from src.api.v1.messages import messages
-from src.api.v1.soundkits import soundkits
-from src.api.v1.spotify import spotify
-from src.api.v1.squads import squads
-from src.api.v1.subscriptions import subscription
-from src.api.v1.tags import tags
-from src.api.v1.tracks import tracks
+from src.api.v1.routes.albums import albums
+from src.api.v1.routes.auth import auth
+from src.api.v1.routes.beatpacks import beatpacks
+from src.api.v1.routes.beats import beats
+from src.api.v1.routes.comments import comments
+from src.api.v1.routes.licenses import licenses
+from src.api.v1.routes.messages import messages
+from src.api.v1.routes.soundkits import soundkits
+from src.api.v1.routes.spotify import spotify
+from src.api.v1.routes.squads import squads
+from src.api.v1.routes.subscriptions import subscription
+from src.api.v1.routes.tags import tags
+from src.api.v1.routes.tracks import tracks
 
 router = APIRouter()
 

@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, status
 
-from src.schemas.auth import User
-from src.schemas.base import Page, get_items_response
-from src.schemas.tags import (
+from src.api.v1.schemas.auth import User
+from src.api.v1.schemas.base import Page, get_items_response
+from src.api.v1.schemas.tags import (
     SAddTagResponse,
     SAddTagRequest,
     SMyListenerTagsResponse,
@@ -10,8 +10,8 @@ from src.schemas.tags import (
     Tag,
     SMyArtistTagsResponse
 )
+from src.api.v1.utils.auth import get_current_user
 from src.services.tags import TagsService, get_tags_service
-from src.utils.auth import get_current_user
 
 tags = APIRouter(prefix="/tags", tags=["All tags"])
 

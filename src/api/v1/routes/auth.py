@@ -7,7 +7,7 @@ from fastapi import (
     status,
 )
 
-from src.schemas.auth import (
+from src.api.v1.schemas.auth import (
     SRefreshTokenResponse,
     SSpotifyCallbackResponse,
     SArtistResponse,
@@ -35,7 +35,8 @@ from src.schemas.auth import (
     SDeleteProducerResponse,
     SLoginResponse,
 )
-from src.schemas.base import Page, get_items_response
+from src.api.v1.schemas.base import Page, get_items_response
+from src.api.v1.utils.auth import get_current_user, get_hashed_password
 from src.services.auth import (
     AuthService,
     ArtistsService,
@@ -46,7 +47,6 @@ from src.services.auth import (
     get_producers_service,
     get_auth_service
 )
-from src.utils.auth import get_current_user, get_hashed_password
 from src.utils.files import unique_filename, get_file_stream
 
 auth = APIRouter(prefix='/auth')

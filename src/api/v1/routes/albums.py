@@ -1,7 +1,6 @@
 from fastapi import UploadFile, File, APIRouter, Depends, status
 
-from src.enums.type import Type
-from src.schemas.albums import (
+from src.api.v1.schemas.albums import (
     SAddAlbumResponse,
     SAlbumResponse,
     SAllAlbumsResponse,
@@ -13,10 +12,11 @@ from src.schemas.albums import (
     SUpdateAlbumRequest,
     SUpdateAlbumResponse,
 )
-from src.schemas.auth import User
-from src.schemas.base import Page, get_items_response
+from src.api.v1.schemas.auth import User
+from src.api.v1.schemas.base import Page, get_items_response
+from src.api.v1.utils.auth import get_current_user
+from src.enums.type import Type
 from src.services.albums import get_album_service, AlbumService
-from src.utils.auth import get_current_user
 from src.utils.files import unique_filename, get_file_stream
 
 albums = APIRouter(prefix="/albums", tags=["Albums"])

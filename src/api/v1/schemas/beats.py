@@ -3,9 +3,9 @@ from typing import Literal
 
 from pydantic import BaseModel
 
+from src.api.v1.schemas.base import DetailMixin, ItemsResponse
 from src.dtos.database.base import BaseRequestDTO
 from src.enums.type import Type
-from src.schemas.base import DetailMixin, ItemsResponse
 
 
 class SCreateBeatRequest(BaseRequestDTO):

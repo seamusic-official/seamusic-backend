@@ -8,7 +8,7 @@ from src.dtos.database.albums import (
     AlbumsResponseDTO
 )
 from src.enums.type import Type
-from src.exceptions.services import NoRightsException, NotFoundException
+from src.exceptions import NoRightsException, NotFoundException
 from src.repositories import Repositories, DatabaseRepositories
 from src.repositories.database.albums.base import BaseAlbumRepository
 from src.repositories.database.albums.postgres import init_postgres_repository

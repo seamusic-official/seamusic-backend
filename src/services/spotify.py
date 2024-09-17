@@ -9,7 +9,7 @@ from src.dtos.api.spotify import (
     SearchResponseDTO
 )
 from src.enums.spotify import SpotifyType
-from src.exceptions.services import NotFoundException
+from src.exceptions import NotFoundException
 from src.repositories import Repositories
 from src.repositories.api.spotify.base import BaseSpotifyRepository
 

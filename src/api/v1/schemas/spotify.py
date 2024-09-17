@@ -2,8 +2,8 @@ import datetime
 
 from pydantic import BaseModel
 
+from src.api.v1.schemas.base import ItemsResponse
 from src.enums.spotify import SpotifyAlbumType, SpotifyType
-from src.schemas.base import ItemsResponse
 
 
 class SpotifyTrack(BaseModel):

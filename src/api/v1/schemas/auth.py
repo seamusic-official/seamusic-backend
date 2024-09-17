@@ -3,9 +3,9 @@ from typing import Literal
 
 from pydantic import BaseModel, EmailStr, Field
 
+from src.api.v1.schemas.base import DetailMixin, ItemsResponse
 from src.enums.auth import Role
 from src.enums.type import Type
-from src.schemas.base import DetailMixin, ItemsResponse
 
 
 class User(BaseModel):

@@ -3,8 +3,8 @@ from typing import Literal
 
 from pydantic import BaseModel
 
+from src.api.v1.schemas.base import DetailMixin, ItemsResponse
 from src.enums.type import Type
-from src.schemas.base import DetailMixin, ItemsResponse
 
 
 class SAlbumResponse(BaseModel):

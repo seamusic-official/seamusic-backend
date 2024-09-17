@@ -4,9 +4,9 @@ from httpx import Response
 from sqlalchemy.ext.asyncio import create_async_engine
 
 from src.api.app import app
+from src.api.v1.schemas import SRegisterUserRequest, Role, SLoginRequest, SLoginResponse
 from src.core.config import settings
 from src.models.base import Base
-from src.schemas.auth import SRegisterUserRequest, Role, SLoginRequest, SLoginResponse
 
 engine_test = create_async_engine(settings.db.url, echo=True)
 

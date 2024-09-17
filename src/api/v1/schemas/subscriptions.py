@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from src.schemas.base import ItemsResponse
+from src.api.v1.schemas.base import ItemsResponse
 
 
 class TelegramAccount(BaseModel):

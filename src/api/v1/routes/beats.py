@@ -1,8 +1,8 @@
 from fastapi import UploadFile, File, APIRouter, Depends, status
 
-from src.schemas.auth import User
-from src.schemas.base import Page, get_items_response
-from src.schemas.beats import (
+from src.api.v1.schemas.auth import User
+from src.api.v1.schemas.base import Page, get_items_response
+from src.api.v1.schemas.beats import (
     SBeatReleaseRequest,
     SBeatReleaseResponse,
     SBeatResponse,
@@ -12,9 +12,9 @@ from src.schemas.beats import (
     SMyBeatsResponse,
     SUpdateBeatPictureResponse,
 )
-from src.schemas.beats import SBeatUpdateRequest, SBeatUpdateResponse
+from src.api.v1.schemas.beats import SBeatUpdateRequest, SBeatUpdateResponse
+from src.api.v1.utils.auth import get_current_user
 from src.services.beats import BeatsService, get_beats_service
-from src.utils.auth import get_current_user
 from src.utils.files import unique_filename, get_file_stream
 
 beats = APIRouter(prefix="/beats", tags=["Beats"])

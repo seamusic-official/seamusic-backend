@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from io import BytesIO
 
 from src.dtos.database.tracks import TracksResponseDTO, CreateTrackRequestDTO, UpdateTrackRequestDTO, TrackResponseDTO
-from src.exceptions.services import NoRightsException, NotFoundException
+from src.exceptions import NoRightsException, NotFoundException
 from src.repositories import Repositories, BaseMediaRepository, DatabaseRepositories
 from src.repositories.database.tracks.base import BaseTracksRepository
 from src.repositories.database.tracks.postgres import init_postgres_repository
