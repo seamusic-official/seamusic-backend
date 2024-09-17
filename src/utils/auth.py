@@ -49,7 +49,7 @@ def create_refresh_token(data: dict) -> str:
 async def authenticate_user(
     email: EmailStr,
     password: str,
-    service: UsersService = Depends(),
+    service: UsersService = Depends(get_users_service),
 ) -> _User | None:
 
     user = await service.get_user_by_email(email=email)
