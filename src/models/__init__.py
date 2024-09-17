@@ -1,4 +1,5 @@
 from src.models.albums import Album, album_track_association, artist_profile_album_association
+from src.models.auth import User, user_to_artist_association, user_to_producer_association, ProducerProfile, ArtistProfile
 from src.models.beatpacks import Beatpack, user_to_beatpacks_association_table, beats_to_beatpacks_association_table
 from src.models.beats import Beat
 from src.models.comments import BaseComment
