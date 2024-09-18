@@ -11,5 +11,5 @@ def models_to_dto(models: list[Base], dto: type[BaseDTO]) -> list:
 
 
 def request_dto_to_model(request_dto: BaseRequestDTO, model: type[Base]):  # type: ignore[no-untyped-def, no-any-return]
-    request_dto_dict = {key: item if item is not None else None for key, item in request_dto.model_dump()}  # type: ignore
+    request_dto_dict = {key: item if item is not None else None for key, item in request_dto.model_dump().items()}
     return model(**request_dto_dict)
