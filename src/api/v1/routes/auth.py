@@ -459,7 +459,7 @@ async def deactivate_one_producer(
     path='/register',
     summary='Create new user',
     response_model=SRegisterUserResponse,
-    responses={status.HTTP_201_CREATED: {'model': SRegisterUserResponse}},
+    status_code=status.HTTP_201_CREATED,
 )
 async def register(
     user: SRegisterUserRequest,
@@ -520,7 +520,7 @@ async def login(
 )
 async def refresh_token(
     user: User = Depends(get_current_user),
-    service: AuthService = Depends(get_auth_service)
+    service: AuthService = Depends(get_auth_service),
 ) -> SRefreshTokenResponse:
 
     access_token, refresh_token_ = await service.refresh_token(user_id=user.id)
