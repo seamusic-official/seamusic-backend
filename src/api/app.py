@@ -15,6 +15,8 @@ def create_app() -> FastAPI:
         title="SeaMusic",
         description="High-perfomance musical application",
         version='0.1.0',
+        docs_url='/',
+        redoc_url='/docs',
     )
 
     _app.include_router(v1)
