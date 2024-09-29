@@ -2,6 +2,7 @@ import datetime
 
 from pydantic import BaseModel
 
+from src.api.v1.schemas.base import ItemsResponse
 from src.enums.spotify import SpotifyAlbumType, SpotifyType
 
 
@@ -14,15 +15,6 @@ class SpotifyTrack(BaseModel):
     spotify_url: str
 
 
-class SSpotifyTracksResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    tracks: list[SpotifyTrack]
-
-
 class SSpotifyTrackResponse(BaseModel):
     id: str
     type: SpotifyType
@@ -32,20 +24,15 @@ class SSpotifyTrackResponse(BaseModel):
     spotify_url: str
 
 
+class SSpotifyTracksResponse(ItemsResponse[SSpotifyTrackResponse]):
+    pass
+
+
 class SpotifyAlbum(BaseModel):
     id: str
     name: str
     image_url: str | None = None
     spotify_url: str
-
-
-class SSpotifyAlbumsResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    albums: list[SpotifyAlbum]
 
 
 class SpotifyArtist(BaseModel):
@@ -67,6 +54,10 @@ class SSpotifyAlbumResponse(BaseModel):
     uri: str
     album_type: SpotifyAlbumType
     total_tracks: int
+
+
+class SSpotifyAlbumsResponse(ItemsResponse[SpotifyAlbum]):
+    pass
 
 
 class SpotifyAlbumTrack(BaseModel):

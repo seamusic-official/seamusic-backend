@@ -4,13 +4,13 @@ from io import BytesIO
 from boto3 import Session, client
 
 from src.core.config import settings
-from src.repositories import BaseMediaRepository
+from src.repositories.media.base import BaseMediaRepository
 
 
 @dataclass
 class S3Repository(BaseMediaRepository):
     _client: client
-    bucket_name: str
+    bucket_name: str = settings.bucket_name
 
     async def upload_file(self, folder: str, filename: str, file_stream: BytesIO) -> str:
         key = f"{folder}/{filename}"

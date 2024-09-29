@@ -8,7 +8,7 @@ from src.dtos.database.soundkits import (
     UpdateSoundkitResponseDTO,
     UpdateSoundkitRequestDTO
 )
-from src.exceptions.services import NotFoundException, NoRightsException
+from src.exceptions import NotFoundException, NoRightsException
 from src.repositories import DatabaseRepositories, BaseMediaRepository, Repositories
 from src.repositories.database.soundkits.base import BaseSoundkitsRepository
 from src.repositories.database.soundkits.postgres import init_postgres_repository

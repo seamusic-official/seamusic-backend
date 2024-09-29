@@ -8,8 +8,7 @@ from src.dtos.database.licenses import (
     UpdateLicenseRequestDTO,
     LicenseResponseDTO
 )
-from src.exceptions.api import NoRightsException
-from src.exceptions.services import NotFoundException
+from src.exceptions import NotFoundException, NoRightsException
 from src.repositories import Repositories, DatabaseRepositories, BaseMediaRepository
 from src.repositories.database.auth.base import BaseUsersRepository
 from src.repositories.database.auth.postgres import init_users_postgres_repository

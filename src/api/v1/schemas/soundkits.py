@@ -2,20 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
-from src.schemas.base import DetailMixin
-
-
-class Soundkit(BaseModel):
-    id: int
-    title: str
-    picture: str | None = None
-    description: str | None = None
-    file_path: str
-    co_prod: str | None = None
-    prod_by: str | None = None
-    playlist_id: int | None = None
-    user_id: int
-    beatpack_id: int | None = None
+from src.api.v1.schemas.base import DetailMixin, ItemsResponse
 
 
 class SSoundkitResponse(BaseModel):
@@ -32,22 +19,12 @@ class SSoundkitResponse(BaseModel):
     updated_at: datetime
 
 
-class SAllSoundkitsResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[SSoundkitResponse]
+class SAllSoundkitsResponse(ItemsResponse[SSoundkitResponse]):
+    pass
 
 
-class SMySoundkitsResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[SSoundkitResponse]
+class SMySoundkitsResponse(ItemsResponse[SSoundkitResponse]):
+    pass
 
 
 class SCreateSoundkitRequest(BaseModel):

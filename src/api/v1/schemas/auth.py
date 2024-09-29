@@ -3,15 +3,15 @@ from typing import Literal
 
 from pydantic import BaseModel, EmailStr, Field
 
+from src.api.v1.schemas.base import DetailMixin, ItemsResponse
 from src.enums.auth import Role
 from src.enums.type import Type
-from src.schemas.base import DetailMixin
 
 
 class User(BaseModel):
     id: int
     username: str
-    email: str
+    email: EmailStr
     password: str
     picture_url: str
     birthday: datetime
@@ -21,7 +21,7 @@ class User(BaseModel):
 class SUserResponse(BaseModel):
     id: int
     username: str
-    email: str
+    email: EmailStr
     picture_url: str
     birthday: datetime
     type: Literal[Type.user] = Type.user
@@ -30,19 +30,14 @@ class SUserResponse(BaseModel):
 class SMeResponse(BaseModel):
     id: int
     username: str
-    email: str
+    email: EmailStr
     picture_url: str
     birthday: datetime
     type: Literal[Type.user] = Type.user
 
 
-class SUsersResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[SUserResponse]
+class SUsersResponse(ItemsResponse[SUserResponse]):
+    pass
 
 
 class SUpdateUserPictureResponse(BaseModel, DetailMixin):
@@ -63,13 +58,6 @@ class SDeleteUserResponse(BaseModel, DetailMixin):
     detail: str = "User deleted."
 
 
-class Artist(BaseModel):
-    id: int
-    user: User
-    description: str | None = None
-    type: Literal[Type.artist] = Type.artist
-
-
 class SArtistResponse(BaseModel):
     id: int
     user: SUserResponse
@@ -84,13 +72,8 @@ class SMeAsArtistResponse(BaseModel):
     type: Literal[Type.artist] = Type.artist
 
 
-class SArtistsResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[SArtistResponse]
+class SArtistsResponse(ItemsResponse[SArtistResponse]):
+    pass
 
 
 class SUpdateArtistRequest(BaseModel):
@@ -103,13 +86,6 @@ class SUpdateArtistResponse(BaseModel):
 
 class SDeleteArtistResponse(BaseModel, DetailMixin):
     detail: str = "Artist deleted"
-
-
-class Producer(BaseModel):
-    id: int
-    user: User
-    description: str | None = None
-    type: Literal[Type.producer] = Type.producer
 
 
 class SProducerResponse(BaseModel):
@@ -125,13 +101,8 @@ class SMeAsProducerResponse(BaseModel):
     description: str | None = None
 
 
-class SProducersResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[SProducerResponse]
+class SProducersResponse(ItemsResponse[SProducerResponse]):
+    pass
 
 
 class SUpdateProducerRequest(BaseModel):

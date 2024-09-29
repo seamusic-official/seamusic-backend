@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Depends, status
 
-from src.models.auth import User
-from src.schemas.base import Page
-from src.schemas.licenses import (
+from src.api.v1.schemas.base import Page, get_items_response
+from src.api.v1.schemas.licenses import (
     SMyLicensesResponse,
     SLicensesResponse,
     SLicenseResponse,
@@ -12,8 +11,9 @@ from src.schemas.licenses import (
     SLicensesDeleteResponse,
     SEditLicenseRequest,
 )
+from src.api.v1.utils.auth import get_current_user
+from src.models.auth import User
 from src.services.licenses import LicensesService, get_licenses_service
-from src.utils.auth import get_current_user
 
 licenses = APIRouter(prefix="/licenses", tags=["Licenses"])
 
@@ -25,14 +25,14 @@ licenses = APIRouter(prefix="/licenses", tags=["Licenses"])
     responses={status.HTTP_200_OK: {"model": SMyLicensesResponse}},
 )
 async def get_my_licenses(
-    page: Page,
+    page: Page = Depends(Page),
     user: User = Depends(get_current_user),
     service: LicensesService = Depends(get_licenses_service),
 ) -> SMyLicensesResponse:
 
     response = await service.get_user_licenses(user_id=user.id, start=page.start, size=page.size)
 
-    licenses_ = list(map(
+    items = list(map(
         lambda license_: SLicenseResponse(
             id=license_.id,
             title=license_.title,
@@ -53,13 +53,12 @@ async def get_my_licenses(
 
     total = await service.get_user_licenses_count(user_id=user.id)
 
-    return SMyLicensesResponse(
-        total=total,
-        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
-        has_next=page.start + page.size < total,
-        has_previous=page.start - page.size >= 0,
+    return get_items_response(
+        start=page.start,
         size=page.size,
-        items=licenses_,
+        total=total,
+        items=items,
+        response_model=SMyLicensesResponse,
     )
 
 
@@ -69,14 +68,14 @@ async def get_my_licenses(
     response_model=SLicensesResponse,
     responses={status.HTTP_200_OK: {"model": SLicensesResponse}},
 )
-async def all_licenses(
-    page: Page,
+async def get_all_licenses(
+    page: Page = Depends(Page),
     service: LicensesService = Depends(get_licenses_service),
 ) -> SLicensesResponse:
 
     response = await service.get_all_licenses(start=page.start, size=page.size)
 
-    licenses_ = list(map(
+    items = list(map(
         lambda license_: SLicenseResponse(
             id=license_.id,
             title=license_.title,
@@ -97,13 +96,12 @@ async def all_licenses(
 
     total = await service.get_licenses_count()
 
-    return SLicensesResponse(
-        total=total,
-        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
-        has_next=page.start + page.size < total,
-        has_previous=page.start - page.size >= 0,
+    return get_items_response(
+        start=page.start,
         size=page.size,
-        items=licenses_,
+        total=total,
+        items=items,
+        response_model=SMyLicensesResponse,
     )
 
 

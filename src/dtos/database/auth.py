@@ -38,7 +38,7 @@ class CreateUserRequestDTO(BaseRequestDTO):
     roles: list[Role]
     birthday: date
     tags: list[str]
-    access_level: AccessLevel
+    access_level: AccessLevel = AccessLevel.user
 
 
 class UpdateUserRequestDTO(BaseRequestDTO):

@@ -3,7 +3,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.base import Base
 
-
 producer_tags_association = Table(
     "producer_tags_association",
     Base.metadata,
@@ -30,12 +29,12 @@ class Tag(Base):
     __tablename__ = "tags"
 
     name: Mapped[str] = mapped_column(nullable=False)
-    artist_profiles: Mapped[list["ArtistProfile"]] = relationship(  # type: ignore[name-defined]
+    artist_profiles: Mapped[list["ArtistProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=artist_tags_association, back_populates="tags"
     )
-    producer_profiles: Mapped[list["ProducerProfile"]] = relationship(  # type: ignore[name-defined]
+    producer_profiles: Mapped[list["ProducerProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=producer_tags_association, back_populates="tags"
     )
-    listener_profiles: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]
+    listener_profiles: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=listener_tags_association, back_populates="tags"
     )

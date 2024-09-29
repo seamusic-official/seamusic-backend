@@ -2,10 +2,10 @@ from typing import Literal
 
 from pydantic import BaseModel
 
+from src.api.v1.schemas.auth import SUserResponse
+from src.api.v1.schemas.base import DetailMixin, ItemsResponse
+from src.api.v1.schemas.beats import SBeatResponse
 from src.enums.type import Type
-from src.schemas.auth import SUserResponse
-from src.schemas.base import DetailMixin
-from src.schemas.beats import SBeatResponse
 
 
 class SBeatpackResponse(BaseModel):
@@ -26,13 +26,8 @@ class SBeatpacksResponse(BaseModel):
     items: list[SBeatpackResponse]
 
 
-class SMyBeatpacksResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[SBeatpackResponse]
+class SMyBeatpacksResponse(ItemsResponse[SBeatpackResponse]):
+    pass
 
 
 class SCreateBeatpackRequest(BaseModel):

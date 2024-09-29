@@ -27,7 +27,6 @@ python = "^3.11"
 python-dotenv = "^1.0.1"
 redis = "^5.0.8"
 requests = "^2.32.3"
-sqladmin = "^0.18.0"
 sqlalchemy = "^2.0.32"
 types-requests = "^2.32.0.20240712"
 uvicorn = "^0.30.6"
@@ -50,17 +49,6 @@ pytest-mock = "^3.14.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.black]
-exclude = [
-    ".git/",
-    ".venv/",
-    ".idea/",
-    ".vscode/",
-    "*cache*",
-    "__init__.py",
-    "migrations/env.py",
-]
 
 [tool.flake8]
 max-line-length = 200

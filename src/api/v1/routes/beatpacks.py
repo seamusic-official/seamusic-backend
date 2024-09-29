@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, status
 
-from src.schemas.auth import User, SUserResponse
-from src.schemas.base import Page
-from src.schemas.beatpacks import (
+from src.api.v1.schemas.auth import User, SUserResponse
+from src.api.v1.schemas.base import Page, get_items_response
+from src.api.v1.schemas.beatpacks import (
     SBeatpackResponse,
     SCreateBeatpackRequest,
     SEditBeatpackResponse,
@@ -12,9 +12,9 @@ from src.schemas.beatpacks import (
     SCreateBeatpackResponse,
     SEditBeatpackRequest,
 )
-from src.schemas.beats import SBeatResponse
+from src.api.v1.schemas.beats import SBeatResponse
+from src.api.v1.utils.auth import get_current_user
 from src.services.beatpacks import BeatpackService, get_beatpack_service
-from src.utils.auth import get_current_user
 
 beatpacks = APIRouter(prefix="/beatpacks", tags=["Beatpacks"])
 
@@ -26,14 +26,14 @@ beatpacks = APIRouter(prefix="/beatpacks", tags=["Beatpacks"])
     responses={status.HTTP_200_OK: {"model": SMyBeatpacksResponse}},
 )
 async def get_my_beatpacks(
-    page: Page,
+    page: Page = Depends(Page),
     user: User = Depends(get_current_user),
     service: BeatpackService = Depends(get_beatpack_service),
 ) -> SMyBeatpacksResponse:
 
     response = await service.get_user_beatpacks(user_id=user.id, start=page.start, size=page.size)
 
-    beatpacks_ = list(map(
+    items = list(map(
         lambda beatpack: SBeatpackResponse(
             title=beatpack.title,
             description=beatpack.description,
@@ -70,13 +70,12 @@ async def get_my_beatpacks(
 
     total = await service.get_user_beatpacks_count(user_id=user.id)
 
-    return SMyBeatpacksResponse(
-        total=total,
-        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
-        has_next=page.start + page.size < total,
-        has_previous=page.start - page.size >= 0,
+    return get_items_response(
+        start=page.start,
         size=page.size,
-        items=beatpacks_,
+        total=total,
+        items=items,
+        response_model=SMyBeatpacksResponse,
     )
 
 
@@ -87,13 +86,13 @@ async def get_my_beatpacks(
     responses={status.HTTP_200_OK: {"model": SBeatpacksResponse}},
 )
 async def all_beatpacks(
-    page: Page,
+    page: Page = Depends(Page),
     service: BeatpackService = Depends(get_beatpack_service),
 ) -> SBeatpacksResponse:
 
     response = await service.get_all_beatpacks(start=page.start, size=page.size)
 
-    beatpacks_ = list(map(
+    items = list(map(
         lambda beatpack: SBeatpackResponse(
             title=beatpack.title,
             description=beatpack.description,
@@ -130,13 +129,12 @@ async def all_beatpacks(
 
     total = await service.get_beatpacks_count()
 
-    return SBeatpacksResponse(
-        total=total,
-        page=page.start // page.size if page.start % page.size == 0 else page.start // page.size + 1,
-        has_next=page.start + page.size < total,
-        has_previous=page.start - page.size >= 0,
+    return get_items_response(
+        start=page.start,
         size=page.size,
-        items=beatpacks_,
+        total=total,
+        items=items,
+        response_model=SMyBeatpacksResponse,
     )
 
 

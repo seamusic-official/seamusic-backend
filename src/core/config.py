@@ -1,6 +1,8 @@
 from pydantic import Field, EmailStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from src.core.loggers import core as logger
+
 
 class Settings(BaseSettings):
 
@@ -47,21 +49,23 @@ class Settings(BaseSettings):
     email_address: EmailStr = Field(default='seamusimgmt@gmail.com', alias='EMAIL_ADDRESS')
     email_password: str = Field(default='', alias='EMAIL_PASSWORD')
     smtp_host: str = Field(default='', alias='SMTP_HOST')
-    smtp_port: int = Field(default='', alias='SMTP_PORT')
+    smtp_port: int = Field(default=0, alias='SMTP_PORT')
 
     @property
     def db_url(self) -> str:
         return f"postgresql+asyncpg://{self.db_user}:{self.db_pass}@{self.db_host}:{self.db_port}/{self.db_name}"
+
     @property
     def db_url_test(self) -> str:
         return f'postgresql+asyncpg://{self.db_user_test}:{self.db_pass_test}@{self.db_host_test}:{self.db_port_test}/{self.db_name_test}'
-    
+
 
 settings = Settings()
 
-print(f"DB Host: {settings.db_host}")
-print(f"DB Port: {settings.db_port}")  # This should print an integer
-print(f"DB Name: {settings.db_name}")
-print(f"DB User: {settings.db_user}")
-print(f"DB Password: {settings.db_pass}")
-print(f"Database URL: {settings.db_url}")
+logger.debug(f'''Database settings:
+host={settings.db_host}
+port={settings.db_port}
+name={settings.db_name}
+username={settings.db_user}
+password={settings.db_pass}
+url={settings.db_url}''')

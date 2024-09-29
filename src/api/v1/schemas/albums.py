@@ -3,20 +3,8 @@ from typing import Literal
 
 from pydantic import BaseModel
 
+from src.api.v1.schemas.base import DetailMixin, ItemsResponse
 from src.enums.type import Type
-from src.schemas.base import DetailMixin
-
-
-class Album(BaseModel):
-    id: int
-    created_at: datetime.datetime
-    updated_at: datetime.datetime
-    is_available: bool
-    title: str
-    picture_url: str | None = None
-    description: str
-    co_prod: str | None = None
-    type: Literal[Type.album] = Type.album
 
 
 class SAlbumResponse(BaseModel):
@@ -31,22 +19,12 @@ class SAlbumResponse(BaseModel):
     type: Literal[Type.album] = Type.album
 
 
-class SMyAlbumsResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[SAlbumResponse] = list()
+class SMyAlbumsResponse(ItemsResponse[SAlbumResponse]):
+    pass
 
 
-class SAllAlbumsResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[SAlbumResponse] = list()
+class SAllAlbumsResponse(ItemsResponse[SAlbumResponse]):
+    pass
 
 
 class SAddAlbumResponse(BaseModel):

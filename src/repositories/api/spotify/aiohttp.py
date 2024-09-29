@@ -64,7 +64,7 @@ class SpotifyRepository(BaseSpotifyRepository, AiohttpRepositpry):
     async def get_album_tracks(self, album_id: str, offset: int = 0, limit: int = 10) -> SpotifyTracksResponseDTO:
         async with self.session.get(f'{self.base_url}/albums/{album_id}/tracks?offset={offset}&limit={limit}') as response:  # type: ignore[attr-defined]
             return SpotifyTracksResponseDTO(**await response.json())
-        
+
     async def get_album_tracks_count(self, album_id: str) -> int:
         async with self.session.get(f'{self.base_url}/albums/{album_id}/tracks') as response:  # type: ignore[attr-defined]
             data = await response.json()
@@ -78,7 +78,7 @@ class SpotifyRepository(BaseSpotifyRepository, AiohttpRepositpry):
         async with self.session.get(f'{self.base_url}/artists/{artist_id}/albums') as response:  # type: ignore[attr-defined]
             data = await response.json()
             return jmespath.search('total', data)
-        
+
     async def get_track(self, track_id: str) -> SpotifyTrackResponseDTO | None:
         async with self.session.get(f'{self.base_url}/tracks/{track_id}') as response:  # type: ignore[attr-defined]
             return SpotifyTrackResponseDTO(**await response.json()) if response.status != 404 else None
@@ -99,4 +99,3 @@ class SpotifyRepository(BaseSpotifyRepository, AiohttpRepositpry):
         async with self.session.get(f'{self.base_url}/search?q={query}&type={type_}') as response:  # type: ignore[attr-defined]
             data = await response.json()
             return jmespath.search('total', data)
-        

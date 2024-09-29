@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from src.dtos.database.tags import AddTagRequestDTO, TagsResponseDTO
-from src.exceptions.services import NotFoundException
+from src.exceptions import NotFoundException
 from src.repositories import Repositories, BaseMediaRepository, DatabaseRepositories
 from src.repositories.database.auth.base import BaseProducersRepository, BaseArtistsRepository
 from src.repositories.database.auth.postgres import (

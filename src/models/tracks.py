@@ -4,7 +4,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.models.albums import album_track_association
 from src.models.base import Base
 
-
 artist_profile_track_association = Table(
     "artist_profile_track_association",
     Base.metadata,
@@ -25,10 +24,10 @@ class Track(Base):
     type: Mapped[str] = mapped_column(nullable=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
-    artist_profiles: Mapped["ArtistProfile"] = relationship(  # type: ignore[name-defined]
+    artist_profiles: Mapped["ArtistProfile"] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=artist_profile_track_association, back_populates="tracks"
     )
-    albums: Mapped["Album"] = relationship(  # type: ignore[name-defined]
+    albums: Mapped["Album"] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=album_track_association, back_populates="tracks"
     )
-    user: Mapped["User"] = relationship("User")  # type: ignore[name-defined]
+    user: Mapped["User"] = relationship("User")  # type: ignore[name-defined]  # noqa: F821

@@ -2,23 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
-from src.schemas.base import DetailMixin
-
-
-class License(BaseModel):
-    id: int
-    title: str
-    picture_url: str | None = None
-    description: str | None = None
-    file_path: str
-    co_prod: str | None = None
-    prod_by: str | None = None
-    playlist_id: int | None = None
-    user_id: int
-    beat_pack_id: int | None = None
-    price: str
-    created_at: datetime
-    updated_at: datetime
+from src.api.v1.schemas.base import DetailMixin, ItemsResponse
 
 
 class SLicenseResponse(BaseModel):
@@ -37,22 +21,12 @@ class SLicenseResponse(BaseModel):
     updated_at: datetime
 
 
-class SLicensesResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[SLicenseResponse]
+class SLicensesResponse(ItemsResponse[SLicenseResponse]):
+    pass
 
 
-class SMyLicensesResponse(BaseModel):
-    total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
-    items: list[SLicenseResponse]
+class SMyLicensesResponse(ItemsResponse[SLicenseResponse]):
+    pass
 
 
 class SCreateLicenseRequest(BaseModel):
