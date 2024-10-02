@@ -1,7 +1,10 @@
-from sqlalchemy import Date, Column, Table, ForeignKey, Integer, String, DATETIME
-from sqlalchemy.dialects.postgresql import TIMESTAMP
+from datetime import date
+
+from sqlalchemy import Column, Table, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from src.models.base import Base
+
 
 artist_profile_album_association = Table(
     "artist_profile_album_association",
@@ -21,16 +24,11 @@ album_track_association = Table(
 class Album(Base):
     __tablename__ = "albums"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     title: Mapped[str] = mapped_column(String, nullable=False)
     picture_url: Mapped[str] = mapped_column(String, nullable=True)
     description: Mapped[str] = mapped_column(String, nullable=True)
     type: Mapped[str] = mapped_column(String, nullable=False)
-    created_at: Mapped[date] = mapped_column(DATETIME, nullable=False)
-    updated_at: Mapped[date] = mapped_column(DATETIME, nullable=False)
-    tags: Mapped[list["Tags"]] = relationship(
-        "Tags"
-    )
-    artists: Mapped[list["ArtistProfile"]] = relationship(
-        "ArtistProfile"
-    )
+    created_at: Mapped[date] = mapped_column(nullable=False)
+    updated_at: Mapped[date] = mapped_column(nullable=False)
+    tags: Mapped[list["Tags"]] = relationship("Tag")  # type: ignore[name-defined]  # noqa: F821
+    artist_profiles: Mapped[list["ArtistProfile"]] = relationship("ArtistProfile")  # type: ignore[name-defined]  # noqa: F821

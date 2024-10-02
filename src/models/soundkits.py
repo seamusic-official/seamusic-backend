@@ -1,26 +1,23 @@
+from datetime import date
 
-from sqlalchemy import Column, Table, ForeignKey, Integer, String, Date
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import Column, Table, ForeignKey, Integer
+from sqlalchemy.orm import Mapped, mapped_column
 
-from src.models.auth import User
 from src.models.base import Base
-
-
 
 user_to_soundkits_association_table = Table(
     "user_to_soundkits_association_table",
     Base.metadata,
-    Column("soundkit_id", Integer, ForeignKey("soundkits.id")),
-    Column("user_id", Integer, ForeignKey("users.id")),
+    Column("soundkit_id", Integer, ForeignKey("soundkits.id"), primary_key=True),
+    Column("user_id", Integer, ForeignKey("users.id"), primary_key=True),
 )
 
 
 class Soundkit(Base):
     __tablename__ = "soundkits"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    title: Mapped[str] = mapped_column(String, nullable=False)
-    description: Mapped[str] = mapped_column(String, nullable=True)
-    picture_url: Mapped[str] = mapped_column(String, nullable=True)
-    file_url: Mapped[str] = mapped_column(String, nullable=False)
-    created_at: Mapped[Date] = mapped_column(Date, nullable=False)
+    title: Mapped[str] = mapped_column(nullable=False)
+    description: Mapped[str] = mapped_column(nullable=True)
+    picture_url: Mapped[str] = mapped_column(nullable=True)
+    file_url: Mapped[str] = mapped_column(nullable=False)
+    created_at: Mapped[date] = mapped_column(nullable=False)
