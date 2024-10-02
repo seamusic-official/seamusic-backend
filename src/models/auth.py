@@ -49,11 +49,11 @@ class User(Base):
         argument="ProducerProfile",
         back_populates="user"
     )
-    saved_albums: Mapped[list["Album"]] = relationship(  # type: ignore[name-defined]
+    saved_albums: Mapped[list["Album"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="Album",
         overlaps="user"
     )
-    liked_tracks: Mapped[list["Track"]] = relationship(  # type: ignore[name-defined]
+    liked_tracks: Mapped[list["Track"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="Track",
         back_populates="user"
     )
@@ -82,15 +82,15 @@ class ArtistProfile(Base):
     )
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
 
-    tracks: Mapped[list["Track"]] = relationship(  # type: ignore[name-defined]
+    tracks: Mapped[list["Track"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=artist_profile_track_association,
         back_populates="artist_profiles"
     )
-    albums: Mapped[list["Album"]] = relationship(  # type: ignore[name-defined]
+    albums: Mapped[list["Album"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=artist_profile_album_association,
         back_populates="artist_profiles"
     )
-    tags: Mapped[list["Tag"]] = relationship(  # type: ignore[name-defined]
+    tags: Mapped[list["Tag"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="Tag",
         secondary=artist_profile_tags_association,
     )
@@ -107,11 +107,11 @@ class ProducerProfile(Base):
     description: Mapped[str] = mapped_column(nullable=False)
     picture_url: Mapped[str] = mapped_column(nullable=False)
     beats: Mapped[list["Beat"]] = relationship(argument="Beat")  # type: ignore[name-defined]  # noqa: F821
-    tags: Mapped[list["Tag"]] = relationship(  # type: ignore[name-defined]
+    tags: Mapped[list["Tag"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument='Tag',
         secondary=producer_profile_tags_association,
     )
-    squads: Mapped[list["Squad"]] = (relationship(  # type: ignore[name-defined]
+    squads: Mapped[list["Squad"]] = (relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=squad_producer_profile_association,
         back_populates="producer_profiles",
     ))

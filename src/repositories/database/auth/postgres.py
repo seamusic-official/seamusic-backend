@@ -38,7 +38,7 @@ class UsersRepository(BaseUsersRepository, SQLAlchemyRepository):
         return model_to_response_dto(model=user, response_dto=UserResponseDTO)
 
     async def get_users(self, offset: int = 0, limit: int = 10) -> UsersResponseDTO:
-        query = select(User).offset(offset).limit(limit).order_by(User.updated_at.desc())
+        query = select(User).offset(offset).limit(limit).order_by(User.created_at.desc())
         users = list(await self.scalars(query))
         return UsersResponseDTO(users=models_to_dto(models=users, dto=_User))
 
@@ -72,7 +72,7 @@ class ArtistsRepository(BaseArtistsRepository, SQLAlchemyRepository):
         return model_to_response_dto(model=artist, response_dto=ArtistResponseDTO)
 
     async def get_artists(self, offset: int = 0, limit: int = 10) -> ArtistsResponseDTO:
-        query = select(ArtistProfile).offset(offset).limit(limit).order_by(ArtistProfile.updated_at.desc())
+        query = select(ArtistProfile).offset(offset).limit(limit).order_by(ArtistProfile.id.desc())
         artists = list(await self.scalars(query))
         return ArtistsResponseDTO(artists=models_to_dto(models=artists, dto=Artist))
 
@@ -102,7 +102,7 @@ class ProducersRepository(BaseProducersRepository, SQLAlchemyRepository):
         return model_to_response_dto(model=producer, response_dto=ProducerResponseDTO)
 
     async def get_producers(self, offset: int = 0, limit: int = 10) -> ProducersResponseDTO:
-        query = select(ProducerProfile).offset(offset).limit(limit).order_by(ProducerProfile.updated_at.desc())
+        query = select(ProducerProfile).offset(offset).limit(limit).order_by(ProducerProfile.id.desc())
         producers = list(await self.scalars(query))
         return ProducersResponseDTO(producers=models_to_dto(models=producers, dto=Producer))
 
