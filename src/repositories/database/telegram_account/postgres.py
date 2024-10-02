@@ -25,7 +25,7 @@ class TelegramAccountRepository(SQLAlchemyRepository, BaseTelegramAccountReposit
         return model_to_response_dto(model=await self.scalar(query), response_dto=TelegramAccountResponseDTO)
 
     async def get_telegram_accounts_ids(self, offset: int = 0, limit: int = 10) -> TelegramAccountsIDSResponseDTO:
-        query = select(TelegramAccount.telegram_id).offset(offset).limit(limit).order_by(TelegramAccount.updated_at.desc())
+        query = select(TelegramAccount.telegram_id).offset(offset).limit(limit).order_by(TelegramAccount.telegram_id.desc())
         ids = list(await self.scalars(query))
         return TelegramAccountsIDSResponseDTO(ids=ids)
 

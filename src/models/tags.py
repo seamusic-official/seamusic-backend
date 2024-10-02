@@ -1,40 +1,25 @@
-from sqlalchemy import Column, Table, ForeignKey, Integer
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import Table, Column, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column
 
 from src.models.base import Base
 
-producer_tags_association = Table(
-    "producer_tags_association",
+
+artist_profile_tags_association = Table(
+    'artist_profile_tags_association',
     Base.metadata,
-    Column("producer_profile_id", Integer, ForeignKey("producer_profiles.id")),
-    Column("tag_id", Integer, ForeignKey("tags.id")),
+    Column("artist_id", ForeignKey('artist_profiles.id'), primary_key=True),
+    Column("tag_name", ForeignKey('tags.name'), primary_key=True),
 )
 
-artist_tags_association = Table(
-    "artist_tags_association",
-    Base.metadata,
-    Column("artist_profile_id", Integer, ForeignKey("artist_profiles.id")),
-    Column("tag_id", Integer, ForeignKey("tags.id")),
-)
 
-listener_tags_association = Table(
-    "listener_tags_association",
+producer_profile_tags_association = Table(
+    'producer_profile_tags_association',
     Base.metadata,
-    Column("user_id", Integer, ForeignKey("users.id")),
-    Column("tag_id", Integer, ForeignKey("tags.id")),
+    Column("producer_id", ForeignKey('producer_profiles.id'), primary_key=True),
+    Column("tag_names", ForeignKey('tags.name'), primary_key=True),
 )
 
 
 class Tag(Base):
     __tablename__ = "tags"
-
     name: Mapped[str] = mapped_column(nullable=False)
-    artist_profiles: Mapped[list["ArtistProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        secondary=artist_tags_association, back_populates="tags"
-    )
-    producer_profiles: Mapped[list["ProducerProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        secondary=producer_tags_association, back_populates="tags"
-    )
-    listener_profiles: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        secondary=listener_tags_association, back_populates="tags"
-    )
