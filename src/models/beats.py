@@ -1,4 +1,4 @@
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.base import Base
@@ -7,13 +7,9 @@ from src.models.base import Base
 class Beat(Base):
     __tablename__ = "beats"
 
-    title: Mapped[str] = mapped_column(nullable=False)
-    description: Mapped[str] = mapped_column(nullable=True)
-    picture_url: Mapped[str] = mapped_column(nullable=True)
-    file_url: Mapped[str] = mapped_column(nullable=False)
-    co_prod: Mapped[str] = mapped_column(nullable=True)
-
-    type: Mapped[str] = mapped_column(nullable=True)
-
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    user: Mapped["User"] = relationship("User")  # type: ignore[name-defined]  # noqa: F821
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    title: Mapped[str] = mapped_column(String, nullable=False)
+    description: Mapped[str] = mapped_column(String, nullable=True)
+    picture_url: Mapped[str] = mapped_column(String, nullable=True)
+    file_url: Mapped[str] = mapped_column(String, nullable=False)
+    created_at: Mapped[Date] = mapped_column(Date, nullable=False)

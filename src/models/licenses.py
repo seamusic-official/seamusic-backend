@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Table, ForeignKey, Integer
+from sqlalchemy import Column, Table, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.base import Base
@@ -14,10 +14,7 @@ user_to_licenses_association = Table(
 class License(Base):
     __tablename__ = "licenses"
 
-    title: Mapped[str] = mapped_column(nullable=False)
-    price: Mapped[str] = mapped_column(nullable=False)
-    description: Mapped[str] = mapped_column(nullable=False)
-    picture_url: Mapped[str] = mapped_column(nullable=True)
-
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
-    user: Mapped["User"] = relationship("User", secondary=user_to_licenses_association)  # type: ignore[name-defined]  # noqa: F821
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    text: Mapped[str] = mapped_column(String, nullable=False)
+    author_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    author: Mapped["User"] = relationship("User", secondary=user_to_licenses_association)  # type: ignore[name-defined]  # noqa: F821

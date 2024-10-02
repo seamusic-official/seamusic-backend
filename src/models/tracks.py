@@ -1,8 +1,10 @@
-from sqlalchemy import Column, ForeignKey, Integer, Table
+from sqlalchemy import Column, ForeignKey, Integer, Table, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.albums import album_track_association
 from src.models.base import Base
+from .albums import Album
+from .tags import Tag
 
 artist_profile_track_association = Table(
     "artist_profile_track_association",
@@ -14,20 +16,14 @@ artist_profile_track_association = Table(
 
 class Track(Base):
     __tablename__ = "tracks"
-
-    name: Mapped[str] = mapped_column(nullable=False)
-    description: Mapped[str] = mapped_column(nullable=True)
-    picture_url: Mapped[str] = mapped_column(nullable=True)
-    file_url: Mapped[str] = mapped_column(nullable=False)
-    co_prod: Mapped[str] = mapped_column(nullable=True)
-    prod_by: Mapped[str] = mapped_column(nullable=True)
-    type: Mapped[str] = mapped_column(nullable=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-
-    artist_profiles: Mapped["ArtistProfile"] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        secondary=artist_profile_track_association, back_populates="tracks"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    description: Mapped[str] = mapped_column(String, nullable=True)
+    picture_url: Mapped[str] = mapped_column(String, nullable=True)
+    file_url: Mapped[str] = mapped_column(String, nullable=False)
+    album: Mapped["Album"] = relationship(
+        back_populates="tracks"
     )
-    albums: Mapped["Album"] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        secondary=album_track_association, back_populates="tracks"
+    tags: Mapped["Tag"] = relationship(
+        back_populates="tags"
     )
-    user: Mapped["User"] = relationship("User")  # type: ignore[name-defined]  # noqa: F821

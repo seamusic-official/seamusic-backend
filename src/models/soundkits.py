@@ -1,8 +1,10 @@
-from sqlalchemy import Column, Table, ForeignKey, Integer
+
+from sqlalchemy import Column, Table, ForeignKey, Integer, String, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.auth import User
 from src.models.base import Base
+
 
 
 user_to_soundkits_association_table = Table(
@@ -16,10 +18,9 @@ user_to_soundkits_association_table = Table(
 class Soundkit(Base):
     __tablename__ = "soundkits"
 
-    name: Mapped[str] = mapped_column(nullable=False)
-    description: Mapped[str] = mapped_column(nullable=True)
-    picture_url: Mapped[str] = mapped_column(nullable=True)
-    file_url: Mapped[str] = mapped_column(nullable=False)
-
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    user: Mapped["User"] = relationship("User")  # type: ignore[name-defined]
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    title: Mapped[str] = mapped_column(String, nullable=False)
+    description: Mapped[str] = mapped_column(String, nullable=True)
+    picture_url: Mapped[str] = mapped_column(String, nullable=True)
+    file_url: Mapped[str] = mapped_column(String, nullable=False)
+    created_at: Mapped[Date] = mapped_column(Date, nullable=False)
