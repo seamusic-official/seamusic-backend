@@ -5,11 +5,10 @@ from src.dtos.database.soundkits import (
     SoundkitsResponseDTO,
     SoundkitResponseDTO,
     CreateSoundkitRequestDTO,
-    CreateSoundkitResponseDTO,
     UpdateSoundkitResponseDTO,
     UpdateSoundkitRequestDTO
 )
-from src.exceptions.services import NotFoundException, NoRightsException
+from src.exceptions import NotFoundException, NoRightsException
 from src.repositories import DatabaseRepositories, BaseMediaRepository, Repositories
 from src.repositories.database.soundkits.base import BaseSoundkitsRepository
 from src.repositories.database.soundkits.postgres import init_postgres_repository
@@ -32,11 +31,17 @@ class SoundkitsRepositories(Repositories):
 class SoundkitsService(BaseService):
     repositories: SoundkitsRepositories
 
-    async def get_user_soundkits(self, user_id: int) -> SoundkitsResponseDTO:
-        return await self.repositories.database.soundkits.get_user_soundkits(user_id=user_id)
+    async def get_user_soundkits(self, user_id: int, start: int = 1, size: int = 10) -> SoundkitsResponseDTO:
+        return await self.repositories.database.soundkits.get_user_soundkits(user_id=user_id, offset=start - 1, limit=size)
 
-    async def get_all_soundkits(self) -> SoundkitsResponseDTO:
-        return await self.repositories.database.soundkits.get_all_soundkits()
+    async def get_user_soundkits_count(self, user_id: int) -> int:
+        return await self.repositories.database.soundkits.get_users_soundkits_count(user_id=user_id)
+
+    async def get_all_soundkits(self, start: int = 1, size: int = 10) -> SoundkitsResponseDTO:
+        return await self.repositories.database.soundkits.get_all_soundkits(offset=start - 1, limit=size)
+
+    async def get_all_soundkits_count(self) -> int:
+        return await self.repositories.database.soundkits.get_soundkits_count()
 
     async def get_soundkit_by_id(self, soundkit_id: int) -> SoundkitResponseDTO:
         soundkit = await self.repositories.database.soundkits.get_soundkit_by_id(soundkit_id=soundkit_id)

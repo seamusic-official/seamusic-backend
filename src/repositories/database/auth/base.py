@@ -4,16 +4,18 @@ from dataclasses import dataclass
 from pydantic import EmailStr
 
 from src.dtos.database.auth import (
-    UserResponseDTO,
-    UsersResponseDTO,
-    UpdateUserRequestDTO,
     ArtistResponseDTO,
     ArtistsResponseDTO,
-    UpdateArtistRequestDTO,
+    CreateArtistRequestDTO,
+    CreateProducerRequestDTO,
+    CreateUserRequestDTO,
     ProducerResponseDTO,
     ProducersResponseDTO,
+    UpdateUserRequestDTO,
+    UpdateArtistRequestDTO,
     UpdateProducerRequestDTO,
-    CreateUserRequestDTO, CreateArtistRequestDTO, CreateProducerRequestDTO,
+    UserResponseDTO,
+    UsersResponseDTO,
 )
 
 
@@ -28,7 +30,11 @@ class BaseUsersRepository(ABC):
         ...
 
     @abstractmethod
-    async def get_users(self) -> UsersResponseDTO:
+    async def get_users(self, offset: int = 0, limit: int = 10) -> UsersResponseDTO:
+        ...
+
+    @abstractmethod
+    async def get_users_count(self) -> int:
         ...
 
     @abstractmethod
@@ -55,7 +61,11 @@ class BaseArtistsRepository(ABC):
         ...
 
     @abstractmethod
-    async def get_artists(self) -> ArtistsResponseDTO:
+    async def get_artists(self, offset: int = 0, limit: int = 10) -> ArtistsResponseDTO:
+        ...
+
+    @abstractmethod
+    async def get_artists_count(self) -> int:
         ...
 
     @abstractmethod
@@ -78,7 +88,11 @@ class BaseProducersRepository(ABC):
         ...
 
     @abstractmethod
-    async def get_producers(self) -> ProducersResponseDTO:
+    async def get_producers(self, offset: int = 0, limit: int = 10) -> ProducersResponseDTO:
+        ...
+
+    @abstractmethod
+    async def get_producers_count(self) -> int:
         ...
 
     @abstractmethod

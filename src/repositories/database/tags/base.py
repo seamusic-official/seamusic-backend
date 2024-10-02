@@ -15,13 +15,25 @@ class BaseTagsRepository(ABC):
         ...
 
     @abstractmethod
-    async def get_listener_tags(self, user_id: int) -> TagsResponseDTO:
+    async def get_listener_tags(self, user_id: int, offset: int = 0, limit: int = 10) -> TagsResponseDTO:
         ...
 
     @abstractmethod
-    async def get_producer_tags(self, producer_id: int) -> TagsResponseDTO:
+    async def get_listener_tags_count(self, user_id: int) -> int:
         ...
 
     @abstractmethod
-    async def get_artist_tags(self, artist_id: int) -> TagsResponseDTO:
+    async def get_producer_tags(self, producer_id: int, offset: int = 0, limit: int = 10) -> TagsResponseDTO:
+        ...
+
+    @abstractmethod
+    async def get_producer_tags_count(self, producer_id: int) -> int:
+        ...
+
+    @abstractmethod
+    async def get_artist_tags(self, artist_id: int, offset: int = 0, limit: int = 10) -> TagsResponseDTO:
+        ...
+
+    @abstractmethod
+    async def get_artist_tags_count(self, artist_id: int) -> int:
         ...

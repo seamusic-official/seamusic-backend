@@ -27,7 +27,7 @@ class UserResponseDTO(BaseResponseDTO):
 
 
 class UsersResponseDTO(BaseResponseDTO):
-    users: list[User]
+    users: list[UserResponseDTO]
 
 
 class CreateUserRequestDTO(BaseRequestDTO):
@@ -38,7 +38,7 @@ class CreateUserRequestDTO(BaseRequestDTO):
     roles: list[Role]
     birthday: date
     tags: list[str]
-    access_level: AccessLevel
+    access_level: AccessLevel = AccessLevel.user
 
 
 class UpdateUserRequestDTO(BaseRequestDTO):
@@ -51,18 +51,18 @@ class UpdateUserRequestDTO(BaseRequestDTO):
 
 class Artist(BaseDTO):
     id: int
-    user: User
+    user: UserResponseDTO
     description: str | None = None
 
 
 class ArtistResponseDTO(BaseResponseDTO):
     id: int
-    user: User
+    user: UserResponseDTO
     description: str | None = None
 
 
 class ArtistsResponseDTO(BaseResponseDTO):
-    artists: list[Artist]
+    artists: list[ArtistResponseDTO]
 
 
 class CreateArtistRequestDTO(BaseRequestDTO):
@@ -79,18 +79,18 @@ class UpdateArtistRequestDTO(BaseRequestDTO):
 
 class Producer(BaseDTO):
     id: int
-    user: User
+    user: UserResponseDTO
     description: str | None = None
 
 
 class ProducerResponseDTO(BaseResponseDTO):
     id: int
-    user: User
+    user: UserResponseDTO
     description: str | None = None
 
 
 class ProducersResponseDTO(BaseResponseDTO):
-    producers: list[Producer]
+    producers: list[ProducerResponseDTO]
 
 
 class CreateProducerRequestDTO(BaseRequestDTO):

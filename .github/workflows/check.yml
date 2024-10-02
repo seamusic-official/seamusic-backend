@@ -1,0 +1,45 @@
+name: check
+on:
+  push
+
+jobs:
+  flake8:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.11.10
+          architecture: x64
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Install and configure Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.5.1
+          virtualenvs-create: true
+          virtualenvs-in-project: false
+      - name: Install dependencies
+        run: poetry install
+      - name: Run flake8
+        run: poetry run flake8
+  mypy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.11.10
+          architecture: x64
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Install and configure Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.5.1
+          virtualenvs-create: true
+          virtualenvs-in-project: false
+      - name: Install dependencies
+        run: poetry install
+      - name: Run mypy
+        run: poetry run mypy -p src --ignore-missing-imports --config-file=pyproject.toml

@@ -12,11 +12,19 @@ class BaseTracksRepository(ABC):
         ...
 
     @abstractmethod
-    async def get_user_tracks(self, user_id: int) -> TracksResponseDTO:
+    async def get_user_tracks(self, user_id: int, offset: int = 0, limit: int = 10) -> TracksResponseDTO:
         ...
 
     @abstractmethod
-    async def get_all_tracks(self) -> TracksResponseDTO:
+    async def get_users_tracks_count(self, user_id: int) -> int:
+        ...
+
+    @abstractmethod
+    async def get_all_tracks(self, offset: int = 0, limit: int = 10) -> TracksResponseDTO:
+        ...
+
+    @abstractmethod
+    async def get_tracks_count(self) -> int:
         ...
 
     @abstractmethod

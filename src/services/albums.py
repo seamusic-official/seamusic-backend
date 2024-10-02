@@ -8,7 +8,7 @@ from src.dtos.database.albums import (
     AlbumsResponseDTO
 )
 from src.enums.type import Type
-from src.exceptions.services import NoRightsException, NotFoundException
+from src.exceptions import NoRightsException, NotFoundException
 from src.repositories import Repositories, DatabaseRepositories
 from src.repositories.database.albums.base import BaseAlbumRepository
 from src.repositories.database.albums.postgres import init_postgres_repository
@@ -32,11 +32,30 @@ class AlbumService(BaseService):
 
     repositories: AlbumRepositories
 
-    async def get_user_albums(self, user_id: int) -> AlbumsResponseDTO:
-        return await self.repositories.database.albums.get_user_albums(user_id=user_id)
+    async def get_user_albums(
+        self,
+        user_id: int,
+        start: int = 1,
+        size: int = 10,
+    ) -> AlbumsResponseDTO:
+        return await self.repositories.database.albums.get_user_albums(
+            user_id=user_id,
+            offset=start - 1,
+            limit=size,
+        )
 
-    async def get_all_albums(self) -> AlbumsResponseDTO:
-        return await self.repositories.database.albums.get_all_albums()
+    async def get_user_albums_count(self, user_id: int) -> int:
+        return await self.repositories.database.albums.get_user_albums_count(user_id=user_id)
+
+    async def get_all_albums(
+        self,
+        start: int = 1,
+        size: int = 10
+    ) -> AlbumsResponseDTO:
+        return await self.repositories.database.albums.get_all_albums(offset=start - 1, limit=size)
+
+    async def get_all_albums_count(self) -> int:
+        return await self.repositories.database.albums.get_albums_count()
 
     async def get_one_album(self, album_id: int) -> AlbumResponseDTO:
         album = await self.repositories.database.albums.get_album_by_id(album_id=album_id)

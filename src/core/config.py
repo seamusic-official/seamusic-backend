@@ -1,6 +1,8 @@
 from pydantic import Field, EmailStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from src.core.loggers import core as logger
+
 
 class Settings(BaseSettings):
 
@@ -24,13 +26,10 @@ class Settings(BaseSettings):
     db_pass: str = Field(default='postgres', alias='DB_PASS')
 
     db_host_test: str = Field(default='localhost', alias='DB_HOST_TEST')
-    db_port_test: int = Field(default=5432, alias='DB_PORT_TEST')
+    db_port_test: int = Field(default=5600, alias='DB_PORT_TEST')
     db_name_test: str = Field(default='postgres', alias='DB_NAME_TEST')
     db_user_test: str = Field(default='postgres', alias='DB_USER_TEST')
     db_pass_test: str = Field(default='postgres', alias='DB_PASS_TEST')
-
-    db_url: str = f'postgresql+asyncpg://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}'
-    db_url_test: str = f'postgresql+asyncpg://{db_user_test}:{db_pass_test}@{db_host_test}:{db_port_test}/{db_name_test}'
 
     redis_host: str = Field(default='localhost', alias='REDIS_HOST')
     redis_port: int = Field(default=6379, alias='REDIS_PORT')
@@ -47,10 +46,26 @@ class Settings(BaseSettings):
 
     bucket_name: str = Field(default='', alias='BUCKET_NAME')
 
-    email_address: EmailStr = Field(default='', alias='EMAIL_ADDRESS')
+    email_address: EmailStr = Field(default='seamusimgmt@gmail.com', alias='EMAIL_ADDRESS')
     email_password: str = Field(default='', alias='EMAIL_PASSWORD')
     smtp_host: str = Field(default='', alias='SMTP_HOST')
-    smtp_port: str = Field(default='', alias='SMTP_PORT')
+    smtp_port: int = Field(default=0, alias='SMTP_PORT')
+
+    @property
+    def db_url(self) -> str:
+        return f"postgresql+asyncpg://{self.db_user}:{self.db_pass}@{self.db_host}:{self.db_port}/{self.db_name}"
+
+    @property
+    def db_url_test(self) -> str:
+        return f'postgresql+asyncpg://{self.db_user_test}:{self.db_pass_test}@{self.db_host_test}:{self.db_port_test}/{self.db_name_test}'
 
 
 settings = Settings()
+
+logger.debug(f'''Database settings:
+host={settings.db_host}
+port={settings.db_port}
+name={settings.db_name}
+username={settings.db_user}
+password={settings.db_pass}
+url={settings.db_url}''')

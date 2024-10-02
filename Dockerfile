@@ -1,4 +1,4 @@
-FROM python:3.11.9
+FROM python:3.11.10
 
 COPY . /backend
 WORKDIR /backend
@@ -10,4 +10,4 @@ RUN pip install --upgrade pip
 RUN pip install poetry
 RUN poetry install
 
-CMD ["make", "run"]
+CMD ["make", "run-local"]

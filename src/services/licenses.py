@@ -8,8 +8,7 @@ from src.dtos.database.licenses import (
     UpdateLicenseRequestDTO,
     LicenseResponseDTO
 )
-from src.exceptions.api import NoRightsException
-from src.exceptions.services import NotFoundException
+from src.exceptions import NotFoundException, NoRightsException
 from src.repositories import Repositories, DatabaseRepositories, BaseMediaRepository
 from src.repositories.database.auth.base import BaseUsersRepository
 from src.repositories.database.auth.postgres import init_users_postgres_repository
@@ -34,11 +33,17 @@ class LicensesRepositories(Repositories):
 class LicensesService:
     repositories: LicensesRepositories
 
-    async def get_user_licenses(self, user_id: int) -> LicensesResponseDTO:
-        return await self.repositories.database.licenses.get_user_licenses(user_id=user_id)
+    async def get_user_licenses(self, user_id: int, start: int = 1, size: int = 10) -> LicensesResponseDTO:
+        return await self.repositories.database.licenses.get_user_licenses(user_id=user_id, offset=start - 1, limit=size)
 
-    async def get_all_licenses(self) -> LicensesResponseDTO:
-        return await self.repositories.database.licenses.get_all_licenses()
+    async def get_user_licenses_count(self, user_id: int) -> int:
+        return await self.repositories.database.licenses.get_user_licenses_count(user_id=user_id)
+
+    async def get_all_licenses(self, start: int = 1, size: int = 10) -> LicensesResponseDTO:
+        return await self.repositories.database.licenses.get_all_licenses(offset=start - 1, limit=size)
+
+    async def get_licenses_count(self) -> int:
+        return await self.repositories.database.licenses.get_licenses_count()
 
     async def get_one(self, license_id: int) -> LicenseResponseDTO:
         license_: LicenseResponseDTO | None = await self.repositories.database.licenses.get_license_by_id(license_id=license_id)
@@ -111,11 +116,15 @@ class LicensesService:
         await self.repositories.database.licenses.delete_license(license_id=license_id, user_id=user_id)
 
 
-def get_licenses_service() -> LicensesService:
-    return LicensesService(repositories=LicensesRepositories(
+def get_licenses_repositories() -> LicensesRepositories:
+    return LicensesRepositories(
         database=LicensesDatabaseRepositories(
             licenses=init_licenses_postgres_repository(),
             users=init_users_postgres_repository(),
         ),
         media=init_s3_repository()
-    ))
+    )
+
+
+def get_licenses_service() -> LicensesService:
+    return LicensesService(repositories=get_licenses_repositories())

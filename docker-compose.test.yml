@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   db:
-    container_name: my_db
+    container_name: db
     image: postgres:16.2
     environment:
       - POSTGRES_DB=${DB_NAME_TEST}
@@ -16,3 +16,23 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: tests
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - '8000:8000'
+    env_file:
+      - .env
+    volumes:
+      - ./:/backend/
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: "bridge"

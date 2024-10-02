@@ -3,7 +3,7 @@ version: '3.8'
 services:
   db:
     image: postgres:16.2
-    container_name: my_db
+    container_name: db
     restart: always
     environment:
       - POSTGRES_DB=${DB_NAME}
@@ -25,13 +25,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: my_app
+    container_name: app
     depends_on:
       db:
         condition: service_healthy
     ports:
       - '8000:8000'
-    restart: always
     env_file:
       - .env
     volumes:

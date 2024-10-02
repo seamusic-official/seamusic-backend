@@ -1,8 +1,11 @@
 from dataclasses import dataclass
 
-from src.dtos.database.subscriptions import CreateTelegramAccountRequestDTO, TelegramAccountResponseDTO, \
-    TelegramAccountsIDSResponseDTO
-from src.exceptions.services import NotFoundException
+from src.dtos.database.subscriptions import (
+    CreateTelegramAccountRequestDTO,
+    TelegramAccountResponseDTO,
+    TelegramAccountsIDSResponseDTO,
+)
+from src.exceptions import NotFoundException
 from src.repositories import DatabaseRepositories, Repositories
 from src.repositories.database.telegram_account.base import BaseTelegramAccountRepository
 from src.repositories.database.telegram_account.postgres import init_postgres_repository
@@ -34,8 +37,11 @@ class SubscriptionsService:
 
         return telegram_account
 
-    async def get_telegram_accounts_ids(self) -> TelegramAccountsIDSResponseDTO:
-        return await self.repositories.database.telegram_account.get_telegram_accounts_ids()
+    async def get_telegram_accounts_ids(self, start: int = 1, size: int = 10) -> TelegramAccountsIDSResponseDTO:
+        return await self.repositories.database.telegram_account.get_telegram_accounts_ids(offset=start - 1, limit=size)
+
+    async def get_telegram_accounts_count(self) -> int:
+        return await self.repositories.database.telegram_account.get_telegram_accounts_ids_count()
 
 
 def get_subscriptions_repositories() -> SubscriptionsRepositories:

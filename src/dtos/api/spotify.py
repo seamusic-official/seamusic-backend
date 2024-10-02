@@ -2,7 +2,6 @@ from datetime import date
 
 from src.dtos.database.base import BaseDTO, BaseResponseDTO
 from src.enums.spotify import SpotifyType, SpotifyAlbumType
-from src.schemas.auth import Artist
 
 
 class SpotifyImage(BaseDTO):
@@ -45,6 +44,11 @@ class SpotifyAlbumTrack(BaseDTO):
 
 
 class SpotifyAlbumTracksResponseDTO(BaseResponseDTO):
+    limit: int
+    next: str
+    offset: int
+    previous: str
+    total: int
     tracks: list[SpotifyAlbumTrack]
 
 
@@ -101,6 +105,11 @@ class SpotifyTrackResponseDTO(BaseResponseDTO):
 
 
 class SpotifyTracksResponseDTO(BaseResponseDTO):
+    limit: int
+    next: str
+    offset: int
+    previous: str
+    total: int
     tracks: list[SpotifyTrack]
 
 
@@ -121,7 +130,6 @@ class SpotifyAlbumResponseDTO(BaseResponseDTO):
 
 
 class SpotifyAlbumsResponseDTO(BaseResponseDTO):
-    href: str
     limit: int
     next: str
     offset: int
@@ -143,7 +151,7 @@ class SearchArtists(BaseDTO):
     id: str
     type: str
     name: str
-    artists: list[Artist]
+    artists: list[SpotifyArtist]
     preview_url: str
     external_urls: dict[str, str]
     duration_ms: int
@@ -155,13 +163,18 @@ class SearchAlbums(BaseDTO):
     images: list[SpotifyImage]
     external_urls: dict[str, str]
     release_date: str
-    artists: list[Artist]
+    artists: list[SpotifyArtist]
     uri: str
     album_type: str
     total_tracks: int
 
 
 class SearchResponseDTO(BaseResponseDTO):
+    limit: int
+    next: str
+    offset: int
+    previous: str
+    total: int
     tracks: list[SpotifyTrack] | None = None
     artists: list[SpotifyTrack] | None = None
     albums: list[SpotifyAlbum] | None = None
