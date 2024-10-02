@@ -25,12 +25,12 @@ pydantic-settings = "^2.4.0"
 pyjwt = "2.9.0"
 python = "^3.11"
 python-dotenv = "^1.0.1"
+python-multipart = "^0.0.12"
 redis = "^5.0.8"
 requests = "^2.32.3"
 sqlalchemy = "^2.0.32"
 types-requests = "^2.32.0.20240712"
 uvicorn = "^0.30.6"
-python-multipart = "^0.0.12"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"
