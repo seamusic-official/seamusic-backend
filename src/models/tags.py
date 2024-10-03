@@ -1,8 +1,7 @@
-from sqlalchemy import Table, Column, ForeignKey
+from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.orm import Mapped, mapped_column
 
 from src.models.base import Base
-
 
 artist_profile_tags_association = Table(
     'artist_profile_tags_association',
@@ -22,4 +21,4 @@ producer_profile_tags_association = Table(
 
 class Tag(Base):
     __tablename__ = "tags"
-    name: Mapped[str] = mapped_column(nullable=False)
+    name: Mapped[str] = mapped_column(nullable=False, unique=True)
