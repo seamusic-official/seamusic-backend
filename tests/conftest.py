@@ -1,3 +1,5 @@
+from typing import AsyncGenerator
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import create_async_engine
@@ -6,7 +8,7 @@ from src.api.app import app
 from src.core.config import settings
 from src.models.base import Base
 
-engine_test = create_async_engine(settings.db.url, echo=True)
+engine_test = create_async_engine(settings.db_url, echo=True)
 
 user_email = 'test_email@example.com'
 user_password = 'test_password'
@@ -18,7 +20,7 @@ def client() -> TestClient:
 
 
 @pytest.fixture(autouse=True, scope='session')
-async def create_tables():
+async def create_tables() -> AsyncGenerator:
     async with engine_test.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     yield
