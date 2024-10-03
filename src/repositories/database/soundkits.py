@@ -17,7 +17,7 @@ from src.repositories.database.base import SQLAlchemyRepository
 @dataclass
 class SoundkitsRepository(SQLAlchemyRepository):
     async def get_user_soundkits(self, user_id: int, offset: int = 0, limit: int = 10) -> SoundkitsResponseDTO:
-        query = select(Soundkit).filter_by(user_id=user_id).offset(offset).limit(limit).order_by(Soundkit.updated_at.desc())
+        query = select(Soundkit).filter_by(user_id=user_id).offset(offset).limit(limit).order_by(Soundkit.created_at.desc())
         soundkits = list(await self.scalars(query))
         return SoundkitsResponseDTO(soundkits=models_to_dto(models=soundkits, dto=_Soundkit))
 
@@ -26,7 +26,7 @@ class SoundkitsRepository(SQLAlchemyRepository):
         return await self.scalar(query)
 
     async def get_all_soundkits(self, offset: int = 0, limit: int = 10) -> SoundkitsResponseDTO:
-        query = select(Soundkit).offset(offset).limit(limit).order_by(Soundkit.updated_at.desc())
+        query = select(Soundkit).offset(offset).limit(limit).order_by(Soundkit.created_at.desc())
         soundkits = list(await self.scalars(query))
         return SoundkitsResponseDTO(soundkits=models_to_dto(models=soundkits, dto=_Soundkit))
 

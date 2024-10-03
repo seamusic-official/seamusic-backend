@@ -23,7 +23,7 @@ class TracksRepository(SQLAlchemyRepository):
         return model.id
 
     async def get_user_tracks(self, user_id: int, offset: int = 0, limit: int = 10) -> TracksResponseDTO:
-        query = select(Track).filter_by(user_id=user_id).offset(offset).limit(limit).order_by(Track.updated_at.desc())
+        query = select(Track).filter_by(user_id=user_id).offset(offset).limit(limit).order_by(Track.name.desc())
         tracks = list(await self.scalars(query))
         return TracksResponseDTO(tracks=models_to_dto(models=tracks, dto=_Track))
 
@@ -32,7 +32,7 @@ class TracksRepository(SQLAlchemyRepository):
         return await self.scalar(query)
 
     async def get_all_tracks(self, offset: int = 0, limit: int = 10) -> TracksResponseDTO:
-        query = select(Track).offset(offset).limit(limit).order_by(Track.updated_at.desc())
+        query = select(Track).offset(offset).limit(limit).order_by(Track.name.desc())
         tracks = list(await self.scalars(query))
         return TracksResponseDTO(tracks=models_to_dto(models=tracks, dto=_Track))
 

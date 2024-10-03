@@ -6,18 +6,17 @@ from src.models.base import Base
 user_to_licenses_association = Table(
     "user_to_licenses_association",
     Base.metadata,
-    Column("user_id", Integer, ForeignKey("users.id")),
-    Column("license_id", Integer, ForeignKey("licenses.id")),
+    Column("user_id", Integer, ForeignKey("users.id"), primary_key=True),
+    Column("license_id", Integer, ForeignKey("licenses.id"), primary_key=True),
 )
 
 
 class License(Base):
     __tablename__ = "licenses"
 
-    title: Mapped[str] = mapped_column(nullable=False)
-    price: Mapped[str] = mapped_column(nullable=False)
-    description: Mapped[str] = mapped_column(nullable=False)
-    picture_url: Mapped[str] = mapped_column(nullable=True)
-
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
-    user: Mapped["User"] = relationship("User", secondary=user_to_licenses_association)  # type: ignore[name-defined]  # noqa: F821
+    text: Mapped[str] = mapped_column(nullable=False)
+    author_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    author: Mapped["User"] = relationship(  # type: ignore[name-defined]  # noqa: F821
+        argument="User",
+        secondary=user_to_licenses_association,
+    )
