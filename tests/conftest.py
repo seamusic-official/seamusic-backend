@@ -1,42 +1,24 @@
 import pytest
 from fastapi.testclient import TestClient
-from httpx import Response
 from sqlalchemy.ext.asyncio import create_async_engine
 
 from src.api.app import app
-from src.api.v1.schemas import SRegisterUserRequest, Role, SLoginRequest, SLoginResponse
 from src.core.config import settings
 from src.models.base import Base
 
 engine_test = create_async_engine(settings.db.url, echo=True)
 
-email = 'test_email@example.com'
-password = 'test_password'
+user_email = 'test_email@example.com'
+user_password = 'test_password'
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='function')
 def client() -> TestClient:
     return TestClient(app=app)
 
 
 @pytest.fixture(autouse=True, scope='session')
-def login(client: TestClient):
-    register = SRegisterUserRequest(
-        username='test_username',
-        password=password,
-        email=email,
-        roles=[Role.listener, Role.superuser, Role.moder, Role.producer, Role.listener],
-        birthday=None,
-        tags=['supertrap', 'newjazz', 'rage', 'hyperpop']
-    )
-    login = SLoginRequest(email=email, password=password)
-    client.post(url='/auth/register', json=register.model_dump())
-    response: Response = client.post(url='/auth/login', json=login.model_dump())
-    yield SLoginResponse(**response.json())
-
-
-@pytest.fixture(autouse=True, scope='session')
-async def prepare_database():
+async def create_tables():
     async with engine_test.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     yield
