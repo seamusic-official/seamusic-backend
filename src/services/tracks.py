@@ -4,14 +4,13 @@ from io import BytesIO
 from src.dtos.database.tracks import TracksResponseDTO, CreateTrackRequestDTO, UpdateTrackRequestDTO, TrackResponseDTO
 from src.exceptions import NoRightsException, NotFoundException
 from src.repositories import Repositories, BaseMediaRepository, DatabaseRepositories
-from src.repositories.database.tracks.base import BaseTracksRepository
-from src.repositories.database.tracks.postgres import init_postgres_repository
+from src.repositories.database.tracks import init_tracks_repository, TracksRepository
 from src.repositories.media.s3 import init_s3_repository
 
 
 @dataclass
 class TracksDatabaseRepositories(DatabaseRepositories):
-    tracks: BaseTracksRepository
+    tracks: TracksRepository
 
 
 @dataclass
@@ -174,7 +173,7 @@ class TracksService:
 
 def get_tracks_repositories() -> TracksRepositories:
     return TracksRepositories(
-        database=TracksDatabaseRepositories(tracks=init_postgres_repository()),
+        database=TracksDatabaseRepositories(tracks=init_tracks_repository()),
         media=init_s3_repository()
     )
 

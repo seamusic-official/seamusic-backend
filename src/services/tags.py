@@ -3,21 +3,19 @@ from dataclasses import dataclass
 from src.dtos.database.tags import AddTagRequestDTO, TagsResponseDTO
 from src.exceptions import NotFoundException
 from src.repositories import Repositories, BaseMediaRepository, DatabaseRepositories
-from src.repositories.database.auth.base import BaseProducersRepository, BaseArtistsRepository
-from src.repositories.database.auth.postgres import (
-    init_artists_postgres_repository as init_artists_repository,
-    init_producers_postgres_repository as init_producers_repository
+from src.repositories.database.auth import (
+    init_artists_repository as init_artists_repository,
+    init_producers_repository as init_producers_repository, ArtistsRepository, ProducersRepository
 )
-from src.repositories.database.tags.base import BaseTagsRepository
-from src.repositories.database.tags.postgres import init_postgres_repository as init_tags_repository
+from src.repositories.database.tags import init_tags_repository as init_tags_repository, TagsRepository
 from src.repositories.media.s3 import init_s3_repository
 
 
 @dataclass
 class TagsDatabaseRepositories(DatabaseRepositories):
-    tags: BaseTagsRepository
-    artists: BaseArtistsRepository
-    producers: BaseProducersRepository
+    tags: TagsRepository
+    artists: ArtistsRepository
+    producers: ProducersRepository
 
 
 @dataclass

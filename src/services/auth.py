@@ -24,39 +24,37 @@ from src.enums.auth import Role, AccessLevel
 from src.exceptions import NotFoundException, ServerError, InvalidRequestException
 from src.repositories import Repositories, DatabaseRepositories, BaseMediaRepository
 from src.repositories.api.spotify.base import BaseSpotifyRepository
-from src.repositories.database.auth.base import BaseUsersRepository, BaseProducersRepository, BaseArtistsRepository
-from src.repositories.database.auth.postgres import (
-    init_artists_postgres_repository,
-    init_producers_postgres_repository,
-    init_users_postgres_repository,
+from src.repositories.database.auth import (
+    init_artists_repository,
+    init_producers_repository,
+    init_users_repository, UsersRepository, ArtistsRepository, ProducersRepository,
 )
-from src.repositories.database.tags.base import BaseTagsRepository
-from src.repositories.database.tags.postgres import init_postgres_repository as init_tags_postgres_repository
+from src.repositories.database.tags import init_tags_repository as init_tags_postgres_repository, TagsRepository
 from src.repositories.media.s3 import S3Repository, init_s3_repository
 from src.services.base import BaseService
 
 
 @dataclass
 class UsersDatabaseRepositories(DatabaseRepositories):
-    users: BaseUsersRepository
-    tags: BaseTagsRepository
-    artists: BaseArtistsRepository
-    producers: BaseProducersRepository
+    users: UsersRepository
+    tags: TagsRepository
+    artists: ArtistsRepository
+    producers: ProducersRepository
 
 
 @dataclass
 class ArtistsDatabaseRepositories(DatabaseRepositories):
-    artists: BaseArtistsRepository
+    artists: ArtistsRepository
 
 
 @dataclass
 class ProducersDatabaseRepositories(DatabaseRepositories):
-    producers: BaseProducersRepository
+    producers: ProducersRepository
 
 
 @dataclass
 class AuthDatabaseRepositories(DatabaseRepositories):
-    users: BaseUsersRepository
+    users: UsersRepository
 
 
 @dataclass
@@ -377,10 +375,10 @@ class AuthService(BaseService):
 def get_users_repositories() -> UsersRepositories:
     return UsersRepositories(
         database=UsersDatabaseRepositories(
-            users=init_users_postgres_repository(),
+            users=init_users_repository(),
             tags=init_tags_postgres_repository(),
-            artists=init_artists_postgres_repository(),
-            producers=init_producers_postgres_repository()
+            artists=init_artists_repository(),
+            producers=init_producers_repository()
         ),
         media=init_s3_repository()
     )
@@ -392,7 +390,7 @@ def get_users_service() -> UsersService:
 
 def get_artists_repositories() -> ArtistsRepositories:
     return ArtistsRepositories(
-        database=ArtistsDatabaseRepositories(artists=init_artists_postgres_repository()),
+        database=ArtistsDatabaseRepositories(artists=init_artists_repository()),
         media=init_s3_repository()
     )
 
@@ -403,7 +401,7 @@ def get_artists_service() -> ArtistsService:
 
 def get_producers_repositories() -> ProducersRepositories:
     return ProducersRepositories(
-        database=ProducersDatabaseRepositories(producers=init_producers_postgres_repository()),
+        database=ProducersDatabaseRepositories(producers=init_producers_repository()),
         media=init_s3_repository()
     )
 
@@ -414,7 +412,7 @@ def get_producers_service() -> ProducersService:
 
 def get_auth_repositories() -> AuthRepositories:
     return AuthRepositories(
-        database=AuthDatabaseRepositories(users=init_users_postgres_repository()),
+        database=AuthDatabaseRepositories(users=init_users_repository()),
         media=init_s3_repository()
     )
 

@@ -12,11 +12,10 @@ from src.dtos.database.beatpacks import (
 )
 from src.models.beatpacks import Beatpack
 from src.repositories.database.base import SQLAlchemyRepository
-from src.repositories.database.beatpacks.base import BaseBeatpacksRepository
 
 
 @dataclass
-class BeatpacksRepository(BaseBeatpacksRepository, SQLAlchemyRepository):
+class BeatpacksRepository(SQLAlchemyRepository):
     async def get_user_beatpacks(self, user_id: int, offset: int = 0, limit: int = 10) -> BeatpacksResponseDTO:
         query = select(Beatpack).filter_by(user_id=user_id).offset(offset).limit(limit).order_by(Beatpack.id.desc())
         beatpacks = list(await self.scalars(query))
@@ -56,5 +55,5 @@ class BeatpacksRepository(BaseBeatpacksRepository, SQLAlchemyRepository):
         await self.execute(query)
 
 
-def init_postgres_repository() -> BeatpacksRepository:
+def init_beatpacks_repository() -> BeatpacksRepository:
     return BeatpacksRepository()

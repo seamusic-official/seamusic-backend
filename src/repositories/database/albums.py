@@ -10,12 +10,11 @@ from src.dtos.database.albums import (
     UpdateAlbumRequestDTO
 )
 from src.models.albums import Album
-from src.repositories.database.albums.base import BaseAlbumRepository
 from src.repositories.database.base import SQLAlchemyRepository
 
 
 @dataclass
-class AlbumRepository(SQLAlchemyRepository, BaseAlbumRepository):
+class AlbumRepository(SQLAlchemyRepository):
     async def create_album(self, album: CreateAlbumRequestDTO) -> int:
         model = request_dto_to_model(model=Album, request_dto=album)
         await self.add(model)
@@ -53,5 +52,5 @@ class AlbumRepository(SQLAlchemyRepository, BaseAlbumRepository):
         await self.execute(query)
 
 
-def init_postgres_repository() -> AlbumRepository:
+def init_albums_repository() -> AlbumRepository:
     return AlbumRepository()

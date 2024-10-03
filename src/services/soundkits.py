@@ -10,15 +10,14 @@ from src.dtos.database.soundkits import (
 )
 from src.exceptions import NotFoundException, NoRightsException
 from src.repositories import DatabaseRepositories, BaseMediaRepository, Repositories
-from src.repositories.database.soundkits.base import BaseSoundkitsRepository
-from src.repositories.database.soundkits.postgres import init_postgres_repository
+from src.repositories.database.soundkits import init_soundkits_repository, SoundkitsRepository
 from src.repositories.media.s3 import init_s3_repository
 from src.services.base import BaseService
 
 
 @dataclass
 class SoundkitsDatabaseRepositories(DatabaseRepositories):
-    soundkits: BaseSoundkitsRepository
+    soundkits: SoundkitsRepository
 
 
 @dataclass
@@ -158,7 +157,7 @@ class SoundkitsService(BaseService):
 
 def get_soundkits_repositories() -> SoundkitsRepositories:
     return SoundkitsRepositories(
-        database=SoundkitsDatabaseRepositories(soundkits=init_postgres_repository()),
+        database=SoundkitsDatabaseRepositories(soundkits=init_soundkits_repository()),
         media=init_s3_repository()
     )
 

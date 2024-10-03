@@ -10,10 +10,9 @@ from src.dtos.database.beats import (
 )
 from src.models.beats import Beat
 from src.repositories.database.base import SQLAlchemyRepository
-from src.repositories.database.beats.base import BaseBeatsRepository
 
 
-class BeatsRepository(BaseBeatsRepository, SQLAlchemyRepository):
+class BeatsRepository(SQLAlchemyRepository):
     async def get_user_beats(self, user_id: int, offset: int = 0, limit: int = 10) -> BeatsResponseDTO:
         query = select(Beat).filter_by(user_id=user_id).offset(offset).limit(limit).order_by(Beat.id.desc())
         beats = list(await self.scalars(query))
@@ -53,5 +52,5 @@ class BeatsRepository(BaseBeatsRepository, SQLAlchemyRepository):
         await self.execute(query)
 
 
-def init_postgres_repository() -> BeatsRepository:
+def init_beats_repository() -> BeatsRepository:
     return BeatsRepository()

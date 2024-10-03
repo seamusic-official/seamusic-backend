@@ -7,11 +7,10 @@ from src.dtos.database.tags import AddTagRequestDTO, TagsResponseDTO, Tag as _Ta
 from src.models.auth import User, ArtistProfile, ProducerProfile
 from src.models.tags import Tag
 from src.repositories.database.base import SQLAlchemyRepository
-from src.repositories.database.tags.base import BaseTagsRepository
 
 
 @dataclass
-class TagsRepository(SQLAlchemyRepository, BaseTagsRepository):
+class TagsRepository(SQLAlchemyRepository):
     async def add_tag(self, tag: AddTagRequestDTO) -> int:
         model = request_dto_to_model(model=Tag, request_dto=tag)
         await self.add(model)
@@ -50,5 +49,5 @@ class TagsRepository(SQLAlchemyRepository, BaseTagsRepository):
         return await self.scalar(query)
 
 
-def init_postgres_repository() -> TagsRepository:
+def init_tags_repository() -> TagsRepository:
     return TagsRepository()

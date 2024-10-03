@@ -8,14 +8,13 @@ from src.dtos.database.beatpacks import (
 )
 from src.exceptions import NotFoundException, NoRightsException
 from src.repositories import DatabaseRepositories, Repositories
-from src.repositories.database.beatpacks.base import BaseBeatpacksRepository
-from src.repositories.database.beatpacks.postgres import init_postgres_repository
+from src.repositories.database.beatpacks import init_beatpacks_repository, BeatpacksRepository
 from src.repositories.media.s3 import S3Repository, init_s3_repository
 
 
 @dataclass
 class BeatpacksDatabaseRepositories(DatabaseRepositories):
-    beatpacks: BaseBeatpacksRepository
+    beatpacks: BeatpacksRepository
 
 
 @dataclass
@@ -95,7 +94,7 @@ class BeatpackService:
 
 def get_beatpacks_repositories() -> BeatpacksRepositories:
     return BeatpacksRepositories(
-        database=BeatpacksDatabaseRepositories(beatpacks=init_postgres_repository()),
+        database=BeatpacksDatabaseRepositories(beatpacks=init_beatpacks_repository()),
         media=init_s3_repository()
     )
 

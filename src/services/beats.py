@@ -6,8 +6,7 @@ from src.dtos.database.beats import BeatsResponseDTO, CreateBeatRequestDTO, Upda
 from src.enums.type import Type
 from src.exceptions import NoRightsException, NotFoundException
 from src.repositories import DatabaseRepositories, Repositories
-from src.repositories.database.beats.base import BaseBeatsRepository
-from src.repositories.database.beats.postgres import init_postgres_repository
+from src.repositories.database.beats import init_beats_repository, BeatsRepository
 from src.repositories.media.base import BaseMediaRepository
 from src.repositories.media.s3 import init_s3_repository
 from src.services.base import BaseService
@@ -15,7 +14,7 @@ from src.services.base import BaseService
 
 @dataclass
 class BeatsDatabaseRepositories(DatabaseRepositories):
-    beats: BaseBeatsRepository
+    beats: BeatsRepository
 
 
 @dataclass
@@ -163,6 +162,6 @@ class BeatsService(BaseService):
 
 def get_beats_service() -> BeatsService:
     return BeatsService(repositories=BeatsRepositories(
-        database=BeatsDatabaseRepositories(beats=init_postgres_repository()),
+        database=BeatsDatabaseRepositories(beats=init_beats_repository()),
         media=init_s3_repository()
     ))

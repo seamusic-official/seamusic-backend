@@ -7,13 +7,12 @@ from src.dtos.database.subscriptions import (
 )
 from src.exceptions import NotFoundException
 from src.repositories import DatabaseRepositories, Repositories
-from src.repositories.database.telegram_account.base import BaseTelegramAccountRepository
-from src.repositories.database.telegram_account.postgres import init_postgres_repository
+from src.repositories.database.telegram_accounts import init_telegram_accounts_repository, TelegramAccountRepository
 
 
 @dataclass
 class TelegramAccountDatabaseRepositories(DatabaseRepositories):
-    telegram_account: BaseTelegramAccountRepository
+    telegram_account: TelegramAccountRepository
 
 
 @dataclass
@@ -45,7 +44,7 @@ class SubscriptionsService:
 
 
 def get_subscriptions_repositories() -> SubscriptionsRepositories:
-    return SubscriptionsRepositories(database=TelegramAccountDatabaseRepositories(telegram_account=init_postgres_repository()))
+    return SubscriptionsRepositories(database=TelegramAccountDatabaseRepositories(telegram_account=init_telegram_accounts_repository()))
 
 
 def get_subscriptions_service() -> SubscriptionsService:

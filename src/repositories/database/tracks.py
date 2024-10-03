@@ -12,11 +12,10 @@ from src.dtos.database.tracks import (
 )
 from src.models.tracks import Track
 from src.repositories.database.base import SQLAlchemyRepository
-from src.repositories.database.tracks.base import BaseTracksRepository
 
 
 @dataclass
-class TracksRepository(SQLAlchemyRepository, BaseTracksRepository):
+class TracksRepository(SQLAlchemyRepository):
 
     async def create_track(self, track: CreateTrackRequestDTO) -> int:
         model = request_dto_to_model(model=Track, request_dto=track)
@@ -55,5 +54,5 @@ class TracksRepository(SQLAlchemyRepository, BaseTracksRepository):
         await self.execute(query)
 
 
-def init_postgres_repository() -> TracksRepository:
+def init_tracks_repository() -> TracksRepository:
     return TracksRepository()

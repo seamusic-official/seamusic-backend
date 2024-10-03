@@ -10,11 +10,10 @@ from src.dtos.database.subscriptions import (
 )
 from src.models.subscriptions import TelegramAccount
 from src.repositories.database.base import SQLAlchemyRepository
-from src.repositories.database.telegram_account.base import BaseTelegramAccountRepository
 
 
 @dataclass
-class TelegramAccountRepository(SQLAlchemyRepository, BaseTelegramAccountRepository):
+class TelegramAccountRepository(SQLAlchemyRepository):
     async def add_one(self, telegram_account: CreateTelegramAccountRequestDTO) -> int:
         telegram_account_ = request_dto_to_model(request_dto=telegram_account, model=TelegramAccount)
         await self.add(telegram_account_)
@@ -34,5 +33,5 @@ class TelegramAccountRepository(SQLAlchemyRepository, BaseTelegramAccountReposit
         return await self.scalar(query)
 
 
-def init_postgres_repository() -> TelegramAccountRepository:
+def init_telegram_accounts_repository() -> TelegramAccountRepository:
     return TelegramAccountRepository()

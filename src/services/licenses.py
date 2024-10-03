@@ -10,17 +10,16 @@ from src.dtos.database.licenses import (
 )
 from src.exceptions import NotFoundException, NoRightsException
 from src.repositories import Repositories, DatabaseRepositories, BaseMediaRepository
-from src.repositories.database.auth.base import BaseUsersRepository
-from src.repositories.database.auth.postgres import init_users_postgres_repository
-from src.repositories.database.licenses.base import BaseLicensesRepository
-from src.repositories.database.licenses.postgres import init_postgres_repository as init_licenses_postgres_repository
+from src.repositories.database.auth import init_users_repository, UsersRepository
+from src.repositories.database.licenses import init_licenses_repository as init_licenses_postgres_repository, \
+    LicensesRepository
 from src.repositories.media.s3 import init_s3_repository
 
 
 @dataclass
 class LicensesDatabaseRepositories(DatabaseRepositories):
-    licenses: BaseLicensesRepository
-    users: BaseUsersRepository
+    licenses: LicensesRepository
+    users: UsersRepository
 
 
 @dataclass
@@ -120,7 +119,7 @@ def get_licenses_repositories() -> LicensesRepositories:
     return LicensesRepositories(
         database=LicensesDatabaseRepositories(
             licenses=init_licenses_postgres_repository(),
-            users=init_users_postgres_repository(),
+            users=init_users_repository(),
         ),
         media=init_s3_repository()
     )

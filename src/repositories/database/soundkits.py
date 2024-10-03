@@ -12,11 +12,10 @@ from src.dtos.database.soundkits import (
 )
 from src.models.soundkits import Soundkit
 from src.repositories.database.base import SQLAlchemyRepository
-from src.repositories.database.soundkits.base import BaseSoundkitsRepository
 
 
 @dataclass
-class SoundkitsRepository(SQLAlchemyRepository, BaseSoundkitsRepository):
+class SoundkitsRepository(SQLAlchemyRepository):
     async def get_user_soundkits(self, user_id: int, offset: int = 0, limit: int = 10) -> SoundkitsResponseDTO:
         query = select(Soundkit).filter_by(user_id=user_id).offset(offset).limit(limit).order_by(Soundkit.updated_at.desc())
         soundkits = list(await self.scalars(query))
@@ -54,5 +53,5 @@ class SoundkitsRepository(SQLAlchemyRepository, BaseSoundkitsRepository):
         await self.execute(query)
 
 
-def init_postgres_repository() -> SoundkitsRepository:
+def init_soundkits_repository() -> SoundkitsRepository:
     return SoundkitsRepository()

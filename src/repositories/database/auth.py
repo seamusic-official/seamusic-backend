@@ -22,12 +22,11 @@ from src.dtos.database.auth import (
     UsersResponseDTO,
 )
 from src.models.auth import User, ArtistProfile, ProducerProfile
-from src.repositories.database.auth.base import BaseUsersRepository, BaseArtistsRepository, BaseProducersRepository
 from src.repositories.database.base import SQLAlchemyRepository
 
 
 @dataclass
-class UsersRepository(BaseUsersRepository, SQLAlchemyRepository):
+class UsersRepository(SQLAlchemyRepository):
     async def get_user_by_id(self, user_id: int) -> UserResponseDTO | None:
         user = await self.get(User, user_id)
         return model_to_response_dto(model=user, response_dto=UserResponseDTO)
@@ -62,7 +61,7 @@ class UsersRepository(BaseUsersRepository, SQLAlchemyRepository):
 
 
 @dataclass
-class ArtistsRepository(BaseArtistsRepository, SQLAlchemyRepository):
+class ArtistsRepository(SQLAlchemyRepository):
     async def get_artist_id_by_user_id(self, user_id: int) -> int | None:
         query = select(User.artist_profile).filter_by(id=user_id)
         return await self.scalar(query)
@@ -92,7 +91,7 @@ class ArtistsRepository(BaseArtistsRepository, SQLAlchemyRepository):
 
 
 @dataclass
-class ProducersRepository(BaseProducersRepository, SQLAlchemyRepository):
+class ProducersRepository(SQLAlchemyRepository):
     async def get_producer_id_by_user_id(self, user_id: int) -> int | None:
         query = select(User.producer_profile).filter_by(id=user_id)
         return await self.scalar(query)
@@ -121,13 +120,13 @@ class ProducersRepository(BaseProducersRepository, SQLAlchemyRepository):
         return model.id
 
 
-def init_users_postgres_repository() -> UsersRepository:
+def init_users_repository() -> UsersRepository:
     return UsersRepository()
 
 
-def init_artists_postgres_repository() -> ArtistsRepository:
+def init_artists_repository() -> ArtistsRepository:
     return ArtistsRepository()
 
 
-def init_producers_postgres_repository() -> ProducersRepository:
+def init_producers_repository() -> ProducersRepository:
     return ProducersRepository()

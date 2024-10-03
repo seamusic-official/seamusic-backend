@@ -10,20 +10,19 @@ from src.dtos.database.albums import (
 from src.enums.type import Type
 from src.exceptions import NoRightsException, NotFoundException
 from src.repositories import Repositories, DatabaseRepositories
-from src.repositories.database.albums.base import BaseAlbumRepository
-from src.repositories.database.albums.postgres import init_postgres_repository
+from src.repositories.database.albums import init_albums_repository, AlbumRepository
 from src.repositories.media.s3 import init_s3_repository, S3Repository
 from src.services.base import BaseService
 
 
 @dataclass
-class AlbumDatabaeRepositories(DatabaseRepositories):
-    albums: BaseAlbumRepository
+class AlbumDatabaseRepositories(DatabaseRepositories):
+    albums: AlbumRepository
 
 
 @dataclass
 class AlbumRepositories(Repositories):
-    database: AlbumDatabaeRepositories
+    database: AlbumDatabaseRepositories
     media: S3Repository
 
 
@@ -194,7 +193,7 @@ class AlbumService(BaseService):
 
 def get_album_repositories() -> AlbumRepositories:
     return AlbumRepositories(
-        database=AlbumDatabaeRepositories(albums=init_postgres_repository()),
+        database=AlbumDatabaseRepositories(albums=init_albums_repository()),
         media=init_s3_repository()
     )
 

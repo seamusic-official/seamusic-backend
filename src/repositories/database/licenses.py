@@ -12,11 +12,10 @@ from src.dtos.database.licenses import (
 )
 from src.models.licenses import License
 from src.repositories.database.base import SQLAlchemyRepository
-from src.repositories.database.licenses.base import BaseLicensesRepository
 
 
 @dataclass
-class LicensesRepository(SQLAlchemyRepository, BaseLicensesRepository):
+class LicensesRepository(SQLAlchemyRepository):
     async def get_user_licenses(self, user_id: int, offset: int = 0, limit: int = 10) -> LicensesResponseDTO:
         query = select(License).filter_by(user_id=user_id).offset(offset).limit(limit).order_by(License.id.desc())
         licenses = list(await self.scalars(query))
@@ -56,5 +55,5 @@ class LicensesRepository(SQLAlchemyRepository, BaseLicensesRepository):
         await self.execute(query)
 
 
-def init_postgres_repository() -> LicensesRepository:
+def init_licenses_repository() -> LicensesRepository:
     return LicensesRepository()
