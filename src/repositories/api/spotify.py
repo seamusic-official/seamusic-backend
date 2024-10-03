@@ -13,11 +13,10 @@ from src.dtos.api.spotify import (
 )
 from src.enums.spotify import SpotifyType
 from src.repositories.api.base import AiohttpRepositpry
-from src.repositories.api.spotify.base import BaseSpotifyRepository
 
 
 @dataclass
-class SpotifyRepository(BaseSpotifyRepository, AiohttpRepositpry):
+class SpotifyRepository(AiohttpRepositpry):
     async def login(self, code: str) -> str:
         payload = {
             "code": code,
