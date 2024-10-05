@@ -23,7 +23,7 @@ from src.dtos.database.tags import AddTagsRequestDTO, Tag
 from src.enums.auth import Role, AccessLevel
 from src.exceptions import NotFoundException, ServerError, InvalidRequestException
 from src.repositories import Repositories, DatabaseRepositories, BaseMediaRepository
-from src.repositories.api.spotify.base import BaseSpotifyRepository
+from src.repositories.api.spotify import SpotifyRepository
 from src.repositories.database.auth import (
     init_artists_repository,
     init_producers_repository,
@@ -81,7 +81,7 @@ class ProducersRepositories(BaseAuthRepositories):
 class AuthRepositories(BaseAuthRepositories):
     database: AuthDatabaseRepositories
     media: S3Repository
-    api: BaseSpotifyRepository
+    api: SpotifyRepository
 
 
 @dataclass

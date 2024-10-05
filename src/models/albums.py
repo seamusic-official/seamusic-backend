@@ -30,5 +30,7 @@ class Album(Base):
     type: Mapped[str] = mapped_column(String, nullable=False)
     created_at: Mapped[date] = mapped_column(nullable=False)
     updated_at: Mapped[date] = mapped_column(nullable=False)
-    tags: Mapped[list["Tags"]] = relationship("Tag")  # type: ignore[name-defined]  # noqa: F821
-    artist_profiles: Mapped[list["ArtistProfile"]] = relationship("ArtistProfile")  # type: ignore[name-defined]  # noqa: F821
+    tags_id: Mapped[int] = mapped_column(ForeignKey("tags.id"), nullable=True)
+    artist_profiles_id: Mapped[int] = mapped_column(ForeignKey("artist_profiles.id"), nullable=True)
+    tags: Mapped[list["Tag"]] = relationship("Tag", foreign_keys=[tags_id])  # type: ignore[name-defined]  # noqa: F821
+    artist_profiles: Mapped[list["ArtistProfile"]] = relationship("ArtistProfile", foreign_keys=[artist_profiles_id])  # type: ignore[name-defined]  # noqa: F821

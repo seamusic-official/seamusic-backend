@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     db_pass: str = Field(default='postgres', alias='DB_PASS')
 
     db_host_test: str = Field(default='localhost', alias='DB_HOST_TEST')
-    db_port_test: int = Field(default=5600, alias='DB_PORT_TEST')
+    db_port_test: int = Field(default=6000, alias='DB_PORT_TEST')
     db_name_test: str = Field(default='postgres', alias='DB_NAME_TEST')
     db_user_test: str = Field(default='postgres', alias='DB_USER_TEST')
     db_pass_test: str = Field(default='postgres', alias='DB_PASS_TEST')
