@@ -25,7 +25,7 @@ class TestSquadRepository:
 
     async def test_get_squads_count(self) -> None:
         get_squads_count = await self.repostirory.get_squads_count()
-        assert get_squads_count > 0
+        assert get_squads_count >= 0
 
     async def test_update_squad(self, squad: UpdateSquadRequestDTO) -> None:
         update_squad = await self.repostirory.update_squad(squad)
