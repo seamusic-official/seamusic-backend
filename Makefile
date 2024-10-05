@@ -6,19 +6,19 @@ run-local:
 	poetry run uvicorn src.api.app:app --host 0.0.0.0 --port 8000 --reload --reload-dir . --log-config=log_config.ini --log-level=debug
 
 build:
-	poetry run docker-compose -f docker-compose.$(for).yml build
+	poetry run sudo docker compose -f docker-compose.test.yml build
 
 start:
-	poetry run docker-compose -f docker-compose.$(for).yml up --force-recreate --remove-orphans
+	poetry run sudo docker compose -f docker-compose.test.yml up --force-recreate --remove-orphans
 
 up:
-	poetry run docker-compose -f docker-compose.$(for).yml up --force-recreate --remove-orphans -d
+	poetry run docker-compose -f docker-compose.dev.yml up --force-recreate --remove-orphans -d
 
 stop:
-	poetry run docker-compose -f docker-compose.$(for).yml stop
+	poetry run sudo docker compose -f docker-compose.dev.yml stop
 
 rm:
-	poetry run docker-compose -f docker-compose.$(for).yml rm
+	poetry run sudo docker compose -f docker-compose.dev.yml rm
 	sudo rm -rf db
 
 revision:
@@ -31,8 +31,8 @@ downgrade:
 	poetry run docker run app /bin/bash -c "poetry run alembic downgrade $(revision)"
 
 test:
-	poetry run docker-compose -f docker-compose.test.yml up --force-recreate --remove-orphans -d
-	poetry run docker-compose stop
+	poetry run sudo docker compose -f docker-compose.test.yml up --force-recreate --remove-orphans -d
+	poetry run sudo docker compose stop
 
 test-local:
 	poetry run alembic upgrade head

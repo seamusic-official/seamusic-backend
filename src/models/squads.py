@@ -27,9 +27,12 @@ class Squad(Base):
     picture_url: Mapped[str] = mapped_column(nullable=True)
     description: Mapped[str] = mapped_column(nullable=True)
     file_url: Mapped[str] = mapped_column(nullable=False)
-    admins: Mapped[list["User"]] = relationship(argument="User")  # type: ignore[name-defined]  # noqa: F821
+    admins_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=True)
+    artists_id: Mapped[int] = mapped_column(ForeignKey("artist_profiles.id"), nullable=True)
+    admins: Mapped[list["User"]] = relationship(argument="User", foreign_keys=[admins_id])  # type: ignore[name-defined]  # noqa: F821
     artists: Mapped[list["ArtistProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="ArtistProfile",
-        secondary=squad_artist_profile_association,
+        # secondary=squad_artist_profile_association,
+        foreign_keys=[artists_id]
     )
     created_at: Mapped[date] = mapped_column(nullable=False)
