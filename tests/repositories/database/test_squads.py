@@ -1,5 +1,3 @@
-import logging
-
 import pytest
 
 from src.dtos.database.squads import (
@@ -8,7 +6,6 @@ from src.dtos.database.squads import (
     SquadResponseDTO,
     UpdateSquadRequestDTO
 )
-
 from src.repositories.database.squads import SquadRepository, init_squads_repository
 
 

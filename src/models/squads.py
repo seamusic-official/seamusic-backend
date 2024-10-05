@@ -32,7 +32,7 @@ class Squad(Base):
     admins: Mapped[list["User"]] = relationship(argument="User", foreign_keys=[admins_id])  # type: ignore[name-defined]  # noqa: F821
     artists: Mapped[list["ArtistProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="ArtistProfile",
-        # secondary=squad_artist_profile_association,
+        secondary=squad_artist_profile_association,
         foreign_keys=[artists_id]
     )
     created_at: Mapped[date] = mapped_column(nullable=False)
