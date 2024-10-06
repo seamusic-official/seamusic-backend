@@ -1,35 +1,34 @@
 from dataclasses import dataclass
-from datetime import datetime, date
+from datetime import date, datetime
 from io import BytesIO
 
 from pydantic import EmailStr
 
-from src.dtos.database.auth import (
-    ArtistResponseDTO,
-    ArtistsResponseDTO,
-    CreateArtistRequestDTO,
-    CreateUserRequestDTO,
-    CreateProducerRequestDTO,
-    ProducerResponseDTO,
-    ProducersResponseDTO,
-    UpdateArtistRequestDTO,
-    UpdateProducerRequestDTO,
-    UpdateUserRequestDTO,
-    User,
-    UserResponseDTO,
-    UsersResponseDTO,
-)
+from src.dtos.database.auth import (ArtistResponseDTO, ArtistsResponseDTO,
+                                    CreateArtistRequestDTO,
+                                    CreateProducerRequestDTO,
+                                    CreateUserRequestDTO, ProducerResponseDTO,
+                                    ProducersResponseDTO,
+                                    UpdateArtistRequestDTO,
+                                    UpdateProducerRequestDTO,
+                                    UpdateUserRequestDTO, User,
+                                    UserResponseDTO, UsersResponseDTO)
 from src.dtos.database.tags import AddTagsRequestDTO, Tag
-from src.enums.auth import Role, AccessLevel
-from src.exceptions import NotFoundException, ServerError, InvalidRequestException
-from src.repositories import Repositories, DatabaseRepositories, BaseMediaRepository
-from src.repositories.api.spotify.base import BaseSpotifyRepository
-from src.repositories.database.auth import (
-    init_artists_repository,
-    init_producers_repository,
-    init_users_repository, UsersRepository, ArtistsRepository, ProducersRepository,
-)
-from src.repositories.database.tags import init_tags_repository as init_tags_postgres_repository, TagsRepository
+from src.enums.auth import AccessLevel, Role
+from src.exceptions import (InvalidRequestException, NotFoundException,
+                            ServerError)
+from src.repositories import (BaseMediaRepository, DatabaseRepositories,
+                              Repositories)
+from src.repositories.api.spotify import SpotifyRepository
+from src.repositories.database.auth import (ArtistsRepository,
+                                            ProducersRepository,
+                                            UsersRepository,
+                                            init_artists_repository,
+                                            init_producers_repository,
+                                            init_users_repository)
+from src.repositories.database.tags import TagsRepository
+from src.repositories.database.tags import \
+    init_tags_repository as init_tags_postgres_repository
 from src.repositories.media.s3 import S3Repository, init_s3_repository
 from src.services.base import BaseService
 
@@ -81,7 +80,7 @@ class ProducersRepositories(BaseAuthRepositories):
 class AuthRepositories(BaseAuthRepositories):
     database: AuthDatabaseRepositories
     media: S3Repository
-    api: BaseSpotifyRepository
+    api: SpotifyRepository
 
 
 @dataclass
@@ -101,7 +100,8 @@ class UsersService(BaseService):
         existing_user: UserResponseDTO | None = await self.repositories.database.users.get_user_by_email(email=email)
 
         if existing_user:
-            raise InvalidRequestException('User with this email already exists.')
+            raise InvalidRequestException(
+                'User with this email already exists.')
 
         superuser = await self.repositories.database.users.get_user_by_id(user_id=1)
 
@@ -316,7 +316,9 @@ class AuthService(BaseService):
 
     @staticmethod
     async def login(email: EmailStr, password: str) -> tuple[str, str, User]:
-        from src.api.v1.utils.auth import authenticate_user, create_access_token, create_refresh_token
+        from src.api.v1.utils.auth import (authenticate_user,
+                                           create_access_token,
+                                           create_refresh_token)
 
         user = await authenticate_user(email=email, password=password)
         if not user:
@@ -329,23 +331,27 @@ class AuthService(BaseService):
 
     @staticmethod
     async def refresh_token(user_id: int) -> tuple[str, str]:
-        from src.api.v1.utils.auth import create_access_token, create_refresh_token
+        from src.api.v1.utils.auth import (create_access_token,
+                                           create_refresh_token)
 
         access_token = create_access_token({"sub": str(user_id)})
         refresh_token_ = create_refresh_token({"sub": str(user_id)})
 
         return access_token, refresh_token_
 
-    async def spotify_callback(self, code) -> tuple[str, str]:  # type: ignore[no-untyped-def]
+    # type: ignore[no-untyped-def]
+    async def spotify_callback(self, code) -> tuple[str, str]:
         # old functional
-        from src.api.v1.utils.auth import create_access_token, create_refresh_token
+        from src.api.v1.utils.auth import (create_access_token,
+                                           create_refresh_token)
         access_token = await self.repositories.api.login(code=code)
 
         if access_token:
 
             user_data = await self.repositories.api.get_me(access_token=access_token)
 
-            user = await self.repositories.database.users.get_user_by_email(email=user_data.get("email"))  # type: ignore[arg-type]
+            # type: ignore[arg-type]
+            user = await self.repositories.database.users.get_user_by_email(email=user_data.get("email"))
             if not user:
                 user = CreateUserRequestDTO(
                     username=user_data["username"],
@@ -356,7 +362,8 @@ class AuthService(BaseService):
                     tags=[],
                     access_level=AccessLevel.user
                 )  # type: ignore[assignment]
-                user_id: int = await self.repositories.database.users.create_user(user=user)  # type: ignore[arg-type]
+                # type: ignore[arg-type]
+                user_id: int = await self.repositories.database.users.create_user(user=user)
                 access_token = create_access_token({"sub": str(user_id)})
                 refresh_token_ = create_refresh_token({"sub": str(user_id)})
 
@@ -390,7 +397,8 @@ def get_users_service() -> UsersService:
 
 def get_artists_repositories() -> ArtistsRepositories:
     return ArtistsRepositories(
-        database=ArtistsDatabaseRepositories(artists=init_artists_repository()),
+        database=ArtistsDatabaseRepositories(
+            artists=init_artists_repository()),
         media=init_s3_repository()
     )
 
@@ -401,7 +409,8 @@ def get_artists_service() -> ArtistsService:
 
 def get_producers_repositories() -> ProducersRepositories:
     return ProducersRepositories(
-        database=ProducersDatabaseRepositories(producers=init_producers_repository()),
+        database=ProducersDatabaseRepositories(
+            producers=init_producers_repository()),
         media=init_s3_repository()
     )
 

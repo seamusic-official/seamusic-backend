@@ -1,21 +1,18 @@
 from dataclasses import dataclass
 
-from src.dtos.api.spotify import (
-    SpotifyTracksResponseDTO,
-    SpotifyTrackResponseDTO,
-    SpotifyAlbumsResponseDTO,
-    SpotifyAlbumResponseDTO,
-    SpotifyArtistResponseDTO,
-    SearchResponseDTO
-)
+from src.dtos.api.spotify import (SearchResponseDTO, SpotifyAlbumResponseDTO,
+                                  SpotifyAlbumsResponseDTO,
+                                  SpotifyArtistResponseDTO,
+                                  SpotifyTrackResponseDTO,
+                                  SpotifyTracksResponseDTO)
 from src.enums.spotify import SpotifyType
 from src.exceptions import NotFoundException
 from src.repositories import Repositories
-from src.repositories.api.spotify.base import BaseSpotifyRepository
+from src.repositories.api.spotify import SpotifyRepository
 
 
 class SpotifyRepositories(Repositories):
-    api: BaseSpotifyRepository
+    api: SpotifyRepository
 
 
 @dataclass
