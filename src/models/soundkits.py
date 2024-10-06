@@ -1,6 +1,6 @@
 from datetime import date
 
-from sqlalchemy import Column, Table, ForeignKey, Integer
+from sqlalchemy import Column, ForeignKey, Integer, Table
 from sqlalchemy.orm import Mapped, mapped_column
 
 from src.models.base import Base
@@ -8,8 +8,19 @@ from src.models.base import Base
 user_to_soundkits_association_table = Table(
     "user_to_soundkits_association_table",
     Base.metadata,
-    Column("soundkit_id", Integer, ForeignKey("soundkits.id"), primary_key=True),
+    Column("soundkit_id", Integer, ForeignKey(
+        "soundkits.id"), primary_key=True),
     Column("user_id", Integer, ForeignKey("users.id"), primary_key=True),
+)
+
+
+producer_profile_soundkit_association = Table(
+    "producer_profile_soundkit_association_table",
+    Base.metadata,
+    Column("producer_profile_id", Integer, ForeignKey(
+        "producer_profiles.id"), primary_key=True),
+    Column("soundkit_id", Integer, ForeignKey(
+        "soundkits.id"), primary_key=True),
 )
 
 

@@ -1,10 +1,9 @@
 from datetime import date
 
-from sqlalchemy import Integer, Table, ForeignKey, Column
+from sqlalchemy import Column, ForeignKey, Integer, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.base import Base
-
 
 user_to_beatpacks_association_table = Table(
     "user_to_beatpacks_association_table",
@@ -19,6 +18,16 @@ beats_to_beatpacks_association_table = Table(
     Base.metadata,
     Column("beat_id", Integer, ForeignKey("beats.id")),
     Column("beatpack_id", Integer, ForeignKey("beatpacks.id")),
+)
+
+
+producer_profile_beatpack_association = Table(
+    "producer_profile_beatpack_association",
+    Base.metadata,
+    Column("producer_profile_id", Integer, ForeignKey(
+        "producer_profiles.id"), primary_key=True),
+    Column("beatpack_id", Integer, ForeignKey(
+        "beatpacks.id"), primary_key=True),
 )
 
 
