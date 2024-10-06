@@ -1,12 +1,10 @@
 from pydantic import Field, EmailStr
-from pydantic_settings import BaseSettings, SettingsConfigDict
-
-from src.core.loggers import core as logger
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
 
-    model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8')
+    # model_config = SettingsConfigDict(env_file_encoding='utf-8')
 
     root_url: str = Field(default='http://localhost:8000', alias='ROOT_URL')
 
@@ -25,19 +23,9 @@ class Settings(BaseSettings):
     db_user: str = Field(default='postgres', alias='DB_USER')
     db_pass: str = Field(default='postgres', alias='DB_PASS')
 
-    db_host_test: str = Field(default='localhost', alias='DB_HOST_TEST')
-    db_port_test: int = Field(default=6000, alias='DB_PORT_TEST')
-    db_name_test: str = Field(default='postgres', alias='DB_NAME_TEST')
-    db_user_test: str = Field(default='postgres', alias='DB_USER_TEST')
-    db_pass_test: str = Field(default='postgres', alias='DB_PASS_TEST')
-
     redis_host: str = Field(default='localhost', alias='REDIS_HOST')
     redis_port: int = Field(default=6379, alias='REDIS_PORT')
     redis_pass: str = Field(default='qwerty', alias='REDIS_PASS')
-
-    redis_host_test: str = Field(default='localhost', alias='REDIS_HOST_TEST')
-    redis_port_test: int = Field(default=6379, alias='REDIS_PORT_TEST')
-    redis_pass_test: str = Field(default='qwerty', alias='REDIS_PASS_TEST')
 
     echo: bool = True
 
@@ -55,17 +43,5 @@ class Settings(BaseSettings):
     def db_url(self) -> str:
         return f"postgresql+asyncpg://{self.db_user}:{self.db_pass}@{self.db_host}:{self.db_port}/{self.db_name}"
 
-    @property
-    def db_url_test(self) -> str:
-        return f'postgresql+asyncpg://{self.db_user_test}:{self.db_pass_test}@{self.db_host_test}:{self.db_port_test}/{self.db_name_test}'
-
 
 settings = Settings()
-
-logger.debug(f'''Database settings:
-host={settings.db_host}
-port={settings.db_port}
-name={settings.db_name}
-username={settings.db_user}
-password={settings.db_pass}
-url={settings.db_url}''')

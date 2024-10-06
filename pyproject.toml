@@ -46,6 +46,7 @@ pytest-dependency = "^0.6.0"
 python-dateutil = "^2.9.0.post0"
 python-jose="^3.3.0"
 pytest-mock = "^3.14.0"
+pytest-dotenv = "^0.5.2"
 
 [build-system]
 requires = ["poetry-core"]
@@ -83,3 +84,4 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 pythonpath = [ ".", "src",]
 asyncio_mode="auto"
+env_files = [".env.test"]
