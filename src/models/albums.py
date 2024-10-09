@@ -1,23 +1,37 @@
 from datetime import date
 
-from sqlalchemy import Column, Table, ForeignKey, Integer, String
+from sqlalchemy import Column, Table, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.base import Base
 
 
-artist_profile_album_association = Table(
-    "artist_profile_album_association",
+artist_to_album_association = Table(
+    "artist_to_album_association",
     Base.metadata,
-    Column("artist_id", Integer, ForeignKey("artist_profiles.id"), primary_key=True),
-    Column("album_id", Integer, ForeignKey("albums.id"), primary_key=True),
+    Column("artist_id", ForeignKey("artist_profiles.id"), primary_key=True),
+    Column("album_id", ForeignKey("albums.id"), primary_key=True)
 )
 
-album_track_association = Table(
-    "album_track_association",
+album_to_track_association = Table(
+    "album_to_track_association",
     Base.metadata,
-    Column("album_id", Integer, ForeignKey("albums.id"), primary_key=True),
-    Column("track_id", Integer, ForeignKey("tracks.id"), primary_key=True),
+    Column("album_id", ForeignKey("albums.id"), primary_key=True),
+    Column("track_id", ForeignKey("tracks.id"), primary_key=True)
+)
+
+album_to_tag_association = Table(
+    "album_to_tag_association",
+    Base.metadata,
+    Column("album_id", ForeignKey("albums.id"), primary_key=True),
+    Column("tag_id", ForeignKey("tags.id"), primary_key=True),
+)
+
+album_to_artist_association = Table(
+    "album_to_artist_association",
+    Base.metadata,
+    Column("album_id", ForeignKey("albums.id"), primary_key=True),
+    Column("artist_id", ForeignKey("artist_profiles.id"), primary_key=True),
 )
 
 
@@ -30,7 +44,5 @@ class Album(Base):
     type: Mapped[str] = mapped_column(String, nullable=False)
     created_at: Mapped[date] = mapped_column(nullable=False)
     updated_at: Mapped[date] = mapped_column(nullable=False)
-    tags_id: Mapped[int] = mapped_column(ForeignKey("tags.id"), nullable=True)
-    artist_profiles_id: Mapped[int] = mapped_column(ForeignKey("artist_profiles.id"), nullable=True)
-    tags: Mapped[list["Tag"]] = relationship("Tag", foreign_keys=[tags_id])  # type: ignore[name-defined]  # noqa: F821
-    artist_profiles: Mapped[list["ArtistProfile"]] = relationship("ArtistProfile", foreign_keys=[artist_profiles_id])  # type: ignore[name-defined]  # noqa: F821
+    tags: Mapped[list["Tag"]] = relationship(secondary=album_to_tag_association)  # type: ignore[name-defined]  # noqa: F821
+    artist_profiles: Mapped[list["ArtistProfile"]] = relationship(secondary=album_to_artist_association)  # type: ignore[name-defined]  # noqa: F821

@@ -12,6 +12,13 @@ user_to_soundkits_association_table = Table(
     Column("user_id", Integer, ForeignKey("users.id"), primary_key=True),
 )
 
+producer_to_soundkits_association_table = Table(
+    "producer_to_soundkits_association_table",
+    Base.metadata,
+    Column("soundkit_id", Integer, ForeignKey("soundkits.id"), primary_key=True),
+    Column("producer_id", Integer, ForeignKey("producer_profiles.id"), primary_key=True),
+)
+
 
 class Soundkit(Base):
     __tablename__ = "soundkits"
