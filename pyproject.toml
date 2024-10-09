@@ -30,9 +30,11 @@ requests = "^2.32.3"
 sqlalchemy = "^2.0.32"
 types-requests = "^2.32.0.20240712"
 uvicorn = "^0.30.6"
+pre-commit = "^4.0.1"
+flake8 = "^7.1.1"
+mypy = "^1.11.2"
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.8.0"
 coverage = "^7.6.1"
 flake8 = "^7.1.1"
 flake8-pyproject = "^1.2.3"
