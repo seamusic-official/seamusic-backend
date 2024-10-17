@@ -26,13 +26,6 @@ playlists_to_tag_association = Table(
     Column("tag_id", ForeignKey("tags.id"), primary_key=True)
 )
 
-playlist_to_user_association = Table(
-    "playlist_to_user_association",
-    Base.metadata,
-    Column("playlists_id", ForeignKey("playlists.id"), primary_key=True),
-    Column("user_id", ForeignKey("users.id"), primary_key=True),
-)
-
 
 class Playlists(Base):
     __tablename__ = 'playlists'

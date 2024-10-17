@@ -73,13 +73,6 @@ artist_to_track_association = Table(
     Column("track_id", Integer, ForeignKey("tracks.id"), primary_key=True),
 )
 
-artist_to_album_association = Table(
-    "artist_to_album_association",
-    Base.metadata,
-    Column("album_id", ForeignKey("albums.id"), primary_key=True),
-    Column("artist_id", ForeignKey("artist_profiles.id"), primary_key=True),
-)
-
 artist_to_tags_association = Table(
     'artist_to_tags_association',
     Base.metadata,

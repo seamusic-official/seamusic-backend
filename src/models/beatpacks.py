@@ -4,13 +4,6 @@ from sqlalchemy.orm import Mapped, mapped_column
 from src.models.base import Base
 
 
-beatpacks_to_producer_association_table = Table(
-    "user_to_beatpacks_association_table",
-    Base.metadata,
-    Column("producer_id", ForeignKey("producer_profiles.id")),
-    Column("beatpack_id", ForeignKey("beatpacks.id"))
-)
-
 beatpack_to_beat_association_table = Table(
     "beatpack_to_beat_association_table",
     Base.metadata,
