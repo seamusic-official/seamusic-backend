@@ -9,7 +9,6 @@ class Squad(BaseDTO):
     admins: list[User]
     picture_url: str | None
     description: str | None
-    file_url: str | None
     created_at: datetime
 
 
