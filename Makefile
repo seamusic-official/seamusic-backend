@@ -35,7 +35,7 @@ test:
 
 test-local:
 	poetry run alembic upgrade head
-	poetry run pytest
+	poetry run pytest -s --verbose
 
 lint:
 	poetry run flake8

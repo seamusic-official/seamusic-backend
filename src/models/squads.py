@@ -1,35 +1,25 @@
-from datetime import date
-
 from sqlalchemy import Column, Table, ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from src.models import ProducerProfile
+from src.models.auth import producer_to_squad_association
 from src.models.base import Base
 
-squad_to_artist_association = Table(
-    "squad_to_artist_association",
+admin_producer_to_squad = Table(
+    "admin_producer_to_squad",
     Base.metadata,
     Column("squad_id", Integer, ForeignKey("squads.id"), primary_key=True),
-    Column("artist_profile_id", Integer, ForeignKey("artist_profiles.id"), primary_key=True),
-)
-
-squad_to_producer_association = Table(
-    "squad_to_producer_association",
-    Base.metadata,
-    Column("squad_id", Integer, ForeignKey("squads.id"), primary_key=True),
-    Column("producer_profile_id", Integer, ForeignKey("producer_profiles.id"), primary_key=True),
+    Column("producer_id", Integer, ForeignKey("producer_profiles.id"), primary_key=True),
 )
 
 
 class Squad(Base):
     __tablename__ = "squads"
-
+    producers: Mapped[list["ProducerProfile"]] = relationship(
+        secondary=producer_to_squad_association,
+        back_populates="squads"
+    )
+    admins: Mapped[list["ProducerProfile"]] = relationship(secondary=admin_producer_to_squad)
     name: Mapped[str] = mapped_column(nullable=False)
     picture_url: Mapped[str] = mapped_column(nullable=True)
     description: Mapped[str] = mapped_column(nullable=True)
-    file_url: Mapped[str] = mapped_column(nullable=False)
-    admins_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=True)
-    admins: Mapped[list["User"]] = relationship(argument="User", foreign_keys=[admins_id])  # type: ignore[name-defined]  # noqa: F821
-    artists: Mapped[list["ArtistProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        secondary=squad_to_artist_association
-    )
-    created_at: Mapped[date] = mapped_column(nullable=False)
