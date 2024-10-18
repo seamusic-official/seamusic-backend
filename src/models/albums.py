@@ -1,9 +1,10 @@
-
 from sqlalchemy import Column, Table, ForeignKey, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from src.models import ArtistProfile
 from src.models.base import Base
-
+from src.models.tags import Tag
+from src.models.tracks import Track
 
 album_to_track_association = Table(
     "album_to_track_association",
@@ -30,6 +31,11 @@ album_to_tag_association = Table(
 class Album(Base):
     __tablename__ = "albums"
 
+    artists: Mapped[list["ArtistProfile"]] = relationship(
+        secondary=album_to_artist_association,
+        back_populates="albums")
+    tracks: Mapped[list["Track"]] = relationship(secondary=album_to_track_association)
+    tags: Mapped[list["Tag"]] = relationship(secondary=album_to_tag_association)
     name: Mapped[str] = mapped_column(String, nullable=False)
     picture_url: Mapped[str] = mapped_column(String, nullable=True)
     description: Mapped[str] = mapped_column(String, nullable=True)

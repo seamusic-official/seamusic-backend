@@ -8,11 +8,11 @@ from src.dtos.database.auth import Artist
 
 class Album(BaseDTO):
     id: int
-    title: str | None = None
+    name: str
     picture_url: str | None = None
     description: str | None = None
     co_prod: str | None = None
-    type: str
+    type: Literal[Type.album] = Type.album
     created_at: datetime
     updated_at: datetime
     tags: list[Tag]
@@ -20,10 +20,12 @@ class Album(BaseDTO):
 
 
 class CreateAlbumRequestDTO(BaseRequestDTO):
-    title: str
-    picture_url: str
-    description: str
-    type: str
+    id: int
+    name: str
+    picture_url: str | None = None
+    description: str | None = None
+    co_prod: str | None = None
+    type: Literal[Type.album] = Type.album
     created_at: datetime
     updated_at: datetime
     tags: list[Tag]

@@ -1,6 +1,6 @@
-from datetime import datetime, date
+from datetime import datetime
 
-from pydantic import EmailStr, Field
+from pydantic import EmailStr
 
 from src.dtos.database.base import BaseRequestDTO, BaseResponseDTO, BaseDTO
 from src.enums.auth import Role, AccessLevel
@@ -9,21 +9,25 @@ from src.enums.auth import Role, AccessLevel
 class User(BaseDTO):
     id: int
     username: str
+    description: str | None = None
     email: EmailStr
     password: str
     picture_url: str
     roles: list[Role]
-    birthday: datetime
+    created_at: datetime
+    updated_at: datetime
 
 
 class UserResponseDTO(BaseResponseDTO):
     id: int
     username: str
+    description: str | None = None
     email: EmailStr
     password: str
     picture_url: str
     roles: list[Role]
-    birthday: datetime
+    created_at: datetime
+    updated_at: datetime
 
 
 class UsersResponseDTO(BaseResponseDTO):
@@ -32,12 +36,14 @@ class UsersResponseDTO(BaseResponseDTO):
 
 class CreateUserRequestDTO(BaseRequestDTO):
     username: str
+    description: str | None = None
     email: EmailStr
-    password: str | None
+    password: str
     picture_url: str | None = None
     roles: list[Role]
-    birthday: date
     tags: list[str]
+    created_at: datetime
+    updated_at: datetime
     access_level: AccessLevel = AccessLevel.user
 
 
@@ -67,13 +73,13 @@ class ArtistsResponseDTO(BaseResponseDTO):
 
 class CreateArtistRequestDTO(BaseRequestDTO):
     user_id: int
-    description: str | None = Field(max_length=255)
+    description: str | None = None
     is_available: bool = False
 
 
 class UpdateArtistRequestDTO(BaseRequestDTO):
     id: int
-    description: str | None = Field(max_length=255)
+    description: str | None = None
     is_available: bool = False
 
 
@@ -95,11 +101,11 @@ class ProducersResponseDTO(BaseResponseDTO):
 
 class CreateProducerRequestDTO(BaseRequestDTO):
     user_id: int
-    description: str | None = Field(max_length=255)
+    description: str | None = None
     is_available: bool = False
 
 
 class UpdateProducerRequestDTO(BaseRequestDTO):
     id: int
-    description: str | None = Field(max_length=255)
+    description: str | None = None
     is_available: bool = False

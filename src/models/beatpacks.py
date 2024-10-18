@@ -1,8 +1,10 @@
 from sqlalchemy import Table, ForeignKey, Column
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from src.models import ProducerProfile, Beat
+from src.models.auth import producer_to_beatpacks_association_table
 from src.models.base import Base
-
+from src.models.tags import Tag
 
 beatpack_to_beat_association_table = Table(
     "beatpack_to_beat_association_table",
@@ -21,6 +23,11 @@ beatpack_to_tag_association = Table(
 
 class Beatpack(Base):
     __tablename__ = "beatpacks"
-
-    name: Mapped[str] = mapped_column(nullable=True)
+    producers: Mapped[list["ProducerProfile"]] = relationship(
+        secondary=producer_to_beatpacks_association_table,
+        back_populates="producers"
+    )
+    beats: Mapped[list["Beat"]] = relationship(secondary=beatpack_to_beat_association_table)
+    tags: Mapped[list["Tag"]] = relationship(secondary=beatpack_to_tag_association)
+    name: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(nullable=True)

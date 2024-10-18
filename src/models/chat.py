@@ -1,6 +1,7 @@
 from sqlalchemy import Integer, Column, ForeignKey, Table
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from src.models import User
 from src.models.base import Base
 
 
@@ -16,3 +17,4 @@ class Chat(Base):
     __tablename__ = "chat"
 
     text: Mapped[str] = mapped_column(nullable=False)
+    author: Mapped[list["User"]] = relationship(secondary=user_to_chat_association)

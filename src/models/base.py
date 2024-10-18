@@ -1,7 +1,6 @@
 from datetime import date
 
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import Date
 
 
 class Base(DeclarativeBase):
@@ -9,5 +8,5 @@ class Base(DeclarativeBase):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     is_availible: Mapped[bool] = mapped_column(nullable=False)
-    created_at: Mapped[date] = mapped_column(Date, nullable=False)
-    updated_at: Mapped[date] = mapped_column(Date, nullable=False)
+    created_at: Mapped[date] = mapped_column(nullable=False)
+    updated_at: Mapped[date] = mapped_column(nullable=False)

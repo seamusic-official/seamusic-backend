@@ -12,9 +12,9 @@ user_to_comments_association = Table(
 )
 
 
-class BaseComment(Base):
+class Comment(Base):
     __tablename__ = "comments"
 
     text: Mapped[str] = mapped_column(nullable=False)
-    author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    author: Mapped["User"] = relationship("User")  # type: ignore[name-defined]  # noqa: F821
+    author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))  # этот столбец нужен для o2o связи
+    author: Mapped["User"] = relationship("User", back_populates="comments")    # type: ignore[name-defined]  # noqa: F821
