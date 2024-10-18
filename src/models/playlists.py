@@ -1,8 +1,7 @@
-from datetime import date
-
 from sqlalchemy import Table, ForeignKey, Column
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 
+from src.models import user_to_playlists_association, User
 from src.models.base import Base
 
 playlists_to_beat_association = Table(
@@ -32,8 +31,7 @@ class Playlists(Base):
 
     description: Mapped[str] = mapped_column(nullable=True)
     picture_url: Mapped[str] = mapped_column(nullable=True)
-    beats: Mapped[list['Beat']] = relationship(secondary=playlists_to_beat_association)  # type: ignore[name-defined]  # noqa: F821
-    tracks: Mapped[list['Track']] = relationship(secondary=playlists_to_track_association)  # type: ignore[name-defined]  # noqa: F821
-    tags: Mapped[list['Tag']] = relationship(secondary=playlists_to_tag_association)  # type: ignore[name-defined]  # noqa: F821
-    created_at: Mapped[date] = mapped_column(nullable=False)
-    updated_at: Mapped[date] = mapped_column(nullable=False)
+    author: Mapped[list["User"]] = relationship(secondary=user_to_playlists_association)
+    beats: Mapped[list["Beat"]] = relationship(secondary=playlists_to_beat_association)   # type: ignore[name-defined]  # noqa: F821
+    tracks: Mapped[list["Track"]] = relationship(secondary=playlists_to_track_association)   # type: ignore[name-defined]  # noqa: F821
+    tags: Mapped[list["Tag"]] = relationship(secondary=playlists_to_tag_association)   # type: ignore[name-defined]  # noqa: F821
