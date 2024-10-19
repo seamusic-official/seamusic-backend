@@ -18,12 +18,24 @@ beatpack_to_tag_association = Table(
     Column("tag_id", ForeignKey('tags.id'), primary_key=True),
 )
 
+user_to_beatpacks_likes = Table(
+    "user_to_beatpacks_likes",
+    Base.metadata,
+    Column("beatpacks_id", ForeignKey("beatpacks.id"), primary_key=True),
+    Column("user_id", ForeignKey("users.id"), primary_key=True)
+)
+
 
 class Beatpack(Base):
     __tablename__ = "beatpacks"
 
     title: Mapped[str]
     description: Mapped[str | None]
+    views: Mapped[int]
+    liked_users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+        argument="User",
+        secondary=user_to_beatpacks_likes
+    )
     producers: Mapped[list["ProducerProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=producer_to_beatpacks_association,
         back_populates="producers"

@@ -21,6 +21,13 @@ beat_to_soundkits_association = Table(
 
 )
 
+user_to_soundkits_likes = Table(
+    "user_to_soundkits_likes",
+    Base.metadata,
+    Column("soundkit_id", ForeignKey("soundkits.id"), primary_key=True),
+    Column("user_id", ForeignKey("users.id"), primary_key=True)
+)
+
 
 class Soundkit(Base):
     __tablename__ = "soundkits"
@@ -29,10 +36,15 @@ class Soundkit(Base):
     description: Mapped[str | None]
     picture_url: Mapped[str | None]
     file_url: Mapped[str]
+    views: Mapped[int]
 
     created_at: Mapped[date]
     updated_at: Mapped[datetime]
 
+    liked_users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+        argument="User",
+        secondary=user_to_soundkits_likes
+    )
     producers: Mapped[list["ProducerProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=producer_to_soundkits_association,
         back_populates="soundkits"
