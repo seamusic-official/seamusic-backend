@@ -36,7 +36,7 @@ async def get_my_soundkits(
     items = list(map(
         lambda soundkit: SSoundkitResponse(
             id=soundkit.id,
-            name=soundkit.name,
+            name=soundkit.title,
             picture_url=soundkit.picture_url,
             description=soundkit.description,
             file_url=soundkit.file_url,
@@ -77,7 +77,7 @@ async def all_soundkits(
     items = list(map(
         lambda soundkit: SSoundkitResponse(
             id=soundkit.id,
-            name=soundkit.name,
+            name=soundkit.title,
             picture_url=soundkit.picture_url,
             description=soundkit.description,
             file_url=soundkit.file_url,

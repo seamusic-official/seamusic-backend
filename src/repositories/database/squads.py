@@ -1,5 +1,7 @@
 from dataclasses import dataclass
+
 from sqlalchemy import select, delete, func
+
 from src.converters.repositories.database.sqlalchemy import request_dto_to_model, models_to_dto, model_to_response_dto
 from src.dtos.database.squads import (
     Squad as _Squad,
@@ -8,7 +10,6 @@ from src.dtos.database.squads import (
     CreateSquadRequestDTO,
     UpdateSquadRequestDTO
 )
-
 from src.models.squads import Squad
 from src.repositories.database.base import SQLAlchemyRepository
 

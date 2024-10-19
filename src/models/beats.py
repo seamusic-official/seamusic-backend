@@ -1,9 +1,7 @@
 from sqlalchemy import Table, Column, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, relationship
 
-from src.models import ProducerProfile
 from src.models.base import Base
-from src.models.tags import Tag
 
 tag_to_beat_association = Table(
     "tag_to_beat_association",
@@ -22,12 +20,13 @@ producer_to_beat_association = Table(
 
 class Beat(Base):
     __tablename__ = "beats"
-    producers: Mapped[list["ProducerProfile"]] = relationship(
+
+    title: Mapped[str]
+    description: Mapped[str | None]
+    picture_url: Mapped[str | None]
+    file_url: Mapped[str]
+    producers: Mapped[list["ProducerProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=producer_to_beat_association,
         back_populates="beats"
     )
-    tags: Mapped[list["Tag"]] = relationship(secondary=tag_to_beat_association)
-    name: Mapped[str] = mapped_column(nullable=False)
-    description: Mapped[str] = mapped_column(nullable=True)
-    picture_url: Mapped[str] = mapped_column(nullable=True)
-    file_url: Mapped[str] = mapped_column(nullable=False)
+    tags: Mapped[list["Tag"]] = relationship(secondary=tag_to_beat_association)  # type: ignore[name-defined]  # noqa: F821

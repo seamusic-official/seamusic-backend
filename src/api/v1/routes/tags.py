@@ -45,7 +45,7 @@ async def get_my_listener_tags(
 
     response = await service.get_listener_tags(user_id=user.id, start=page.start, size=page.size)
     items = list(map(
-        lambda tag: Tag(name=tag.name),
+        lambda tag: Tag(name=tag.title),
         response.tags
     ))
     total = await service.get_listener_tags_count(user_id=user.id)
@@ -73,7 +73,7 @@ async def get_my_producer_tags(
 
     response = await service.get_producer_tags(user_id=user.id, start=page.start, size=page.size)
     items = list(map(
-        lambda tag: Tag(name=tag.name),
+        lambda tag: Tag(name=tag.title),
         response.tags
     ))
     total = await service.get_producer_tags_count(user_id=user.id)
@@ -101,7 +101,7 @@ async def get_my_artist_tags(
 
     response = await service.get_artist_tags(user_id=user.id, start=page.start, size=page.size)
     items = list(map(
-        lambda tag: Tag(name=tag.name),
+        lambda tag: Tag(name=tag.title),
         response.tags
     ))
     total = await service.get_producer_tags_count(user_id=user.id)

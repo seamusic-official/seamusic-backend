@@ -22,12 +22,12 @@ class BeatpacksResponseDTO(BaseResponseDTO):
 
 
 class CreateBeatpackRequestDTO(BaseRequestDTO):
-    name: str
+    title: str
     description: str | None = None
     beats: list[Beat]
 
 
 class UpdateBeatpackRequestDTO(BaseRequestDTO):
-    name: str
+    title: str
     description: str | None = None
     beats: list[Beat]

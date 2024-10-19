@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Table, ForeignKey, Integer
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, relationship
 
-from src.models import ProducerProfile
 from src.models.auth import producer_to_squad_association
 from src.models.base import Base
 
@@ -15,11 +14,12 @@ admin_producer_to_squad = Table(
 
 class Squad(Base):
     __tablename__ = "squads"
-    producers: Mapped[list["ProducerProfile"]] = relationship(
+
+    title: Mapped[str]
+    description: Mapped[str | None]
+    picture_url: Mapped[str | None]
+    admins: Mapped[list["ProducerProfile"]] = relationship(secondary=admin_producer_to_squad)  # type: ignore[name-defined]  # noqa: F821
+    producers: Mapped[list["ProducerProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=producer_to_squad_association,
         back_populates="squads"
     )
-    admins: Mapped[list["ProducerProfile"]] = relationship(secondary=admin_producer_to_squad)
-    name: Mapped[str] = mapped_column(nullable=False)
-    picture_url: Mapped[str] = mapped_column(nullable=True)
-    description: Mapped[str] = mapped_column(nullable=True)
