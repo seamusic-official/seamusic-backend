@@ -1,9 +1,10 @@
 from datetime import datetime
 from typing import Literal
-from src.dtos.database.tags import Tag
-from src.dtos.database.base import BaseResponseDTO, BaseRequestDTO, BaseDTO
-from src.enums.type import Type
+
 from src.dtos.database.auth import Artist
+from src.dtos.database.base import BaseResponseDTO, BaseRequestDTO, BaseDTO
+from src.dtos.database.tags import Tag
+from src.enums.type import Type
 
 
 class Album(BaseDTO):
@@ -25,6 +26,7 @@ class CreateAlbumRequestDTO(BaseRequestDTO):
     picture_url: str | None = None
     description: str | None = None
     co_prod: str | None = None
+    prod_by: str | None = None
     type: Literal[Type.album] = Type.album
     created_at: datetime
     updated_at: datetime

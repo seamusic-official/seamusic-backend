@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from src.dtos.database.base import BaseResponseDTO, BaseDTO, BaseRequestDTO
 from src.dtos.database.auth import User
+from src.dtos.database.base import BaseResponseDTO, BaseDTO, BaseRequestDTO
 
 
 class License(BaseDTO):

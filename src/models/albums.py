@@ -1,10 +1,9 @@
-from sqlalchemy import Column, Table, ForeignKey, String
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from datetime import date, datetime
 
-from src.models import ArtistProfile
+from sqlalchemy import Column, Table, ForeignKey
+from sqlalchemy.orm import Mapped, relationship
+
 from src.models.base import Base
-from src.models.tags import Tag
-from src.models.tracks import Track
 
 album_to_track_association = Table(
     "album_to_track_association",
@@ -31,12 +30,24 @@ album_to_tag_association = Table(
 class Album(Base):
     __tablename__ = "albums"
 
-    artists: Mapped[list["ArtistProfile"]] = relationship(
+    title: Mapped[str]
+    picture_url: Mapped[str | None]
+    description: Mapped[str | None]
+    type: Mapped[str]
+
+    created_at: Mapped[date]
+    updated_at: Mapped[datetime]
+
+    artists: Mapped[list["ArtistProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+        argument="ArtistProfile",
         secondary=album_to_artist_association,
-        back_populates="albums")
-    tracks: Mapped[list["Track"]] = relationship(secondary=album_to_track_association)
-    tags: Mapped[list["Tag"]] = relationship(secondary=album_to_tag_association)
-    name: Mapped[str] = mapped_column(String, nullable=False)
-    picture_url: Mapped[str] = mapped_column(String, nullable=True)
-    description: Mapped[str] = mapped_column(String, nullable=True)
-    type: Mapped[str] = mapped_column(String, nullable=False)
+        back_populates="albums"
+    )
+    tracks: Mapped[list["Track"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+        argument="Track",
+        secondary=album_to_track_association
+    )
+    tags: Mapped[list["Tag"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+        argument="Tag",
+        secondary=album_to_tag_association
+    )

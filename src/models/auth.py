@@ -1,17 +1,11 @@
+from datetime import date, datetime
+
 from sqlalchemy import ForeignKey, Table, Column, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.models import Beatpack, Playlists, Album
-from src.models import Soundkit
-from src.models.beats import Beat
-from src.models import album_to_artist_association, producer_to_beat_association
-from src.models.comments import Comment
-from src.models.messages import Message
-from src.models.squads import Squad
-from src.models.tags import Tag
-from src.models.licenses import License
+from src.models.albums import album_to_artist_association
 from src.models.base import Base
-from src.models.tracks import Track
+from src.models.beats import producer_to_beat_association
 
 user_to_licenses_association = Table(
     "user_to_licenses_association",
@@ -38,7 +32,14 @@ user_to_albums_association = Table(
     "user_to_albums_association",
     Base.metadata,
     Column("user_id", Integer, ForeignKey("users.id"), primary_key=True),
-    Column("album_id", Integer, ForeignKey("albums.id"), primary_key=True)
+    Column("album_id", Integer, ForeignKey("albums.id"), primary_key=True),
+)
+
+user_to_tags_association = Table(
+    "user_to_tags_association",
+    Base.metadata,
+    Column("user_id", Integer, ForeignKey("users.id"), primary_key=True),
+    Column("tag_id", Integer, ForeignKey("tags.id"), primary_key=True),
 )
 
 user_to_playlists_association = Table(
@@ -48,8 +49,8 @@ user_to_playlists_association = Table(
     Column("playlist_id", Integer, ForeignKey("playlists.id"), primary_key=True)
 )
 
-producer_to_beatpacks_association_table = Table(
-    "producer_to_beatpacks_association_table",
+producer_to_beatpacks_association = Table(
+    "producer_to_beatpacks_association",
     Base.metadata,
     Column("producer_profile_id", ForeignKey("producer_profiles.id")),
     Column("beatpack_id", ForeignKey("beatpacks.id"))
@@ -93,55 +94,62 @@ artist_to_tags_association = Table(
 
 class User(Base):
     __tablename__ = "users"
-    comments: Mapped["Comment"] = relationship("Comment", back_populates="author")  # для o2o связи
-    messages: Mapped["Message"] = relationship("Message", back_populates="author")  # для o2o связи
-    username: Mapped[str] = mapped_column(nullable=False)
-    description: Mapped[str] = mapped_column(nullable=True)
-    email: Mapped[str] = mapped_column(nullable=False)
-    password: Mapped[str] = mapped_column(nullable=False)
-    picture_url: Mapped[str] = mapped_column(nullable=True)
-    licenses: Mapped[list["License"]] = relationship(secondary=user_to_licenses_association)
-    access_level: Mapped[str] = mapped_column(nullable=False)
-    followed_artists: Mapped[list["ArtistProfile"]] = relationship(
-        secondary=user_to_artist_association,
-        back_populates="users"
-    )
-    saved_playlists: Mapped[list["Playlists"]] = relationship(secondary=user_to_playlists_association)
+
+    username: Mapped[str]
+    description: Mapped[str | None]
+    email: Mapped[str]
+    password: Mapped[str]
+    picture_url: Mapped[str | None]
+    access_level: Mapped[str]
+    telegram_id: Mapped[int | None]
+    premium_level: Mapped[str]
+
+    is_active: Mapped[bool]
+    is_adult: Mapped[bool]
+    is_verified: Mapped[bool]
+
+    created_at: Mapped[date]
+    updated_at: Mapped[datetime]
+
+    comments: Mapped["Comment"] = relationship("Comment", back_populates="author")  # type: ignore[name-defined]  # noqa: F821
+    messages: Mapped["Message"] = relationship("Message", back_populates="author")  # type: ignore[name-defined]  # noqa: F821
+    licenses: Mapped[list["License"]] = relationship(secondary=user_to_licenses_association)  # type: ignore[name-defined]  # noqa: F821
+    followed_artists: Mapped[list["ArtistProfile"]] = relationship(secondary=user_to_artist_association, back_populates="users")  # type: ignore[name-defined]  # noqa: F821
+    saved_playlists: Mapped[list["Playlist"]] = relationship(secondary=user_to_playlists_association)  # type: ignore[name-defined]  # noqa: F821
     followed_producers: Mapped[list["ProducerProfile"]] = relationship(secondary=user_to_producer_association)
-    followed_albums: Mapped[list["Album"]] = relationship(secondary=user_to_albums_association)
-    is_active: Mapped[bool] = mapped_column(nullable=False)
-    is_adult: Mapped[bool] = mapped_column(nullable=False)
-    is_verified: Mapped[bool] = mapped_column(nullable=False)
+    followed_albums: Mapped[list["Album"]] = relationship(secondary=user_to_albums_association)  # type: ignore[name-defined]  # noqa: F821
+    followed_tags: Mapped[list["Tag"]] = relationship(secondary=user_to_tags_association)  # type: ignore[name-defined]  # noqa: F821
 
 
 class ArtistProfile(Base):
     __tablename__ = "artist_profiles"
-    users: Mapped[list["User"]] = relationship(
+
+    followers: Mapped[list["User"]] = relationship(
         secondary=user_to_artist_association,
         back_populates="followed_artists"
     )
-    tracks: Mapped[list["Track"]] = relationship(secondary=artist_to_track_association)
-    albums: Mapped[list["Album"]] = relationship(secondary=album_to_artist_association)
-    tags: Mapped[list["Tag"]] = relationship(secondary=artist_to_tags_association)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
-    description: Mapped[str] = mapped_column(nullable=False)
-    picture_url: Mapped[str] = mapped_column(nullable=False)
+    tracks: Mapped[list["Track"]] = relationship(secondary=artist_to_track_association)  # type: ignore[name-defined]  # noqa: F821
+    albums: Mapped[list["Album"]] = relationship(secondary=album_to_artist_association)  # type: ignore[name-defined]  # noqa: F821
+    tags: Mapped[list["Tag"]] = relationship(secondary=artist_to_tags_association)  # type: ignore[name-defined]  # noqa: F821
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    description: Mapped[str]
+    picture_url: Mapped[str]
 
 
 class ProducerProfile(Base):
     __tablename__ = "producer_profiles"
-    users: Mapped[list["User"]] = relationship(
+    users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=user_to_producer_association,
         back_populates="followed_producers"
     )
-    beats: Mapped[list["Beat"]] = relationship(secondary=producer_to_beat_association, back_populates="producers")
-    sqauds: Mapped[list["Squad"]] = relationship(secondary=producer_to_squad_association, back_populates="producers")
-    tags: Mapped[list["Tag"]] = relationship(secondary=producer_to_soundkits_association)
-    beatpacks: Mapped[list["Beatpack"]] = relationship(
-        producer_to_beatpacks_association_table,
+    beats: Mapped[list["Beat"]] = relationship(secondary=producer_to_beat_association, back_populates="producers")  # type: ignore[name-defined]  # noqa: F821
+    sqauds: Mapped[list["Squad"]] = relationship(secondary=producer_to_squad_association, back_populates="producers")  # type: ignore[name-defined]  # noqa: F821
+    tags: Mapped[list["Tag"]] = relationship(secondary=producer_to_soundkits_association)  # type: ignore[name-defined]  # noqa: F821
+    beatpacks: Mapped[list["Beatpack"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+        secondary=producer_to_beatpacks_association,
         back_populates="producers"
     )
-    soundkits: Mapped[list["Soundkit"]] = relationship(producer_to_soundkits_association, back_populates="producers")
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
-    description: Mapped[str] = mapped_column(nullable=False)
-    picture_url: Mapped[str] = mapped_column(nullable=False)
+    soundkits: Mapped[list["Soundkit"]] = relationship(secondary=producer_to_soundkits_association, back_populates="producers")  # type: ignore[name-defined]  # noqa: F821
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    description: Mapped[str]
+    picture_url: Mapped[str]
