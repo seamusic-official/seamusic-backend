@@ -11,3 +11,9 @@ class AccessLevel(str, Enum):
     user = "user"
     admin = "admin"
     superuser = "superuser"
+
+
+class PremiumLevel(str, Enum):
+    none = "none"
+    bot = "bot"
+    full = "full"

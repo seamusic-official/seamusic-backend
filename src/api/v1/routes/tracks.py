@@ -37,7 +37,7 @@ async def get_my_tracks(
     items = list(map(
         lambda track: STrackResponse(
             id=track.id,
-            name=track.name,
+            name=track.title,
             prod_by=track.prod_by,
             description=track.description,
             co_prod=track.co_prod,
@@ -77,7 +77,7 @@ async def get_all_tracks(
     items = list(map(
         lambda track: STrackResponse(
             id=track.id,
-            name=track.name,
+            name=track.title,
             prod_by=track.prod_by,
             description=track.description,
             co_prod=track.co_prod,

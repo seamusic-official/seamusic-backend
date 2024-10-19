@@ -1,6 +1,7 @@
-from src.dtos.database.base import BaseDTO, BaseResponseDTO, BaseRequestDTO
-from src.dtos.database.auth import User
 from datetime import datetime
+
+from src.dtos.database.auth import User
+from src.dtos.database.base import BaseDTO, BaseResponseDTO, BaseRequestDTO
 
 
 class Squad(BaseDTO):
@@ -9,7 +10,6 @@ class Squad(BaseDTO):
     admins: list[User]
     picture_url: str | None
     description: str | None
-    file_url: str | None
     created_at: datetime
 
 

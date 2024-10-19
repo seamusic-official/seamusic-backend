@@ -46,7 +46,7 @@ async def get_my_beatpacks(
                     picture_url=user_.picture_url,
                     birthday=user_.birthday,
                 ),
-                beatpack.users
+                beatpack.followers
             )),
             beats=list(map(
                 lambda beat: SBeatResponse(
@@ -105,7 +105,7 @@ async def all_beatpacks(
                     picture_url=user_.picture_url,
                     birthday=user_.birthday,
                 ),
-                beatpack.users
+                beatpack.followers
             )),
             beats=list(map(
                 lambda beat: SBeatResponse(

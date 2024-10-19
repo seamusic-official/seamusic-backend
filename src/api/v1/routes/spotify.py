@@ -38,7 +38,7 @@ async def get_recommendations(
         lambda track: SSpotifyTrackResponse(
             id=track.id,
             type=SpotifyType.track,
-            name=track.name,
+            name=track.title,
             preview_url=track.preview_url,
             image_url=track.image_url,
             spotify_url=track.href,
@@ -75,7 +75,7 @@ async def get_top_artist_tracks(
         lambda track: SpotifyTrack(
             id=track.id,
             type=SpotifyType.track,
-            name=track.name,
+            name=track.title,
             preview_url=track.preview_url,
             image_url=track.image_url,
             spotify_url=track.href,
@@ -111,7 +111,7 @@ async def get_artist_albums(
     items = list(map(
         lambda album: SpotifyAlbum(
             id=album.id,
-            name=album.name,
+            name=album.title,
             image_url=jmespath.search('0', album.images),
             spotify_url=album.href,
         ),
@@ -153,7 +153,7 @@ async def get_spotify_album(
                 SpotifyArtist(
                     id=artist.id,
                     type=artist.type,
-                    name=artist.name,
+                    name=artist.title,
                     image_url=jmespath.search('0', artist.images),
                     popularity=artist.popularity,
                 ),
@@ -253,7 +253,7 @@ async def search(
             lambda track: SpotifyTrack(
                 id=track.id,
                 type=track.type,
-                name=track.name,
+                name=track.title,
                 preview_url=track.preview_url,
                 image_url=track.image_url,
                 spotify_url=track.href,
@@ -264,7 +264,7 @@ async def search(
             lambda artist: SpotifyArtist(
                 id=artist.id,
                 type=artist.type,
-                name=artist.name,
+                name=artist.title,
                 image_url=artist.image_url,
                 popularity=artist.popularity,
             ),
@@ -273,7 +273,7 @@ async def search(
         albums=list(map(
             lambda album: SpotifyAlbum(
                 id=album.id,
-                name=album.name,
+                name=album.title,
                 image_url=jmespath.search('0', album.images),
                 spotify_url=album.href,
             ),
