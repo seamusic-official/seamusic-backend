@@ -22,7 +22,8 @@ user_to_beatpacks_likes = Table(
     "user_to_beatpacks_likes",
     Base.metadata,
     Column("beatpacks_id", ForeignKey("beatpacks.id"), primary_key=True),
-    Column("user_id", ForeignKey("users.id"), primary_key=True)
+    Column("user_id", ForeignKey("users.id"), primary_key=True),
+    extend_existing=True
 )
 
 
