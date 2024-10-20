@@ -22,7 +22,7 @@ rm:
 	sudo rm -rf db
 
 revision:
-	poetry run docker run app /bin/bash -c "poetry run alembic revision --autogenerate -m $(name)"
+	poetry run docker run app /bin/bash -c "poetry run alembic revision --autogenerate"
 
 upgrade:
 	poetry run docker run app /bin/bash -c "poetry run alembic upgrade $(revision)"

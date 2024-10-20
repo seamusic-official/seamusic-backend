@@ -17,13 +17,25 @@ track_to_producer_association = Table(
     Column("track_id", ForeignKey('tracks.id'), primary_key=True),
 )
 
+user_to_tracks_likes = Table(
+    "user_to_tracks_likes",
+    Base.metadata,
+    Column("track_id", ForeignKey("tracks.id"), primary_key=True),
+    Column("user_id", ForeignKey("users.id"), primary_key=True)
+)
+
 
 class Track(Base):
     __tablename__ = "tracks"
 
     title: Mapped[str]
+    views: Mapped[int]
     description: Mapped[str | None]
     picture_url: Mapped[str | None]
     file_url: Mapped[str]
+    liked_users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+        argument="User",
+        secondary=user_to_tracks_likes
+    )
     producers: Mapped[list["ProducerProfile"]] = relationship(secondary=track_to_producer_association)  # type: ignore[name-defined]  # noqa: F821
     tags: Mapped[list["Tag"]] = relationship(secondary=track_to_tag_association)  # type: ignore[name-defined]  # noqa: F821

@@ -26,11 +26,19 @@ album_to_tag_association = Table(
     Column("tag_id", ForeignKey("tags.id"), primary_key=True)
 )
 
+user_to_albums_likes = Table(
+    "user_to_albums_likes",
+    Base.metadata,
+    Column("album_id", ForeignKey("albums.id"), primary_key=True),
+    Column("user_id", ForeignKey("users.id"), primary_key=True)
+)
+
 
 class Album(Base):
     __tablename__ = "albums"
 
     title: Mapped[str]
+    views: Mapped[int]
     picture_url: Mapped[str | None]
     description: Mapped[str | None]
     type: Mapped[str]
@@ -38,6 +46,10 @@ class Album(Base):
     created_at: Mapped[date]
     updated_at: Mapped[datetime]
 
+    liked_users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+        argument="User",
+        secondary=user_to_albums_likes
+    )
     artists: Mapped[list["ArtistProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="ArtistProfile",
         secondary=album_to_artist_association,
