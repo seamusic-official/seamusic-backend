@@ -2,6 +2,7 @@ from sqlalchemy import Table, Column, ForeignKey
 from sqlalchemy.orm import Mapped, relationship
 
 from src.models.base import Base
+from src.models.views import user_to_beats_views_association
 
 tag_to_beat_association = Table(
     "tag_to_beat_association",
@@ -32,6 +33,10 @@ class Beat(Base):
     description: Mapped[str | None]
     picture_url: Mapped[str | None]
     file_url: Mapped[str]
+    views: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+        argument="User",
+        secondary=user_to_beats_views_association
+    )
     liked_users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_beats_likes

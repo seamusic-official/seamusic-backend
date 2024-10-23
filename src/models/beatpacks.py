@@ -3,6 +3,7 @@ from sqlalchemy.orm import Mapped, relationship
 
 from src.models.auth import producer_to_beatpacks_association
 from src.models.base import Base
+from src.models.views import user_to_beatpacks_views_association
 
 beatpack_to_beat_association_table = Table(
     "beatpack_to_beat_association_table",
@@ -32,6 +33,10 @@ class Beatpack(Base):
 
     title: Mapped[str]
     description: Mapped[str | None]
+    views: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+        argument="User",
+        secondary=user_to_beatpacks_views_association
+    )
     liked_users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_beatpacks_likes
