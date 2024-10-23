@@ -36,7 +36,6 @@ user_to_playlists_likes = Table(
 class Playlist(Base):
     __tablename__ = 'playlists'
 
-    views: Mapped[int]
     description: Mapped[str | None]
     picture_url: Mapped[str | None]
     liked_users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821

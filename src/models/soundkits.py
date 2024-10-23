@@ -36,7 +36,6 @@ class Soundkit(Base):
     description: Mapped[str | None]
     picture_url: Mapped[str | None]
     file_url: Mapped[str]
-    views: Mapped[int]
 
     created_at: Mapped[date]
     updated_at: Mapped[datetime]

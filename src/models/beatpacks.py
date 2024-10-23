@@ -32,7 +32,6 @@ class Beatpack(Base):
 
     title: Mapped[str]
     description: Mapped[str | None]
-    views: Mapped[int]
     liked_users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_beatpacks_likes

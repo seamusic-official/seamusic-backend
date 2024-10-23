@@ -38,7 +38,6 @@ class Album(Base):
     __tablename__ = "albums"
 
     title: Mapped[str]
-    views: Mapped[int]
     picture_url: Mapped[str | None]
     description: Mapped[str | None]
     type: Mapped[str]

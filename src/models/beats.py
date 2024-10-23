@@ -29,7 +29,6 @@ class Beat(Base):
     __tablename__ = "beats"
 
     title: Mapped[str]
-    views: Mapped[int]
     description: Mapped[str | None]
     picture_url: Mapped[str | None]
     file_url: Mapped[str]

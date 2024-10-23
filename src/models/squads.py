@@ -30,7 +30,6 @@ class Squad(Base):
     __tablename__ = "squads"
 
     title: Mapped[str]
-    views: Mapped[int]
     description: Mapped[str | None]
     picture_url: Mapped[str | None]
     producer_sub: Mapped[list["ProducerProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
