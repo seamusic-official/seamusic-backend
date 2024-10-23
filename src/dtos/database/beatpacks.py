@@ -4,17 +4,15 @@ from src.dtos.database.beats import Beat
 
 
 class Beatpack(BaseDTO):
-    title: str
-    description: str
-    user_id: int
+    name: str
+    description: str | None = None
     users: list[User]
     beats: list[Beat]
 
 
 class BeatpackResponseDTO(BaseResponseDTO):
-    title: str
-    description: str
-    user_id: int
+    name: str
+    description: str | None = None
     users: list[User]
     beats: list[Beat]
 
@@ -25,11 +23,11 @@ class BeatpacksResponseDTO(BaseResponseDTO):
 
 class CreateBeatpackRequestDTO(BaseRequestDTO):
     title: str
-    description: str
+    description: str | None = None
     beats: list[Beat]
 
 
 class UpdateBeatpackRequestDTO(BaseRequestDTO):
-    title: str | None = None
+    title: str
     description: str | None = None
-    beat_ids: list[int] | None = None
+    beats: list[Beat]

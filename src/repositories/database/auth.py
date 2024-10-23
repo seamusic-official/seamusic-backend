@@ -63,7 +63,7 @@ class UsersRepository(SQLAlchemyRepository):
 @dataclass
 class ArtistsRepository(SQLAlchemyRepository):
     async def get_artist_id_by_user_id(self, user_id: int) -> int | None:
-        query = select(User.artist_profile).filter_by(id=user_id)
+        query = select(ArtistProfile.user_id).filter_by(user_id=user_id)
         return await self.scalar(query)
 
     async def get_artist_by_id(self, artist_id: int) -> ArtistResponseDTO | None:
@@ -93,7 +93,7 @@ class ArtistsRepository(SQLAlchemyRepository):
 @dataclass
 class ProducersRepository(SQLAlchemyRepository):
     async def get_producer_id_by_user_id(self, user_id: int) -> int | None:
-        query = select(User.producer_profile).filter_by(id=user_id)
+        query = select(ProducerProfile.user_id).filter_by(id=user_id)
         return await self.scalar(query)
 
     async def get_producer_by_id(self, producer_id: int) -> ProducerResponseDTO | None:

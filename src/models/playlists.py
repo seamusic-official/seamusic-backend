@@ -1,9 +1,9 @@
-from datetime import date
-
 from sqlalchemy import Table, ForeignKey, Column
-from sqlalchemy.orm import Mapped, relationship, mapped_column
+from sqlalchemy.orm import Mapped, relationship
 
+from src.models.auth import user_to_playlists_association
 from src.models.base import Base
+from src.models.views import user_to_playlists_views_association
 
 playlists_to_beat_association = Table(
     "playlists_to_beat_association",
@@ -26,14 +26,28 @@ playlists_to_tag_association = Table(
     Column("tag_id", ForeignKey("tags.id"), primary_key=True)
 )
 
+user_to_playlists_likes = Table(
+    "user_to_playlists_likes",
+    Base.metadata,
+    Column("playlist_id", ForeignKey("playlists.id"), primary_key=True),
+    Column("user_id", ForeignKey("users.id"), primary_key=True)
+)
 
-class Playlists(Base):
+
+class Playlist(Base):
     __tablename__ = 'playlists'
 
-    description: Mapped[str] = mapped_column(nullable=True)
-    picture_url: Mapped[str] = mapped_column(nullable=True)
-    beats: Mapped[list['Beat']] = relationship(secondary=playlists_to_beat_association)  # type: ignore[name-defined]  # noqa: F821
-    tracks: Mapped[list['Track']] = relationship(secondary=playlists_to_track_association)  # type: ignore[name-defined]  # noqa: F821
-    tags: Mapped[list['Tag']] = relationship(secondary=playlists_to_tag_association)  # type: ignore[name-defined]  # noqa: F821
-    created_at: Mapped[date] = mapped_column(nullable=False)
-    updated_at: Mapped[date] = mapped_column(nullable=False)
+    description: Mapped[str | None]
+    picture_url: Mapped[str | None]
+    views: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+        argument="User",
+        secondary=user_to_playlists_views_association
+    )
+    liked_users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+        argument="User",
+        secondary=user_to_playlists_likes
+    )
+    author: Mapped[list["User"]] = relationship(secondary=user_to_playlists_association)   # type: ignore[name-defined]  # noqa: F821
+    beats: Mapped[list["Beat"]] = relationship(secondary=playlists_to_beat_association)   # type: ignore[name-defined]  # noqa: F821
+    tracks: Mapped[list["Track"]] = relationship(secondary=playlists_to_track_association)   # type: ignore[name-defined]  # noqa: F821
+    tags: Mapped[list["Tag"]] = relationship(secondary=playlists_to_tag_association)   # type: ignore[name-defined]  # noqa: F821
