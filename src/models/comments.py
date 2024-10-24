@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy import ForeignKey, Integer, Column, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -17,3 +19,5 @@ class Comment(Base):
     text: Mapped[str]
     author: Mapped["User"] = relationship("User", back_populates="comments")  # type: ignore[name-defined]  # noqa: F821
     author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    created_at: Mapped[datetime]
+    updated_at: Mapped[datetime]

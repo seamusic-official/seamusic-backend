@@ -10,7 +10,7 @@ tag_to_soundkits_association = Table(
     "tag_to_soundkits_association",
     Base.metadata,
     Column("soundkit_id", Integer, ForeignKey("soundkits.id"), primary_key=True),
-    Column("tag_id", ForeignKey('tags.id'), primary_key=True)
+    Column("tag_name", ForeignKey('tags.name'), primary_key=True)
 )
 
 beat_to_soundkits_association = Table(

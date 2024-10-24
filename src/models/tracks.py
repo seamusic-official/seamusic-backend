@@ -1,3 +1,5 @@
+from datetime import datetime, date
+
 from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.orm import Mapped, relationship
 
@@ -7,7 +9,7 @@ track_to_tag_association = Table(
     'track_to_tag_association',
     Base.metadata,
     Column("track_id", ForeignKey('tracks.id'), primary_key=True),
-    Column("tag_id", ForeignKey('tags.id'), primary_key=True),
+    Column("tag_name", ForeignKey('tags.name'), primary_key=True),
 )
 
 track_to_producer_association = Table(
@@ -33,7 +35,11 @@ class Track(Base):
     description: Mapped[str | None]
     picture_url: Mapped[str | None]
     file_url: Mapped[str]
-    liked_users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+
+    created_at: Mapped[date]
+    updated_at: Mapped[datetime]
+
+    likers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_tracks_likes
     )
