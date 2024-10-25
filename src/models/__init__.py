@@ -21,7 +21,7 @@ from src.models.auth import (
     user_to_producer_association,
     user_to_albums_association,
     user_to_artist_association,
-    user_to_tags_association,
+    user_to_tag_association,
     producer_to_squad_association,
 )
 from src.models.beatpacks import (

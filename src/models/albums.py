@@ -24,7 +24,7 @@ album_to_tag_association = Table(
     "album_to_tag_association",
     Base.metadata,
     Column("album_id", ForeignKey("albums.id"), primary_key=True),
-    Column("tag_name", ForeignKey("tags.name"), primary_key=True)
+    Column("tag_id", ForeignKey("tags.id"), primary_key=True)
 )
 
 user_to_albums_likes = Table(
@@ -47,23 +47,18 @@ class Album(Base):
     updated_at: Mapped[datetime]
 
     viewers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        argument="User",
         secondary=user_to_albums_views_association
     )
     likers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        argument="User",
         secondary=user_to_albums_likes
     )
     artists: Mapped[list["ArtistProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        argument="ArtistProfile",
         secondary=album_to_artist_association,
         back_populates="albums"
     )
     tracks: Mapped[list["Track"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        argument="Track",
         secondary=album_to_track_association
     )
     tags: Mapped[list["Tag"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        argument="Tag",
         secondary=album_to_tag_association
     )

@@ -10,7 +10,7 @@ track_to_tag_association = Table(
     'track_to_tag_association',
     Base.metadata,
     Column("track_id", ForeignKey('tracks.id'), primary_key=True),
-    Column("tag_name", ForeignKey('tags.name'), primary_key=True),
+    Column("tag_id", ForeignKey('tags.id'), primary_key=True),
 )
 
 track_to_producer_association = Table(

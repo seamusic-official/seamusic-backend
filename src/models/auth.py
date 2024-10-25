@@ -37,11 +37,11 @@ user_to_albums_association = Table(
     Column("album_id", Integer, ForeignKey("albums.id"), primary_key=True),
 )
 
-user_to_tags_association = Table(
-    "user_to_tags_association",
+user_to_tag_association = Table(
+    "user_to_tag_association",
     Base.metadata,
-    Column("user_id", Integer, ForeignKey("users.id"), primary_key=True),
-    Column("tag_name", String, ForeignKey("tags.name"), primary_key=True),
+    Column("user_id", ForeignKey("users.id"), primary_key=True),
+    Column("tag_id", ForeignKey("tags.id"), primary_key=True),
 )
 
 user_to_playlists_association = Table(
@@ -69,7 +69,7 @@ producer_to_tags_association = Table(
     'producer_to_tags_association',
     Base.metadata,
     Column("producer_id", ForeignKey('producer_profiles.id'), primary_key=True),
-    Column("tag_name", ForeignKey('tags.name'), primary_key=True),
+    Column("tag_id", ForeignKey('tags.id'), primary_key=True),
 )
 
 artist_to_track_association = Table(
@@ -83,7 +83,7 @@ artist_to_tags_association = Table(
     'artist_to_tags_association',
     Base.metadata,
     Column("artist_id", ForeignKey('artist_profiles.id'), primary_key=True),
-    Column("tag_name", ForeignKey('tags.name'), primary_key=True),
+    Column("tag_id", ForeignKey('tags.id'), primary_key=True),
 )
 
 
@@ -113,7 +113,7 @@ class User(Base):
     saved_playlists: Mapped[list["Playlist"]] = relationship(secondary=user_to_playlists_association)  # type: ignore[name-defined]  # noqa: F821
     followed_producers: Mapped[list["ProducerProfile"]] = relationship(secondary=user_to_producer_association)
     followed_albums: Mapped[list["Album"]] = relationship(secondary=user_to_albums_association)  # type: ignore[name-defined]  # noqa: F821
-    followed_tags: Mapped[list["Tag"]] = relationship(secondary=user_to_tags_association)  # type: ignore[name-defined]  # noqa: F821
+    followed_tags: Mapped[list["Tag"]] = relationship(secondary=user_to_tag_association)  # type: ignore[name-defined]  # noqa: F821
 
 
 class ArtistProfile(Base):
