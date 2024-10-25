@@ -6,6 +6,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.models.albums import album_to_artist_association
 from src.models.base import Base
 from src.models.beats import producer_to_beat_association
+from src.models.squads import follower_to_squads_association, artist_to_squad_association, producer_to_squad_association
+
 
 user_to_licenses_association = Table(
     "user_to_licenses_association",
@@ -33,13 +35,6 @@ user_to_albums_association = Table(
     Base.metadata,
     Column("user_id", Integer, ForeignKey("users.id"), primary_key=True),
     Column("album_id", Integer, ForeignKey("albums.id"), primary_key=True),
-)
-
-follower_to_squads_association = Table(
-    "follower_to_squads_association",
-    Base.metadata,
-    Column("user_id", Integer, ForeignKey("users.id"), primary_key=True),
-    Column("squad_id", Integer, ForeignKey("squads.id"), primary_key=True)
 )
 
 user_to_tags_association = Table(
@@ -75,13 +70,6 @@ producer_to_tags_association = Table(
     Base.metadata,
     Column("producer_id", ForeignKey('producer_profiles.id'), primary_key=True),
     Column("tag_name", ForeignKey('tags.name'), primary_key=True),
-)
-
-producer_to_squad_association = Table(
-    "producer_to_squad_association",
-    Base.metadata,
-    Column("squad_id", Integer, ForeignKey("squads.id"), primary_key=True),
-    Column("producer_profile_id", Integer, ForeignKey("producer_profiles.id"), primary_key=True),
 )
 
 artist_to_track_association = Table(
