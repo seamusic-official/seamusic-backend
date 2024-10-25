@@ -1,7 +1,7 @@
 from src.dtos.database.base import BaseDTO, BaseResponseDTO, BaseRequestDTO
 
 
-class Tag(BaseDTO):
+class AddTagRequestDTO(BaseRequestDTO):
     name: str
 
 
@@ -10,16 +10,16 @@ class TagResponseDTO(BaseResponseDTO):
 
 
 class TagsResponseDTO(BaseResponseDTO):
-    tags: list[Tag]
-
-
-class AddTagRequestDTO(BaseRequestDTO):
-    name: str
+    tags: list[str]
 
 
 class AddTagsRequestDTO(BaseRequestDTO):
-    tags: list[Tag]
+    tags: list[str]
 
 
 class UpdateTagRequestDTO(BaseRequestDTO):
+    name: str
+
+
+class Tag(BaseDTO):
     name: str

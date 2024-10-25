@@ -1,45 +1,13 @@
-from datetime import datetime
-
-from pydantic import EmailStr
-
 from src.dtos.database.base import BaseDTO, BaseResponseDTO, BaseRequestDTO
-from src.enums.auth import Role
 
 
-class User(BaseDTO):
-    id: int
-    username: str
-    description: str | None = None
-    email: EmailStr
-    password: str
-    picture_url: str
-    roles: list[Role]
-    created_at: datetime
-    updated_at: datetime
-
-
-class Artist(BaseDTO):
-    id: int
-    user: User
-    description: str | None = None
-
-
-class Producer(BaseDTO):
-    id: int
-    user: User
-    description: str | None = None
-
-
-class Squad(BaseDTO):
-    id: int
-    views: int
+class SquadRequsetDTO(BaseRequestDTO):
     title: str
-    picture_url: str | None
-    description: str | None
-    admins: list["Producer"]
-    producers: list["Producer"]
-    producers_sub: list["Producer"]
-    artist_sub: list["Artist"]
+    views: int
+    description: str | None = None
+    picture_url: str | None = None
+    artists: list["Artist"] = list()  # noqa: F821
+    producers: list["Producer"] = list()  # noqa: F821
 
 
 class SquadResponseDTO(BaseResponseDTO):
@@ -48,24 +16,21 @@ class SquadResponseDTO(BaseResponseDTO):
     title: str | None = None
     picture_url: str | None = None
     description: str | None = None
-    admins: list["Producer"] | None = None
-    producers: list["Producer"] | None = None
-    producers_sub: list["Producer"] | None = None
-    artist_sub: list["Artist"] | None = None
+    followers: list["User"] = list()  # noqa: F821
+    artists: list["Artist"] = list()  # noqa: F821
+    producers: list["Producer"] = list()  # noqa: F821
+
+
+class SquadItemResponse(BaseResponseDTO):
+    id: int
+    views: int
+    title: str | None = None
+    picture_url: str | None = None
+    description: str | None = None
 
 
 class SquadsResponseDTO(BaseResponseDTO):
-    squads: list[SquadResponseDTO]
-
-
-class CreateSquadRequestDTO(BaseRequestDTO):
-    id: int
-    views: int
-    title: str
-    picture_url: str | None = None
-    description: str | None = None
-    admins: list["Producer"]
-    producers: list["Producer"]
+    squads: list["SquadItemResponse"]  # noqa: F821
 
 
 class CreateSquadResponseDTO(BaseResponseDTO):
@@ -73,16 +38,25 @@ class CreateSquadResponseDTO(BaseResponseDTO):
 
 
 class UpdateSquadRequestDTO(BaseRequestDTO):
-    id: int | None = None
-    views: int | None = None
+    id: int
+    views: int
     title: str | None = None
     picture_url: str | None = None
     description: str | None = None
-    admins: list["Producer"] | None = None
-    producers: list["Producer"] | None = None
-    producers_sub: list["Producer"] | None = None
-    artist_sub: list["Artist"] | None = None
+    followers: list["User"] = None  # noqa: F821
+    artists: list["Artist"] = None  # noqa: F821
+    producers: list["Producer"] = None  # noqa: F821
 
 
 class UpdateSquadResponseDTO(BaseResponseDTO):
     id: int
+
+
+class Squad(BaseDTO):
+    views: int
+    title: str
+    picture_url: str | None = None
+    description: str | None = None
+    followers: list["User"] = list()  # noqa: F821
+    artists: list["Artist"] = list()  # noqa: F821
+    producers: list["Producer"] = list()  # noqa: F821
