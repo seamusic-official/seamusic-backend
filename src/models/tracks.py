@@ -1,3 +1,5 @@
+from datetime import datetime, date
+
 from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.orm import Mapped, relationship
 
@@ -33,11 +35,11 @@ class Track(Base):
     description: Mapped[str | None]
     picture_url: Mapped[str | None]
     file_url: Mapped[str]
-    views: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        argument="User",
-        secondary=user_to_tracks_views_association
-    )
-    liked_users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+
+    created_at: Mapped[date]
+    updated_at: Mapped[datetime]
+
+    likers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_tracks_likes
     )

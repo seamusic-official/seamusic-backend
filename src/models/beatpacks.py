@@ -33,7 +33,8 @@ class Beatpack(Base):
 
     title: Mapped[str]
     description: Mapped[str | None]
-    views: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+
+    viewers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_beatpacks_views_association
     )

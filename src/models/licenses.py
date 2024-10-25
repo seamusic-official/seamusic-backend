@@ -1,3 +1,5 @@
+from datetime import datetime, date
+
 from sqlalchemy.orm import Mapped, relationship
 
 from src.models.auth import user_to_licenses_association
@@ -10,6 +12,10 @@ class License(Base):
     title: Mapped[str]
     text: Mapped[str]
     description: Mapped[str]
+
+    created_at: Mapped[date]
+    updated_at: Mapped[datetime]
+
     author: Mapped["User"] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_licenses_association,
