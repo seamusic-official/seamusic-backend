@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 
-from src.dtos.database.auth import User
+from src.dtos.database.auth import UserDTO
 from src.dtos.database.licenses import (
     LicensesResponseDTO,
     CreateLicenseRequestDTO,
@@ -11,8 +11,10 @@ from src.dtos.database.licenses import (
 from src.exceptions import NotFoundException, NoRightsException
 from src.repositories import Repositories, DatabaseRepositories, BaseMediaRepository
 from src.repositories.database.auth import init_users_repository, UsersRepository
-from src.repositories.database.licenses import init_licenses_repository as init_licenses_postgres_repository, \
-    LicensesRepository
+from src.repositories.database.licenses import (
+    init_licenses_repository as init_licenses_postgres_repository,
+    LicensesRepository,
+)
 from src.repositories.media.s3 import init_s3_repository
 
 
@@ -70,7 +72,7 @@ class LicensesService:
             description=description,
             price=price,
             user_id=user_id,
-            user=User(**user.model_dump()),
+            user=UserDTO(**user.model_dump()),
             created_at=datetime.now(),
             updated_at=datetime.now(),
         )

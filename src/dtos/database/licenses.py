@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from src.dtos.database.auth import User
 from src.dtos.database.base import BaseResponseDTO, BaseDTO, BaseRequestDTO
 
 
@@ -32,7 +31,7 @@ class LicenseResponseDTO(BaseResponseDTO):
     user_id: int
     beat_pack_id: int | None = None
     price: str
-    user: User
+    user: "UserDTO"
     created_at: datetime
     updated_at: datetime
 
@@ -47,7 +46,7 @@ class CreateLicenseRequestDTO(BaseRequestDTO):
     description: str | None = None
     picture_url: str | None = None
     user_id: int
-    user: User
+    user: "UserDTO"
     is_available: bool = True
     created_at: datetime
     updated_at: datetime

@@ -15,7 +15,6 @@ from src.dtos.database.auth import (
     UpdateArtistRequestDTO,
     UpdateProducerRequestDTO,
     UpdateUserRequestDTO,
-    User,
     UserResponseDTO,
     UsersResponseDTO,
 )
@@ -27,7 +26,10 @@ from src.repositories.api.spotify import SpotifyRepository
 from src.repositories.database.auth import (
     init_artists_repository,
     init_producers_repository,
-    init_users_repository, UsersRepository, ArtistsRepository, ProducersRepository,
+    init_users_repository,
+    UsersRepository,
+    ArtistsRepository,
+    ProducersRepository,
 )
 from src.repositories.database.tags import init_tags_repository as init_tags_postgres_repository, TagsRepository
 from src.repositories.media.s3 import S3Repository, init_s3_repository
@@ -315,7 +317,7 @@ class AuthService(BaseService):
     repositories: AuthRepositories
 
     @staticmethod
-    async def login(email: EmailStr, password: str) -> tuple[str, str, User]:
+    async def login(email: EmailStr, password: str) -> tuple[str, str, UserResponseDTO]:
         from src.api.v1.utils.auth import authenticate_user, create_access_token, create_refresh_token
 
         user = await authenticate_user(email=email, password=password)

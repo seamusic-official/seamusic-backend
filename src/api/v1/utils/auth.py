@@ -8,7 +8,7 @@ from pydantic import EmailStr
 from src.api.v1.exceptions import UnauthorizedException
 from src.api.v1.schemas.auth import User
 from src.core.config import settings
-from src.dtos.database.auth import User as _User
+from src.dtos.database.auth import UserResponseDTO as _User
 from src.services.auth import UsersService, get_users_service
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
