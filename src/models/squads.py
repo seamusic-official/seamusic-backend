@@ -5,6 +5,7 @@ from sqlalchemy.orm import Mapped, relationship
 
 from src.models.auth import producer_to_squad_association, follower_to_squads_association
 from src.models.base import Base
+from src.models.views import user_to_squads_views_association
 
 admin_producer_to_squad = Table(
     "admin_producer_to_squad",

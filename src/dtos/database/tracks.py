@@ -3,32 +3,28 @@ from datetime import datetime
 from src.dtos.database.base import BaseDTO, BaseResponseDTO, BaseRequestDTO
 
 
+class Tag(BaseDTO):
+    name: str
+
+
 class Track(BaseDTO):
     id: int
-    name: str
-    prod_by: str
-    description: str
-    co_prod: str
-    type: str
-    user_id: int
-    is_available: bool
+    title: str
+    description: str | None = None
+    picture_url: str | None = None
+    views: int
     file_url: str
-    picture_url: str
-    created_at: datetime
-    updated_at: datetime
+    tag: list["Tag"]
 
 
 class TrackResponseDTO(BaseResponseDTO):
     id: int
-    name: str
-    prod_by: str
-    description: str
-    co_prod: str
-    type: str
-    user_id: int
-    is_available: bool
+    title: str
+    description: str | None = None
+    picture_url: str | None = None
+    views: int
     file_url: str
-    picture_url: str
+    tag: list["Tag"]
     created_at: datetime
     updated_at: datetime
 
@@ -38,24 +34,24 @@ class TracksResponseDTO(BaseResponseDTO):
 
 
 class CreateTrackRequestDTO(BaseRequestDTO):
+    id: int
     title: str
-    picture: str | None = None
     description: str | None = None
-    file_path: str
-    co_prod: str | None = None
-    prod_by: str | None = None
-    playlist_id: int | None = None
-    user_id: int
-    track_pack_id: int | None = None
+    picture_url: str | None = None
+    views: int | None = None
+    file_url: str
+    tag: list["Tag"]
 
 
 class UpdateTrackRequestDTO(BaseRequestDTO):
-    title: str
-    picture_url: str | None = None
-    file_url: str | None = None
+    id: int | None = None
+    title: str | None = None
     description: str | None = None
-    co_prod: str | None = None
-    prod_by: str | None = None
-    playlist_id: int | None = None
-    user_id: int
-    track_pack_id: int | None = None
+    picture_url: str | None = None
+    views: int | None = None
+    file_url: str | None = None
+    tag: list["Tag"] | None = None
+
+
+class UpdateTrackResponseDTO(BaseResponseDTO):
+    id: int

@@ -4,6 +4,7 @@ from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.orm import Mapped, relationship
 
 from src.models.base import Base
+from src.models.views import user_to_tracks_views_association
 
 track_to_tag_association = Table(
     'track_to_tag_association',
@@ -31,7 +32,6 @@ class Track(Base):
     __tablename__ = "tracks"
 
     title: Mapped[str]
-    views: Mapped[int]
     description: Mapped[str | None]
     picture_url: Mapped[str | None]
     file_url: Mapped[str]

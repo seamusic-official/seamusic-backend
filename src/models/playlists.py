@@ -3,6 +3,7 @@ from sqlalchemy.orm import Mapped, relationship
 
 from src.models.auth import user_to_playlists_association
 from src.models.base import Base
+from src.models.views import user_to_playlists_views_association
 
 playlists_to_beat_association = Table(
     "playlists_to_beat_association",
@@ -36,9 +37,12 @@ user_to_playlists_likes = Table(
 class Playlist(Base):
     __tablename__ = 'playlists'
 
-    views: Mapped[int]
     description: Mapped[str | None]
     picture_url: Mapped[str | None]
+    views: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+        argument="User",
+        secondary=user_to_playlists_views_association
+    )
     liked_users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_playlists_likes
