@@ -1,3 +1,5 @@
+from datetime import date, datetime
+
 from sqlalchemy import Table, Column, ForeignKey
 from sqlalchemy.orm import Mapped, relationship
 
@@ -33,6 +35,9 @@ class Beat(Base):
     description: Mapped[str | None]
     picture_url: Mapped[str | None]
     file_url: Mapped[str]
+
+    created_at: Mapped[date]
+    updated_at: Mapped[datetime]
 
     views: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",

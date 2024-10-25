@@ -12,6 +12,18 @@ class Author(BaseDTO):
     email: EmailStr
 
 
+class CommentDTO(BaseDTO):
+    id: int
+    comment: str
+    comment_creator_id: int
+    beat_id: int | None = None
+    beat_pack_id: int | None = None
+    soundkit_id: int | None = None
+    created_at: datetime
+    updated_at: datetime
+    comment_author: Author
+
+
 class CommentResponseDTO(BaseResponseDTO):
     id: int
     comment: str
@@ -21,19 +33,16 @@ class CommentResponseDTO(BaseResponseDTO):
     soundkit_id: int | None = None
     created_at: datetime
     updated_at: datetime
-    is_available: bool
     comment_author: Author
 
 
 class CreateCommentRequestDTO(BaseRequestDTO):
-    id: int
     comment: str
     comment_creator_id: int
     beat_id: int | None = None
     beat_pack_id: int | None = None
     soundkit_id: int | None = None
     updated_at: datetime
-    is_available: bool
     comment_author: Author
 
 
@@ -45,5 +54,4 @@ class UpdateCommentRequestDTO(BaseRequestDTO):
     beat_pack_id: int | None = None
     soundkit_id: int | None = None
     updated_at: datetime
-    is_available: bool | None
     comment_author: Author

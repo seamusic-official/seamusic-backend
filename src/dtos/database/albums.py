@@ -1,61 +1,59 @@
-from datetime import datetime
-from typing import Literal
+from datetime import datetime, date
 
-from src.dtos.database.auth import Artist
 from src.dtos.database.base import BaseResponseDTO, BaseRequestDTO, BaseDTO
-from src.dtos.database.tags import Tag
-from src.enums.type import Type
 
 
-class Album(BaseDTO):
+class AlbumResponseDTO(BaseDTO):
     id: int
-    name: str
+    title: str
     picture_url: str | None = None
     description: str | None = None
-    co_prod: str | None = None
-    type: Literal[Type.album] = Type.album
-    created_at: datetime
+    type: str
+
+    created_at: date
     updated_at: datetime
-    tags: list[Tag]
-    artist_profiles: list[Artist]
+
+    artists: list["ArtistDTO"] = list()
+    tracks: list["TrackDTO"] = list()
+    tags: list[str] = list()
 
 
 class CreateAlbumRequestDTO(BaseRequestDTO):
-    id: int
-    name: str
+    title: str
     picture_url: str | None = None
     description: str | None = None
-    co_prod: str | None = None
-    prod_by: str | None = None
-    type: Literal[Type.album] = Type.album
-    created_at: datetime
-    updated_at: datetime
-    tags: list[Tag]
-    artist_profiles: list[Artist]
+
+    artists: list["ArtistDTO"] = list()
+    tracks: list["TrackDTO"] = list()
+    tags: list[str] = list()
 
 
 class UpdateAlbumRequestDTO(BaseRequestDTO):
     id: int
-    name: str | None = None
+    title: str | None = None
     picture_url: str | None = None
     description: str | None = None
-    co_prod: str | None = None
-    type: Literal[Type.album] = Type.album
-    user_id: int
+    type: str | None = None
+
+    artists: list["ArtistDTO"] | None = None
+    tracks: list["TrackDTO"] | None = None
+    tags: list["TagDTO"] | None = None
 
 
-class AlbumResponseDTO(BaseResponseDTO):
+class AlbumItemResponseDTO(BaseResponseDTO):
     id: int
-    name: str
-    picture_url: str
-    description: str
-    co_prod: str
-    type: Literal[Type.album] = Type.album
-    user_id: int
-    created_at: datetime
+    title: str
+    picture_url: str | None = None
+    description: str | None = None
+    type: str
+
+    created_at: date
     updated_at: datetime
-    is_available: bool
+
+    artists: list["ArtistDTO"] = list()
+    tracks: list["TrackDTO"] = list()
+    tags: list["TagDTO"] = list()
 
 
 class AlbumsResponseDTO(BaseResponseDTO):
-    albums: list[AlbumResponseDTO]
+    albums: list[AlbumItemResponseDTO]

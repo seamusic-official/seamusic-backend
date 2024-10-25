@@ -1,3 +1,5 @@
+from datetime import date, datetime
+
 from sqlalchemy import Table, ForeignKey, Column
 from sqlalchemy.orm import Mapped, relationship
 
@@ -40,6 +42,9 @@ class Playlist(Base):
     title: Mapped[str]
     description: Mapped[str | None]
     picture_url: Mapped[str | None]
+
+    created_at: Mapped[date]
+    updated_at: Mapped[datetime]
 
     viewers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
