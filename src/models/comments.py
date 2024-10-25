@@ -17,7 +17,9 @@ class Comment(Base):
     __tablename__ = "comments"
 
     text: Mapped[str]
-    author: Mapped["User"] = relationship("User", back_populates="comments")  # type: ignore[name-defined]  # noqa: F821
     author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+
     created_at: Mapped[datetime]
     updated_at: Mapped[datetime]
+
+    author: Mapped["User"] = relationship("User", back_populates="comments")  # type: ignore[name-defined]  # noqa: F821

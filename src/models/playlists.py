@@ -23,7 +23,7 @@ playlists_to_tag_association = Table(
     "playlists_to_tag_association",
     Base.metadata,
     Column("playlists_id", ForeignKey("playlists.id"), primary_key=True),
-    Column("tag_name", ForeignKey("tags.name"), primary_key=True)
+    Column("tag_id", ForeignKey("tags.id"), primary_key=True)
 )
 
 user_to_playlists_likes = Table(
@@ -37,17 +37,19 @@ user_to_playlists_likes = Table(
 class Playlist(Base):
     __tablename__ = 'playlists'
 
+    title: Mapped[str]
     description: Mapped[str | None]
     picture_url: Mapped[str | None]
-    views: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+
+    viewers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_playlists_views_association
     )
-    liked_users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+    likers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_playlists_likes
     )
-    author: Mapped[list["User"]] = relationship(secondary=user_to_playlists_association)   # type: ignore[name-defined]  # noqa: F821
+    authors: Mapped[list["User"]] = relationship(secondary=user_to_playlists_association)   # type: ignore[name-defined]  # noqa: F821
     beats: Mapped[list["Beat"]] = relationship(secondary=playlists_to_beat_association)   # type: ignore[name-defined]  # noqa: F821
     tracks: Mapped[list["Track"]] = relationship(secondary=playlists_to_track_association)   # type: ignore[name-defined]  # noqa: F821
     tags: Mapped[list["Tag"]] = relationship(secondary=playlists_to_tag_association)   # type: ignore[name-defined]  # noqa: F821

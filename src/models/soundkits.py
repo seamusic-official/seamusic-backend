@@ -11,7 +11,7 @@ tag_to_soundkits_association = Table(
     "tag_to_soundkits_association",
     Base.metadata,
     Column("soundkit_id", Integer, ForeignKey("soundkits.id"), primary_key=True),
-    Column("tag_name", ForeignKey('tags.name'), primary_key=True)
+    Column("tag_id", ForeignKey('tags.id'), primary_key=True)
 )
 
 beat_to_soundkits_association = Table(
@@ -40,11 +40,12 @@ class Soundkit(Base):
 
     created_at: Mapped[date]
     updated_at: Mapped[datetime]
-    views: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+
+    viewers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_soundkits_views_association
     )
-    liked_users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+    likers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_soundkits_likes
     )

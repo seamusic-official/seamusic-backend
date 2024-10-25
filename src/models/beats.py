@@ -7,7 +7,7 @@ from src.models.views import user_to_beats_views_association
 tag_to_beat_association = Table(
     "tag_to_beat_association",
     Base.metadata,
-    Column("tag_name", ForeignKey("tags.name"), primary_key=True),
+    Column("tag_id", ForeignKey("tags.id"), primary_key=True),
     Column("beat_id", ForeignKey("beats.id"), primary_key=True)
 )
 
@@ -33,6 +33,7 @@ class Beat(Base):
     description: Mapped[str | None]
     picture_url: Mapped[str | None]
     file_url: Mapped[str]
+
     views: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_beats_views_association
