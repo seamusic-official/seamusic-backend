@@ -5,21 +5,21 @@ from sqlalchemy import select, delete, func
 
 from src.converters.repositories.database.sqlalchemy import model_to_response_dto, models_to_dto, request_dto_to_model
 from src.dtos.database.auth import (
-    Artist,
     ArtistResponseDTO,
     ArtistsResponseDTO,
     CreateArtistRequestDTO,
     CreateProducerRequestDTO,
     CreateUserRequestDTO,
-    Producer,
     ProducerResponseDTO,
     ProducersResponseDTO,
     UpdateArtistRequestDTO,
     UpdateProducerRequestDTO,
     UpdateUserRequestDTO,
-    User as _User,
     UserResponseDTO,
     UsersResponseDTO,
+    UserItemResponseDTO,
+    ArtistItemResponseDTO,
+    ProducerItemResponseDTO,
 )
 from src.models.auth import User, ArtistProfile, ProducerProfile
 from src.repositories.database.base import SQLAlchemyRepository
@@ -39,7 +39,7 @@ class UsersRepository(SQLAlchemyRepository):
     async def get_users(self, offset: int = 0, limit: int = 10) -> UsersResponseDTO:
         query = select(User).offset(offset).limit(limit).order_by(User.created_at.desc())
         users = list(await self.scalars(query))
-        return UsersResponseDTO(users=models_to_dto(models=users, dto=_User))
+        return UsersResponseDTO(users=models_to_dto(models=users, dto=UserItemResponseDTO))
 
     async def get_users_count(self) -> int:
         query = select(func.count(User.id))
@@ -73,7 +73,7 @@ class ArtistsRepository(SQLAlchemyRepository):
     async def get_artists(self, offset: int = 0, limit: int = 10) -> ArtistsResponseDTO:
         query = select(ArtistProfile).offset(offset).limit(limit).order_by(ArtistProfile.id.desc())
         artists = list(await self.scalars(query))
-        return ArtistsResponseDTO(artists=models_to_dto(models=artists, dto=Artist))
+        return ArtistsResponseDTO(artists=models_to_dto(models=artists, dto=ArtistItemResponseDTO))
 
     async def get_artists_count(self) -> int:
         query = select(func.count(ArtistProfile.id))
@@ -103,7 +103,7 @@ class ProducersRepository(SQLAlchemyRepository):
     async def get_producers(self, offset: int = 0, limit: int = 10) -> ProducersResponseDTO:
         query = select(ProducerProfile).offset(offset).limit(limit).order_by(ProducerProfile.id.desc())
         producers = list(await self.scalars(query))
-        return ProducersResponseDTO(producers=models_to_dto(models=producers, dto=Producer))
+        return ProducersResponseDTO(producers=models_to_dto(models=producers, dto=ProducerItemResponseDTO))
 
     async def get_producers_count(self) -> int:
         query = select(func.count(ProducerProfile.id))
