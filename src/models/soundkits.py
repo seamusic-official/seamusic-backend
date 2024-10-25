@@ -5,6 +5,7 @@ from sqlalchemy.orm import Mapped, relationship
 
 from src.models.auth import producer_to_soundkits_association
 from src.models.base import Base
+from src.models.views import user_to_soundkits_views_association
 
 tag_to_soundkits_association = Table(
     "tag_to_soundkits_association",
@@ -36,12 +37,15 @@ class Soundkit(Base):
     description: Mapped[str | None]
     picture_url: Mapped[str | None]
     file_url: Mapped[str]
-    views: Mapped[int]
 
     created_at: Mapped[date]
     updated_at: Mapped[datetime]
 
-    liked_users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+    viewers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+        argument="User",
+        secondary=user_to_soundkits_views_association
+    )
+    likers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_soundkits_likes
     )

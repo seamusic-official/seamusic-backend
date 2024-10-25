@@ -4,6 +4,7 @@ from sqlalchemy import Column, Table, ForeignKey
 from sqlalchemy.orm import Mapped, relationship
 
 from src.models.base import Base
+from src.models.views import user_to_albums_views_association
 
 album_to_track_association = Table(
     "album_to_track_association",
@@ -38,7 +39,6 @@ class Album(Base):
     __tablename__ = "albums"
 
     title: Mapped[str]
-    views: Mapped[int]
     picture_url: Mapped[str | None]
     description: Mapped[str | None]
     type: Mapped[str]
@@ -46,7 +46,11 @@ class Album(Base):
     created_at: Mapped[date]
     updated_at: Mapped[datetime]
 
-    liked_users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+    viewers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+        argument="User",
+        secondary=user_to_albums_views_association
+    )
+    likers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_albums_likes
     )

@@ -3,6 +3,7 @@ from sqlalchemy.orm import Mapped, relationship
 
 from src.models.auth import user_to_playlists_association
 from src.models.base import Base
+from src.models.views import user_to_playlists_views_association
 
 playlists_to_beat_association = Table(
     "playlists_to_beat_association",
@@ -36,14 +37,19 @@ user_to_playlists_likes = Table(
 class Playlist(Base):
     __tablename__ = 'playlists'
 
-    views: Mapped[int]
+    title: Mapped[str]
     description: Mapped[str | None]
     picture_url: Mapped[str | None]
-    liked_users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+
+    viewers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+        argument="User",
+        secondary=user_to_playlists_views_association
+    )
+    likers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_playlists_likes
     )
-    author: Mapped[list["User"]] = relationship(secondary=user_to_playlists_association)   # type: ignore[name-defined]  # noqa: F821
+    authors: Mapped[list["User"]] = relationship(secondary=user_to_playlists_association)   # type: ignore[name-defined]  # noqa: F821
     beats: Mapped[list["Beat"]] = relationship(secondary=playlists_to_beat_association)   # type: ignore[name-defined]  # noqa: F821
     tracks: Mapped[list["Track"]] = relationship(secondary=playlists_to_track_association)   # type: ignore[name-defined]  # noqa: F821
     tags: Mapped[list["Tag"]] = relationship(secondary=playlists_to_tag_association)   # type: ignore[name-defined]  # noqa: F821
