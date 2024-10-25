@@ -1,6 +1,6 @@
 from datetime import date, datetime
 
-from sqlalchemy import ForeignKey, Table, Column, Integer
+from sqlalchemy import ForeignKey, Table, Column, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.albums import album_to_artist_association
@@ -41,7 +41,7 @@ user_to_tags_association = Table(
     "user_to_tags_association",
     Base.metadata,
     Column("user_id", Integer, ForeignKey("users.id"), primary_key=True),
-    Column("tag_name", Integer, ForeignKey("tags.name"), primary_key=True),
+    Column("tag_name", String, ForeignKey("tags.name"), primary_key=True),
 )
 
 user_to_playlists_association = Table(
@@ -120,6 +120,14 @@ class ArtistProfile(Base):
     __tablename__ = "artist_profiles"
 
     username: Mapped[str]
+    description: Mapped[str]
+    picture_url: Mapped[str]
+
+    created_at: Mapped[date]
+    updated_at: Mapped[datetime]
+
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+
     followers: Mapped[list["User"]] = relationship(
         secondary=user_to_artist_association,
         back_populates="followed_artists"
@@ -128,13 +136,19 @@ class ArtistProfile(Base):
     squads: Mapped[list["Squad"]] = relationship(secondary=artist_to_squad_association)  # type: ignore[name-defined]  # noqa: F821
     albums: Mapped[list["Album"]] = relationship(secondary=album_to_artist_association)  # type: ignore[name-defined]  # noqa: F821
     tags: Mapped[list["Tag"]] = relationship(secondary=artist_to_tags_association)  # type: ignore[name-defined]  # noqa: F821
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    description: Mapped[str]
-    picture_url: Mapped[str]
 
 
 class ProducerProfile(Base):
     __tablename__ = "producer_profiles"
+
+    username: Mapped[str]
+    description: Mapped[str]
+    picture_url: Mapped[str]
+
+    created_at: Mapped[date]
+    updated_at: Mapped[datetime]
+
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
     followers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=user_to_producer_association,
@@ -148,6 +162,3 @@ class ProducerProfile(Base):
         back_populates="producers"
     )
     soundkits: Mapped[list["Soundkit"]] = relationship(secondary=producer_to_soundkits_association, back_populates="producers")  # type: ignore[name-defined]  # noqa: F821
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    description: Mapped[str]
-    picture_url: Mapped[str]

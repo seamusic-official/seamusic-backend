@@ -12,10 +12,12 @@ class License(Base):
     title: Mapped[str]
     text: Mapped[str]
     description: Mapped[str]
+
+    created_at: Mapped[date]
+    updated_at: Mapped[datetime]
+
     author: Mapped["User"] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_licenses_association,
         back_populates="licenses"
     )
-    created_at: Mapped[date]
-    updated_at: Mapped[datetime]

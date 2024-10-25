@@ -46,11 +46,11 @@ class Album(Base):
     created_at: Mapped[date]
     updated_at: Mapped[datetime]
 
-    views: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+    viewers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_albums_views_association
     )
-    liked_users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+    likers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_albums_likes
     )

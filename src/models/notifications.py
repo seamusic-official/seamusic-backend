@@ -10,4 +10,5 @@ class Notification(Base):
 
     title: Mapped[str]
     description: Mapped[str | None]
+
     created_at: Mapped[datetime]
