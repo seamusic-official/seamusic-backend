@@ -1,3 +1,5 @@
+from datetime import datetime, date
+
 from sqlalchemy.orm import Mapped, relationship
 
 from src.models.auth import user_to_licenses_association
@@ -15,3 +17,5 @@ class License(Base):
         secondary=user_to_licenses_association,
         back_populates="licenses"
     )
+    created_at: Mapped[date]
+    updated_at: Mapped[datetime]
