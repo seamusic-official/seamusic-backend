@@ -5,6 +5,7 @@ from sqlalchemy.orm import Mapped, relationship
 
 from src.models.auth import producer_to_squad_association, follower_to_squads_association
 from src.models.base import Base
+from src.models.views import user_to_squads_views_association
 
 admin_producer_to_squad = Table(
     "admin_producer_to_squad",
@@ -32,7 +33,6 @@ class Squad(Base):
     __tablename__ = "squads"
 
     title: Mapped[str]
-    views: Mapped[int]
     description: Mapped[str | None]
     picture_url: Mapped[str | None]
 
@@ -43,6 +43,7 @@ class Squad(Base):
     artists: Mapped[list["ArtistProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=artist_to_squad_association,
         back_populates="squads"
+
     )
     producers: Mapped[list["ProducerProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=producer_to_squad_association,
