@@ -23,7 +23,7 @@ album_to_tag_association = Table(
     "album_to_tag_association",
     Base.metadata,
     Column("album_id", ForeignKey("albums.id"), primary_key=True),
-    Column("tag_id", ForeignKey("tags.id"), primary_key=True)
+    Column("tag_name", ForeignKey("tags.name"), primary_key=True)
 )
 
 user_to_albums_likes = Table(

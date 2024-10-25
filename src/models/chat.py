@@ -10,9 +10,16 @@ user_to_chat_association = Table(
     Column("chat_id", Integer, ForeignKey("chat.id"), primary_key=True)
 )
 
+message_to_chat_association = Table(
+    "message_to_chat_association",
+    Base.metadata,
+    Column("message_id", Integer, ForeignKey("messages.id"), primary_key=True),
+    Column("chat_id", Integer, ForeignKey("chat.id"), primary_key=True)
+)
+
 
 class Chat(Base):
     __tablename__ = "chat"
 
-    text: Mapped[str]
-    author: Mapped[list["User"]] = relationship(secondary=user_to_chat_association)  # type: ignore[name-defined]  # noqa: F821
+    messages: Mapped[list["Message"]] = relationship(secondary=message_to_chat_association, back_populates="chat")  # type: ignore[name-defined]  # noqa: F821
+    participants: Mapped[list["User"]] = relationship(secondary=user_to_chat_association)  # type: ignore[name-defined]  # noqa: F821
