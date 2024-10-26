@@ -4,8 +4,8 @@ from sqlalchemy import select, delete, func
 
 from src.converters.repositories.database.sqlalchemy import request_dto_to_model, models_to_dto, model_to_response_dto
 from src.dtos.database.squads import (
-    Squad as _Squad,
-    SquadRequsetDTO,
+    SquadDTO as _Squad,
+    CreateSquadRequestDTO,
     SquadResponseDTO,
     SquadsResponseDTO,
     UpdateSquadRequestDTO
@@ -16,7 +16,7 @@ from src.repositories.database.base import SQLAlchemyRepository
 
 @dataclass
 class SquadRepository(SQLAlchemyRepository):
-    async def add_squad(self, squad: SquadRequsetDTO) -> int:
+    async def add_squad(self, squad: CreateSquadRequestDTO) -> int:
         model = request_dto_to_model(model=Squad, request_dto=squad)
         await self.add(model)
         return model.id

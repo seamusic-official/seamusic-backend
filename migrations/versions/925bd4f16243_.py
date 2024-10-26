@@ -1,7 +1,8 @@
 """empty message
 
 Revision ID: 925bd4f16243
-Revises: Create Date: 2024-10-25 13:50:26.072847
+Revises:
+Create Date: 2024-10-25 13:50:26.072847
 
 """
 

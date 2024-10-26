@@ -1,13 +1,13 @@
 from src.dtos.database.base import BaseDTO, BaseResponseDTO, BaseRequestDTO
 
 
-class SquadRequsetDTO(BaseRequestDTO):
+class CreateSquadRequestDTO(BaseRequestDTO):
     title: str
     views: int
     description: str | None = None
     picture_url: str | None = None
-    artists: list["Artist"] = list()  # noqa: F821
-    producers: list["Producer"] = list()  # noqa: F821
+    artists: list["ArtistDTO"] = list()  # noqa: F821
+    producers: list["ProducerDTO"] = list()  # noqa: F821
 
 
 class SquadResponseDTO(BaseResponseDTO):
@@ -16,9 +16,9 @@ class SquadResponseDTO(BaseResponseDTO):
     title: str | None = None
     picture_url: str | None = None
     description: str | None = None
-    followers: list["User"] = list()  # noqa: F821
-    artists: list["Artist"] = list()  # noqa: F821
-    producers: list["Producer"] = list()  # noqa: F821
+    followers: list["UserDTO"] = list()  # noqa: F821
+    artists: list["ArtistDTO"] = list()  # noqa: F821
+    producers: list["ProducerDTO"] = list()  # noqa: F821
 
 
 class SquadItemResponse(BaseResponseDTO):
@@ -30,7 +30,7 @@ class SquadItemResponse(BaseResponseDTO):
 
 
 class SquadsResponseDTO(BaseResponseDTO):
-    squads: list["SquadItemResponse"]  # noqa: F821
+    squads: list[SquadItemResponse]  # noqa: F821
 
 
 class CreateSquadResponseDTO(BaseResponseDTO):
@@ -43,20 +43,20 @@ class UpdateSquadRequestDTO(BaseRequestDTO):
     title: str | None = None
     picture_url: str | None = None
     description: str | None = None
-    followers: list["User"] = None  # noqa: F821
-    artists: list["Artist"] = None  # noqa: F821
-    producers: list["Producer"] = None  # noqa: F821
+    followers: list["UserDTO"] = None  # noqa: F821
+    artists: list["ArtistDTO"] = None  # noqa: F821
+    producers: list["ProducerDTO"] = None  # noqa: F821
 
 
 class UpdateSquadResponseDTO(BaseResponseDTO):
     id: int
 
 
-class Squad(BaseDTO):
+class SquadDTO(BaseDTO):
     views: int
     title: str
     picture_url: str | None = None
     description: str | None = None
-    followers: list["User"] = list()  # noqa: F821
-    artists: list["Artist"] = list()  # noqa: F821
-    producers: list["Producer"] = list()  # noqa: F821
+    followers: list["UserDTO"] = list()  # noqa: F821
+    artists: list["ArtistDTO"] = list()  # noqa: F821
+    producers: list["ProducerDTO"] = list()  # noqa: F821
