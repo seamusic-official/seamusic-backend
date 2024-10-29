@@ -43,7 +43,7 @@ class Beatpack(Base):
         argument="User",
         secondary=user_to_beatpacks_views_association
     )
-    liked_users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+    likers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_beatpacks_likes
     )

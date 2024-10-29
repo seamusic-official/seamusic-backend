@@ -53,5 +53,5 @@ class Soundkit(Base):
         secondary=producer_to_soundkits_association,
         back_populates="soundkits"
     )
-    beat: Mapped[list["Beat"]] = relationship(secondary=beat_to_soundkits_association)  # type: ignore[name-defined]  # noqa: F821
+    beats: Mapped[list["Beat"]] = relationship(secondary=beat_to_soundkits_association)  # type: ignore[name-defined]  # noqa: F821
     tags: Mapped[list["Tag"]] = relationship(secondary=tag_to_soundkits_association)  # type: ignore[name-defined]  # noqa: F821

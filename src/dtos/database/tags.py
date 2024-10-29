@@ -1,25 +1,6 @@
-from src.dtos.database.base import BaseDTO, BaseResponseDTO, BaseRequestDTO
+from src.dtos.database.base import BaseDTO
 
 
-class Tag(BaseDTO):
-    name: str
-
-
-class TagResponseDTO(BaseResponseDTO):
-    name: str
-
-
-class TagsResponseDTO(BaseResponseDTO):
-    tags: list[Tag]
-
-
-class AddTagRequestDTO(BaseRequestDTO):
-    name: str
-
-
-class AddTagsRequestDTO(BaseRequestDTO):
-    tags: list[Tag]
-
-
-class UpdateTagRequestDTO(BaseRequestDTO):
+class TagDTO(BaseDTO):
+    id: int
     name: str

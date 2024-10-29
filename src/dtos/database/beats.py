@@ -1,62 +1,84 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from src.dtos.database.base import BaseDTO, BaseResponseDTO, BaseRequestDTO
-from src.enums.type import Type
-
-
-class Beat(BaseDTO):
-    id: int
-    title: str
-    description: str | None = None
-    prod_by: str | None = None
-    picture_url: str | None = None
-    file_url: str
-    co_prod: str | None = None
-    type: str
-    user_id: int
-    is_available: bool
-    created_at: datetime
-    updated_at: datetime
 
 
 class BeatResponseDTO(BaseResponseDTO):
     id: int
     title: str
-    description: str
-    picture_url: str
+    description: str | None
+    picture_url: str | None
     file_url: str
-    prod_by: str
-    co_prod: str
-    type: str
-    user_id: int
-    created_at: datetime
+
+    created_at: date
     updated_at: datetime
-    is_available: bool = True
+
+    viewers: list["UserDTO"]  # type: ignore[name-defined]  # noqa: F821
+    likers: list["UserDTO"]  # type: ignore[name-defined]  # noqa: F821
+    producers: list["ProducerDTO"]  # type: ignore[name-defined]  # noqa: F821
+    tags: list[str]
+
+
+class BeatItemResponseDTO(BaseResponseDTO):
+    id: int
+    title: str
+    description: str | None
+    picture_url: str | None
+    file_url: str
+
+    created_at: date
+    updated_at: datetime
+
+    tags: list[str]
 
 
 class BeatsResponseDTO(BaseResponseDTO):
-    beats: list[Beat]
+    beats: list[BeatItemResponseDTO]
 
 
 class CreateBeatRequestDTO(BaseRequestDTO):
     title: str
-    description: str
+    description: str | None
+    picture_url: str | None
     file_url: str
-    prod_by: str
-    co_prod: str | None = None
-    type: Type = Type.beat
-    user_id: int
-    created_at: datetime
-    updated_at: datetime
-    is_available: bool = True
+
+    created_at: date = date.today()
+    updated_at: datetime = datetime.now()
+
+    tags: list[str]
+
+
+class CreateBeatResponseDTO(BaseResponseDTO):
+    id: int
 
 
 class UpdateBeatRequestDTO(BaseRequestDTO):
+    id: int
     title: str | None = None
     description: str | None = None
     picture_url: str | None = None
     file_url: str | None = None
-    prod_by: str | None = None
-    co_prod: str | None = None
-    type: str | None = None
-    user_id: int | None = None
+
+    updated_at: datetime = datetime.now()
+
+    viewers_ids: list[int] | None = None
+    likers_ids: list[int] | None = None
+    producers_ids: list[int] | None = None
+    tags: list[str] | None = None
+
+
+class UpdateBeatResponseDTO(BaseResponseDTO):
+    id: int
+
+
+class BeatDTO(BaseDTO):
+    id: int
+    title: str
+    description: str | None
+    picture_url: str | None
+    file_url: str
+
+    created_at: date
+    updated_at: datetime
+
+    tags: list[str]
