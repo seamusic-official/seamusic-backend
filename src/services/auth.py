@@ -18,7 +18,6 @@ from src.dtos.database.auth import (
     UserResponseDTO,
     UsersResponseDTO,
 )
-from src.dtos.database.tags import TagDTO
 from src.enums.auth import Role, AccessLevel
 from src.exceptions import NotFoundException, ServerError, InvalidRequestException
 from src.repositories import Repositories, DatabaseRepositories, BaseMediaRepository
@@ -119,7 +118,6 @@ class UsersService(BaseService):
             tags=tags,
             access_level=access_level,
         ))
-        await self.repositories.database.tags.add_tags(tags=AddTagsRequestDTO(tags=list(map(lambda name: TagDTO(name=name), tags))))
 
         artist_profile_id: int = await self.repositories.database.artists.create_artist(CreateArtistRequestDTO(
             user_id=user_id,

@@ -1,13 +1,12 @@
 from datetime import date, datetime
 
-from sqlalchemy import ForeignKey, Table, Column, Integer, String
+from sqlalchemy import ForeignKey, Table, Column, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.albums import album_to_artist_association
 from src.models.base import Base
 from src.models.beats import producer_to_beat_association
 from src.models.squads import follower_to_squads_association, artist_to_squad_association, producer_to_squad_association
-
 
 user_to_licenses_association = Table(
     "user_to_licenses_association",
