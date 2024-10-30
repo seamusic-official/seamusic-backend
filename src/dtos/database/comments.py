@@ -1,57 +1,42 @@
 from datetime import datetime
 
-from pydantic import EmailStr
-
-from src.dtos.database.base import BaseRequestDTO, BaseResponseDTO, BaseDTO
-
-
-class Author(BaseDTO):
-    id: int
-    username: str
-    picture_url: str
-    email: EmailStr
-
-
-class CommentDTO(BaseDTO):
-    id: int
-    comment: str
-    comment_creator_id: int
-    beat_id: int | None = None
-    beat_pack_id: int | None = None
-    soundkit_id: int | None = None
-    created_at: datetime
-    updated_at: datetime
-    comment_author: Author
+from src.dtos.database.base import BaseResponseDTO, BaseRequestDTO, BaseDTO
 
 
 class CommentResponseDTO(BaseResponseDTO):
     id: int
-    comment: str
-    comment_creator_id: int
-    beat_id: int | None = None
-    beat_pack_id: int | None = None
-    soundkit_id: int | None = None
+    text: str
+    author: "UserDTO"  # type: ignore[name-defined]  # noqa: F821
+
     created_at: datetime
     updated_at: datetime
-    comment_author: Author
 
 
 class CreateCommentRequestDTO(BaseRequestDTO):
-    comment: str
-    comment_creator_id: int
-    beat_id: int | None = None
-    beat_pack_id: int | None = None
-    soundkit_id: int | None = None
-    updated_at: datetime
-    comment_author: Author
+    text: str
+    author_id: int
+
+    created_at: datetime = datetime.now()
+    updated_at: datetime = datetime.now()
+
+
+class CreateCommentResponseDTO(BaseResponseDTO):
+    id: int
 
 
 class UpdateCommentRequestDTO(BaseRequestDTO):
+    text: str
+    updated_at: datetime = datetime.now()
+
+
+class UpdateCommentResponseDTO(BaseResponseDTO):
     id: int
-    comment: str
-    comment_creator_id: int
-    beat_id: int | None = None
-    beat_pack_id: int | None = None
-    soundkit_id: int | None = None
+
+
+class CommentDTO(BaseDTO):
+    id: int
+    text: str
+    author: "UserDTO"  # type: ignore[name-defined]  # noqa: F821
+
+    created_at: datetime
     updated_at: datetime
-    comment_author: Author

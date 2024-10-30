@@ -1,71 +1,43 @@
-from datetime import datetime
+from datetime import date, datetime
 
-from pydantic import EmailStr
-
-from src.dtos.database.base import BaseDTO, BaseResponseDTO, BaseRequestDTO
-from src.enums.auth import Role
-
-
-class User(BaseDTO):
-    id: int
-    username: str
-    description: str | None = None
-    email: EmailStr
-    password: str
-    picture_url: str
-    roles: list[Role]
-    created_at: datetime
-    updated_at: datetime
-
-
-class Artist(BaseDTO):
-    id: int
-    user: User
-    description: str | None = None
-
-
-class Producer(BaseDTO):
-    id: int
-    user: User
-    description: str | None = None
-
-
-class Squad(BaseDTO):
-    id: int
-    views: int
-    title: str
-    picture_url: str | None
-    description: str | None
-    admins: list["Producer"]
-    producers: list["Producer"]
-    producers_sub: list["Producer"]
-    artist_sub: list["Artist"]
+from src.dtos.database.base import BaseResponseDTO, BaseRequestDTO
 
 
 class SquadResponseDTO(BaseResponseDTO):
     id: int
-    views: int
-    title: str | None = None
-    picture_url: str | None = None
-    description: str | None = None
-    admins: list["Producer"] | None = None
-    producers: list["Producer"] | None = None
-    producers_sub: list["Producer"] | None = None
-    artist_sub: list["Artist"] | None = None
+    title: str
+    description: str | None
+    picture_url: str | None
+
+    created_at: date
+    updated_at: datetime
+
+    followers: list["UserDTO"]  # type: ignore[name-defined]  # noqa: F821
+    artists: list["ArtistDTO"]  # type: ignore[name-defined]  # noqa: F821
+    producers: list["ProducerDTO"]  # type: ignore[name-defined]  # noqa: F821
+
+
+class SquadItemResponseDTO(BaseResponseDTO):
+    id: int
+    title: str
+    description: str | None
+    picture_url: str | None
+
+    created_at: date
+    updated_at: datetime
 
 
 class SquadsResponseDTO(BaseResponseDTO):
-    squads: list[SquadResponseDTO]
+    squads: list[SquadItemResponseDTO]
 
 
 class CreateSquadRequestDTO(BaseRequestDTO):
-    id: int
-    views: int
     title: str
-    picture_url: str | None = None
-    description: str | None = None
-    admins: list["Producer"]
-    producers: list["Producer"]
+    description: str | None
+    picture_url: str | None
+
+    created_at: date = date.today()
+    updated_at: datetime = datetime.now()
 
 
 class CreateSquadResponseDTO(BaseResponseDTO):
@@ -73,15 +45,16 @@ class CreateSquadResponseDTO(BaseResponseDTO):
 
 
 class UpdateSquadRequestDTO(BaseRequestDTO):
-    id: int | None = None
-    views: int | None = None
+    id: int
     title: str | None = None
-    picture_url: str | None = None
     description: str | None = None
-    admins: list["Producer"] | None = None
-    producers: list["Producer"] | None = None
-    producers_sub: list["Producer"] | None = None
-    artist_sub: list["Artist"] | None = None
+    picture_url: str | None = None
+
+    updated_at: datetime = datetime.now()
+
+    followers_ids: list[int] | None = None
+    artists_ids: list[int] | None = None
+    producers_ids: list[int] | None = None
 
 
 class UpdateSquadResponseDTO(BaseResponseDTO):

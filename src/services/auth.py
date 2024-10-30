@@ -18,7 +18,7 @@ from src.dtos.database.auth import (
     UserResponseDTO,
     UsersResponseDTO,
 )
-from src.dtos.database.tags import AddTagsRequestDTO, Tag
+from src.dtos.database.tags import TagDTO
 from src.enums.auth import Role, AccessLevel
 from src.exceptions import NotFoundException, ServerError, InvalidRequestException
 from src.repositories import Repositories, DatabaseRepositories, BaseMediaRepository
@@ -31,7 +31,6 @@ from src.repositories.database.auth import (
     ArtistsRepository,
     ProducersRepository,
 )
-from src.repositories.database.tags import init_tags_repository as init_tags_postgres_repository, TagsRepository
 from src.repositories.media.s3 import S3Repository, init_s3_repository
 from src.services.base import BaseService
 
@@ -39,7 +38,6 @@ from src.services.base import BaseService
 @dataclass
 class UsersDatabaseRepositories(DatabaseRepositories):
     users: UsersRepository
-    tags: TagsRepository
     artists: ArtistsRepository
     producers: ProducersRepository
 
@@ -121,7 +119,7 @@ class UsersService(BaseService):
             tags=tags,
             access_level=access_level,
         ))
-        await self.repositories.database.tags.add_tags(tags=AddTagsRequestDTO(tags=list(map(lambda name: Tag(name=name), tags))))
+        await self.repositories.database.tags.add_tags(tags=AddTagsRequestDTO(tags=list(map(lambda name: TagDTO(name=name), tags))))
 
         artist_profile_id: int = await self.repositories.database.artists.create_artist(CreateArtistRequestDTO(
             user_id=user_id,
@@ -378,7 +376,6 @@ def get_users_repositories() -> UsersRepositories:
     return UsersRepositories(
         database=UsersDatabaseRepositories(
             users=init_users_repository(),
-            tags=init_tags_postgres_repository(),
             artists=init_artists_repository(),
             producers=init_producers_repository()
         ),
