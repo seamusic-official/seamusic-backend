@@ -1,21 +1,9 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from pydantic import EmailStr
 
 from src.dtos.database.base import BaseRequestDTO, BaseResponseDTO, BaseDTO
-from src.enums.auth import Role, AccessLevel
-
-
-class User(BaseDTO):
-    id: int
-    username: str
-    description: str | None = None
-    email: EmailStr
-    password: str
-    picture_url: str
-    roles: list[Role]
-    created_at: datetime
-    updated_at: datetime
+from src.enums.auth import AccessLevel, PremiumLevel
 
 
 class UserResponseDTO(BaseResponseDTO):
@@ -24,14 +12,49 @@ class UserResponseDTO(BaseResponseDTO):
     description: str | None = None
     email: EmailStr
     password: str
-    picture_url: str
-    roles: list[Role]
-    created_at: datetime
+    picture_url: str | None = None
+    access_level: AccessLevel = AccessLevel.user
+    telegram_id: int | None = None
+    premium_level: PremiumLevel = PremiumLevel.none
+
+    is_active: bool
+    is_adult: bool
+    is_verified: bool
+
+    created_at: date
+    updated_at: datetime
+
+    comments: list["CommentDTO"] = list()  # type: ignore[name-defined]  # noqa: F821
+    messages: list["MessageDTO"] = list()  # type: ignore[name-defined]  # noqa: F821
+    licenses: list["LicenseDTO"] = list()  # type: ignore[name-defined]  # noqa: F821
+    followed_artists: list["ArtistDTO"] = list()
+    saved_playlists: list["PlaylistDTO"] = list()  # type: ignore[name-defined]  # noqa: F821
+    followed_producers: list["ProducerDTO"] = list()
+    followed_albums: list["AlbumDTO"] = list()  # type: ignore[name-defined]  # noqa: F821
+    followed_tags: list[str] = list()
+
+
+class UserItemResponseDTO(BaseResponseDTO):
+    id: int
+    username: str
+    description: str | None = None
+    email: EmailStr
+    password: str
+    picture_url: str | None = None
+    access_level: AccessLevel = AccessLevel.user
+    telegram_id: int | None = None
+    premium_level: PremiumLevel = PremiumLevel.none
+
+    is_active: bool
+    is_adult: bool
+    is_verified: bool
+
+    created_at: date
     updated_at: datetime
 
 
 class UsersResponseDTO(BaseResponseDTO):
-    users: list[UserResponseDTO]
+    users: list[UserItemResponseDTO]
 
 
 class CreateUserRequestDTO(BaseRequestDTO):
@@ -40,59 +63,127 @@ class CreateUserRequestDTO(BaseRequestDTO):
     email: EmailStr
     password: str
     picture_url: str | None = None
-    roles: list[Role]
-    tags: list[str]
-    created_at: datetime
-    updated_at: datetime
     access_level: AccessLevel = AccessLevel.user
+    telegram_id: int | None = None
+    premium_level: PremiumLevel = PremiumLevel.none
+
+    created_at: date = date.today()
+    updated_at: datetime = datetime.now()
+
+    is_active: bool
+    is_adult: bool
+    is_verified: bool
+
+
+class CreateUserResponseDTO(BaseResponseDTO):
+    id: int
 
 
 class UpdateUserRequestDTO(BaseRequestDTO):
-    username: str | None = None
-    picture_url: str | None = None
-    description: str | None = None
-    artist_profile_id: int | None = None
-    producer_profile_id: int | None = None
-
-
-class Artist(BaseDTO):
     id: int
-    user: UserResponseDTO
+    username: str | None = None
     description: str | None = None
+    email: EmailStr | None = None
+    password: str | None = None
+    picture_url: str | None = None
+    access_level: AccessLevel | None = None
+    telegram_id: int | None = None
+    premium_level: PremiumLevel | None = None
+
+    is_active: bool | None = None
+    is_adult: bool | None = None
+    is_verified: bool | None = None
+
+    updated_at: datetime = datetime.now()
+
+    comments_ids: list[int] | None = None
+    messages_ids: list[int] | None = None
+    licenses_ids: list[int] | None = None
+    followed_artists_ids: list[int] | None = None
+    saved_playlists_ids: list[int] | None = None
+    followed_producers_ids: list[int] | None = None
+    followed_albums_ids: list[int] | None = None
+    followed_tags: list[str] | None = None
+
+
+class UpdateUserResponseDTO(BaseResponseDTO):
+    id: int
 
 
 class ArtistResponseDTO(BaseResponseDTO):
     id: int
-    user: UserResponseDTO
+    username: str
+    followers: list["UserDTO"] = list()
+    tracks: list["TrackDTO"] = list()  # type: ignore[name-defined]  # noqa: F821
+    albums: list["AlbumDTO"] = list()  # type: ignore[name-defined]  # noqa: F821
+    tags: list[str] = list()
+    user_id: int
     description: str | None = None
+    picture_url: str | None = None
+
+
+class ArtistItemResponseDTO(BaseResponseDTO):
+    id: int
+    username: str
+    description: str | None = None
+    picture_url: str | None = None
+    user_id: int
+    tags: list[str] = list()
 
 
 class ArtistsResponseDTO(BaseResponseDTO):
-    artists: list[ArtistResponseDTO]
+    artists: list[ArtistItemResponseDTO]
 
 
 class CreateArtistRequestDTO(BaseRequestDTO):
-    user_id: int
+    username: str
     description: str | None = None
-    is_available: bool = False
+    picture_url: str | None = None
+    user_id: int
+    tags: list[str]
+
+
+class CreateArtistResponseDTO(BaseResponseDTO):
+    id: int
 
 
 class UpdateArtistRequestDTO(BaseRequestDTO):
     id: int
+    username: str | None = None
+    followers_ids: list[int] | None = None
+    tracks_ids: list[int] | None = None
+    albums_ids: list[int] | None = None
+    tags: list[str] | None = None
+    user_id: int | None = None
     description: str | None = None
-    is_available: bool = False
+    picture_url: str | None = None
 
 
-class Producer(BaseDTO):
+class UpdateArtistResponseDTO(BaseResponseDTO):
     id: int
-    user: UserResponseDTO
-    description: str | None = None
 
 
 class ProducerResponseDTO(BaseResponseDTO):
     id: int
-    user: UserResponseDTO
+    username: str
+    followers: list["UserDTO"]
+    beats: list["BeatDTO"]  # type: ignore[name-defined]  # noqa: F821
+    sqauds: list["SquadDTO"]  # type: ignore[name-defined]  # noqa: F821
+    tags: list[str]
+    beatpacks: list["BeatpackDTO"]  # type: ignore[name-defined]  # noqa: F821
+    soundkits: list["SoundkitDTO"]  # type: ignore[name-defined]  # noqa: F821
+    user_id: int
     description: str | None = None
+    picture_url: str | None = None
+
+
+class ProducerItemResponseDTO(BaseResponseDTO):
+    id: int
+    username: str
+    description: str | None = None
+    picture_url: str | None = None
+    user_id: int
+    tags: list[str]
 
 
 class ProducersResponseDTO(BaseResponseDTO):
@@ -100,12 +191,69 @@ class ProducersResponseDTO(BaseResponseDTO):
 
 
 class CreateProducerRequestDTO(BaseRequestDTO):
-    user_id: int
+    username: str
     description: str | None = None
-    is_available: bool = False
+    picture_url: str | None = None
+    user_id: int
+    tags: list[str]
+
+
+class CreateProducerResponseDTO(BaseResponseDTO):
+    id: int
 
 
 class UpdateProducerRequestDTO(BaseRequestDTO):
     id: int
+    username: str
     description: str | None = None
-    is_available: bool = False
+    picture_url: str | None = None
+    user_id: int | None = None
+    followers_ids: list[int] | None = None
+    beats_ids: list[int] | None = None
+    sqauds_ids: list[int] | None = None
+    tags: list[str] | None = None
+    beatpacks_ids: list[int] | None = None
+    soundkits_ids: list[int] | None = None
+
+
+class UpdateProducerResponseDTO(BaseResponseDTO):
+    id: int
+
+
+class UserDTO:
+    id: int
+    username: str
+    description: str | None = None
+    email: EmailStr
+    password: str
+    picture_url: str | None = None
+    access_level: AccessLevel = AccessLevel.user
+    telegram_id: int | None = None
+    premium_level: PremiumLevel = PremiumLevel.none
+
+    is_active: bool
+    is_adult: bool
+    is_verified: bool
+
+    created_at: date
+    updated_at: datetime
+
+    followed_tags: list[str]
+
+
+class ArtistDTO(BaseDTO):
+    id: int
+    username: str
+    description: str | None = None
+    picture_url: str | None = None
+    user_id: int
+    tags: list[str]
+
+
+class ProducerDTO(BaseDTO):
+    id: int
+    username: str
+    description: str | None = None
+    picture_url: str | None = None
+    user_id: int
+    tags: list[str]

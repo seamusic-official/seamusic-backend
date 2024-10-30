@@ -31,7 +31,6 @@ class Squad(Base):
     __tablename__ = "squads"
 
     title: Mapped[str]
-    views: Mapped[int]
     description: Mapped[str | None]
     picture_url: Mapped[str | None]
 

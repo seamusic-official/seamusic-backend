@@ -1,59 +1,75 @@
-from datetime import datetime
+from datetime import date, datetime
 
-from src.dtos.database.auth import User
-from src.dtos.database.base import BaseResponseDTO, BaseDTO, BaseRequestDTO
-
-
-class License(BaseDTO):
-    id: int
-    title: str
-    picture_url: str | None = None
-    description: str | None = None
-    file_path: str
-    co_prod: str | None = None
-    prod_by: str | None = None
-    playlist_id: int | None = None
-    user_id: int
-    beat_pack_id: int | None = None
-    price: str
-    created_at: datetime
-    updated_at: datetime
+from src.dtos.database.base import BaseResponseDTO, BaseRequestDTO, BaseDTO
 
 
 class LicenseResponseDTO(BaseResponseDTO):
     id: int
     title: str
-    picture_url: str | None = None
-    description: str | None = None
-    file_path: str
-    co_prod: str | None = None
-    prod_by: str | None = None
-    playlist_id: int | None = None
-    user_id: int
-    beat_pack_id: int | None = None
-    price: str
-    user: User
-    created_at: datetime
+    text: str
+    description: str
+
+    created_at: date
     updated_at: datetime
+
+    author: "UserDTO"  # type: ignore[name-defined]  # noqa: F821
+
+
+class LicenseItemResponseDTO(BaseResponseDTO):
+    id: int
+    title: str
+    text: str
+    description: str
+
+    created_at: date
+    updated_at: datetime
+
+    author: "UserDTO"  # type: ignore[name-defined]  # noqa: F821
 
 
 class LicensesResponseDTO(BaseResponseDTO):
-    licenses: list[License]
+    licenses: list[LicenseItemResponseDTO]
+
+
+class MyLicensesResponseDTO(BaseResponseDTO):
+    licenses: list[LicenseItemResponseDTO]
 
 
 class CreateLicenseRequestDTO(BaseRequestDTO):
     title: str
-    price: str
-    description: str | None = None
-    picture_url: str | None = None
-    user_id: int
-    user: User
-    is_available: bool = True
-    created_at: datetime
-    updated_at: datetime
+    text: str
+    description: str
+    author_id: int
+
+    created_at: date = date.today()
+    updated_at: datetime = datetime.now()
+
+
+class CreateLicenseResponseDTO(BaseResponseDTO):
+    id: int
 
 
 class UpdateLicenseRequestDTO(BaseRequestDTO):
-    title: str | None = None
-    description: str | None = None
-    price: str | None = None
+    id: int
+    title: str
+    text: str
+    description: str
+    author_id: int
+
+    updated_at: datetime = datetime.now()
+
+
+class UpdateLicenseResponseDTO(BaseResponseDTO):
+    id: int
+
+
+class LicenseDTO(BaseDTO):
+    id: int
+    title: str
+    text: str
+    description: str
+
+    created_at: date
+    updated_at: datetime
+
+    author: "UserDTO"  # type: ignore[name-defined]  # noqa: F821

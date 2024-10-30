@@ -1,3 +1,5 @@
+from datetime import datetime, date
+
 from sqlalchemy import Table, ForeignKey, Column
 from sqlalchemy.orm import Mapped, relationship
 
@@ -34,11 +36,14 @@ class Beatpack(Base):
     title: Mapped[str]
     description: Mapped[str | None]
 
+    created_at: Mapped[date]
+    updated_at: Mapped[datetime]
+
     viewers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_beatpacks_views_association
     )
-    liked_users: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
+    likers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_beatpacks_likes
     )

@@ -12,15 +12,15 @@ class S3Repository(BaseMediaRepository):
     _client: client
     bucket_name: str = settings.bucket_name
 
-    async def upload_file(self, folder: str, filename: str, file_stream: BytesIO) -> str:
-        key = f"{folder}/{filename}"
+    async def upload_file(self, path: str, filename: str, file_stream: BytesIO) -> str:
+        key = f"{path}/{filename}"
         self._client.upload_fileobj(file_stream, self.bucket_name, key)
         file_url = f"https://storage.yandexcloud.net/{self.bucket_name}/{key}"
 
         return file_url
 
-    async def delete_file(self, folder: str, filename: str) -> None:
-        key = f"{folder}/{filename}"
+    async def delete_file(self, path: str, filename: str) -> None:
+        key = f"{path}/{filename}"
         self._client.delete_object(Bucket=self.bucket_name, Key=key)
 
 

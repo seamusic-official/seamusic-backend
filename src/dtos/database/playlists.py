@@ -3,12 +3,11 @@ from datetime import date, datetime
 from src.dtos.database.base import BaseResponseDTO, BaseRequestDTO, BaseDTO
 
 
-class TrackResponseDTO(BaseResponseDTO):
+class PlaylistResponseDTO(BaseResponseDTO):
     id: int
     title: str
     description: str | None
     picture_url: str | None
-    file_url: str
     views: int
     likes: int
 
@@ -17,16 +16,17 @@ class TrackResponseDTO(BaseResponseDTO):
 
     viewers: list["UserDTO"]  # type: ignore[name-defined]  # noqa: F821
     likers: list["UserDTO"]  # type: ignore[name-defined]  # noqa: F821
-    producers: list["ProducerDTO"]  # type: ignore[name-defined]  # noqa: F821
+    authors: list["UserDTO"]  # type: ignore[name-defined]  # noqa: F821
+    beats: list["BeatDTO"]  # type: ignore[name-defined]  # noqa: F821
+    tracks: list["TrackDTO"]  # type: ignore[name-defined]  # noqa: F821
     tags: list[str]
 
 
-class TrackItemResponseDTO(BaseResponseDTO):
+class PlaylistItemResponseDTO(BaseResponseDTO):
     id: int
     title: str
     description: str | None
     picture_url: str | None
-    file_url: str
     views: int
     likes: int
 
@@ -36,15 +36,15 @@ class TrackItemResponseDTO(BaseResponseDTO):
     tags: list[str]
 
 
-class TracksResponseDTO(BaseResponseDTO):
-    tracks: list[TrackItemResponseDTO]
+class PlaylistsResponseDTO(BaseResponseDTO):
+    playlists: list[PlaylistItemResponseDTO]
 
 
-class CreateTrackRequestDTO(BaseRequestDTO):
+class CreatePlaylistRequestDTO(BaseRequestDTO):
+    id: int
     title: str
     description: str | None
     picture_url: str | None
-    file_url: str
 
     created_at: date = date.today()
     updated_at: datetime = datetime.now()
@@ -52,35 +52,35 @@ class CreateTrackRequestDTO(BaseRequestDTO):
     tags: list[str]
 
 
-class CreateTrackResponseDTO(BaseResponseDTO):
+class CreatePlaylistResponseDTO(BaseResponseDTO):
     id: int
 
 
-class UpdateTrackRequestDTO(BaseRequestDTO):
+class UpdatePlaylistRequestDTO(BaseRequestDTO):
     id: int
     title: str
     description: str | None
     picture_url: str | None
-    file_url: str
 
     updated_at: datetime = datetime.now()
 
     viewers_ids: list[int]
     likers_ids: list[int]
-    producers_ids: list[int]
+    authors_ids: list[int]
+    beats_ids: list[int]
+    tracks_ids: list[int]
     tags: list[str]
 
 
-class UpdateTrackResponseDTO(BaseResponseDTO):
+class UpdatePlaylistResponseDTO(BaseResponseDTO):
     id: int
 
 
-class TrackDTO(BaseDTO):
+class PlaylistDTO(BaseDTO):
     id: int
     title: str
     description: str | None
     picture_url: str | None
-    file_url: str
     views: int
     likes: int
 
