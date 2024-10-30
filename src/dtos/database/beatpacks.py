@@ -7,6 +7,8 @@ class BeatpackResponseDTO(BaseResponseDTO):
     id: int
     title: str
     description: str | None = None
+    views: int
+    likes: int
 
     created_at: date
     updated_at: datetime
@@ -21,6 +23,8 @@ class BeatpackResponseDTO(BaseResponseDTO):
 class BeatpackItemResponseDTO(BaseResponseDTO):
     title: str
     description: str | None = None
+    views: int
+    likes: int
 
     created_at: date
     updated_at: datetime
@@ -68,6 +72,8 @@ class BeatpackDTO(BaseDTO):
     id: int
     title: str
     description: str | None = None
+    views: int
+    likes: int
 
     created_at: date
     updated_at: datetime

@@ -12,7 +12,6 @@ class SquadResponseDTO(BaseResponseDTO):
     created_at: date
     updated_at: datetime
 
-    viewers: list["UserDTO"]  # type: ignore[name-defined]  # noqa: F821
     followers: list["UserDTO"]  # type: ignore[name-defined]  # noqa: F821
     artists: list["ArtistDTO"]  # type: ignore[name-defined]  # noqa: F821
     producers: list["ProducerDTO"]  # type: ignore[name-defined]  # noqa: F821
@@ -53,7 +52,6 @@ class UpdateSquadRequestDTO(BaseRequestDTO):
 
     updated_at: datetime = datetime.now()
 
-    viewers_ids: list[int] | None = None
     followers_ids: list[int] | None = None
     artists_ids: list[int] | None = None
     producers_ids: list[int] | None = None

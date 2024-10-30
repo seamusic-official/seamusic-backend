@@ -9,6 +9,8 @@ class SoundkitResponseDTO(BaseResponseDTO):
     description: str | None
     picture_url: str | None
     file_url: str
+    views: int
+    likes: int
 
     created_at: date
     updated_at: datetime
@@ -26,6 +28,8 @@ class SoundkitItemResponseDTO(BaseResponseDTO):
     description: str | None
     picture_url: str | None
     file_url: str
+    views: int
+    likes: int
 
     created_at: date
     updated_at: datetime
@@ -79,6 +83,8 @@ class SoundkitDTO(BaseDTO):
     description: str | None
     picture_url: str | None
     file_url: str
+    views: int
+    likes: int
 
     created_at: date
     updated_at: datetime

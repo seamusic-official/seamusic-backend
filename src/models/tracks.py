@@ -39,6 +39,7 @@ class Track(Base):
     created_at: Mapped[date]
     updated_at: Mapped[datetime]
 
+    viewers: Mapped[list["User"]] = relationship(secondary=user_to_tracks_views_association)  # type: ignore[name-defined]  # noqa: F821
     likers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
         secondary=user_to_tracks_likes

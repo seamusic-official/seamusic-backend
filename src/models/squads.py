@@ -4,7 +4,6 @@ from sqlalchemy import Table, ForeignKey, Integer, Column
 from sqlalchemy.orm import Mapped, relationship
 
 from src.models.base import Base
-from src.models.views import user_to_soundkits_views_association
 
 follower_to_squads_association = Table(
     "follower_to_squads_association",
@@ -38,7 +37,6 @@ class Squad(Base):
     created_at: Mapped[date]
     updated_at: Mapped[datetime]
 
-    viewers: Mapped[list["User"]] = relationship(secondary=user_to_soundkits_views_association)  # type: ignore[name-defined]  # noqa: F821
     followers: Mapped[list["User"]] = relationship(secondary=follower_to_squads_association)  # type: ignore[name-defined]  # noqa: F821
     artists: Mapped[list["ArtistProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=artist_to_squad_association,

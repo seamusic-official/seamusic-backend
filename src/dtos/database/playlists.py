@@ -8,6 +8,8 @@ class PlaylistResponseDTO(BaseResponseDTO):
     title: str
     description: str | None
     picture_url: str | None
+    views: int
+    likes: int
 
     created_at: date
     updated_at: datetime
@@ -25,6 +27,8 @@ class PlaylistItemResponseDTO(BaseResponseDTO):
     title: str
     description: str | None
     picture_url: str | None
+    views: int
+    likes: int
 
     created_at: date
     updated_at: datetime
@@ -77,6 +81,8 @@ class PlaylistDTO(BaseDTO):
     title: str
     description: str | None
     picture_url: str | None
+    views: int
+    likes: int
 
     created_at: date
     updated_at: datetime

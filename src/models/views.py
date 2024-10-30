@@ -38,13 +38,6 @@ user_to_soundkits_views_association = Table(
     Column("user_id", ForeignKey("users.id"), primary_key=True)
 )
 
-user_to_squads_views_association = Table(
-    "user_to_squads_views_association",
-    Base.metadata,
-    Column("squad_id", ForeignKey("squads.id"), primary_key=True),
-    Column("user_id", ForeignKey("users.id"), primary_key=True)
-)
-
 user_to_tracks_views_association = Table(
     "user_to_tracks_views_association",
     Base.metadata,

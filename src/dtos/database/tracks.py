@@ -9,10 +9,13 @@ class TrackResponseDTO(BaseResponseDTO):
     description: str | None
     picture_url: str | None
     file_url: str
+    views: int
+    likes: int
 
     created_at: date
     updated_at: datetime
 
+    viewers: list["UserDTO"]  # type: ignore[name-defined]  # noqa: F821
     likers: list["UserDTO"]  # type: ignore[name-defined]  # noqa: F821
     producers: list["ProducerDTO"]  # type: ignore[name-defined]  # noqa: F821
     tags: list[str]
@@ -24,6 +27,8 @@ class TrackItemResponseDTO(BaseResponseDTO):
     description: str | None
     picture_url: str | None
     file_url: str
+    views: int
+    likes: int
 
     created_at: date
     updated_at: datetime
@@ -60,6 +65,7 @@ class UpdateTrackRequestDTO(BaseRequestDTO):
 
     updated_at: datetime = datetime.now()
 
+    viewers_ids: list[int]
     likers_ids: list[int]
     producers_ids: list[int]
     tags: list[str]
@@ -75,6 +81,8 @@ class TrackDTO(BaseDTO):
     description: str | None
     picture_url: str | None
     file_url: str
+    views: int
+    likes: int
 
     created_at: date
     updated_at: datetime

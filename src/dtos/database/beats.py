@@ -9,6 +9,8 @@ class BeatResponseDTO(BaseResponseDTO):
     description: str | None
     picture_url: str | None
     file_url: str
+    views: int
+    likes: int
 
     created_at: date
     updated_at: datetime
@@ -25,6 +27,8 @@ class BeatItemResponseDTO(BaseResponseDTO):
     description: str | None
     picture_url: str | None
     file_url: str
+    views: int
+    likes: int
 
     created_at: date
     updated_at: datetime
@@ -77,6 +81,8 @@ class BeatDTO(BaseDTO):
     description: str | None
     picture_url: str | None
     file_url: str
+    views: int
+    likes: int
 
     created_at: date
     updated_at: datetime

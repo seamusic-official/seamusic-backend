@@ -9,6 +9,8 @@ class AlbumResponseDTO(BaseDTO):
     picture_url: str | None
     description: str | None
     type: str
+    views: int
+    likes: int
 
     created_at: date
     updated_at: datetime
@@ -25,6 +27,8 @@ class AlbumItemResponseDTO(BaseResponseDTO):
     title: str
     picture_url: str | None
     description: str | None
+    views: int
+    likes: int
     type: str
 
     created_at: date
@@ -82,6 +86,8 @@ class AlbumDTO(BaseDTO):
     title: str
     description: str | None
     picture_url: str | None
+    views: int
+    likes: int
     tags: list[str]
     type: str
 
