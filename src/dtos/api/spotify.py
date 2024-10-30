@@ -4,15 +4,15 @@ from src.dtos.database.base import BaseDTO, BaseResponseDTO
 from src.enums.spotify import SpotifyType, SpotifyAlbumType
 
 
-class SpotifyImage(BaseDTO):
+class SpotifyImageDTO(BaseDTO):
     url: str
     height: int
     width: int
 
 
-class SpotifyArtist(BaseDTO):
+class SpotifyArtistDTO(BaseDTO):
     external_urls: dict[str, str]
-    images: list[SpotifyImage]
+    images: list[SpotifyImageDTO]
     genres: list[str]
     href: str
     id: str
@@ -24,7 +24,7 @@ class SpotifyArtist(BaseDTO):
 
 class SpotifyArtistResponseDTO(BaseResponseDTO):
     external_urls: dict[str, str]
-    images: list[SpotifyImage]
+    images: list[SpotifyImageDTO]
     genres: list[str]
     href: str
     id: str
@@ -34,12 +34,12 @@ class SpotifyArtistResponseDTO(BaseResponseDTO):
     uri: str
 
 
-class SpotifyAlbumTrack(BaseDTO):
+class SpotifyAlbumTrackDTO(BaseDTO):
     href: str
     next: str
     previous: str
     popularity: int
-    items: list['SpotifyTrack']
+    items: list["SpotifyTrackDTO"]
     total: int
 
 
@@ -49,30 +49,30 @@ class SpotifyAlbumTracksResponseDTO(BaseResponseDTO):
     offset: int
     previous: str
     total: int
-    tracks: list[SpotifyAlbumTrack]
+    tracks: list[SpotifyAlbumTrackDTO]
 
 
-class SpotifyAlbum(BaseDTO):
+class SpotifyAlbumDTO(BaseDTO):
     external_urls: dict[str, str]
     album_type: str
     total_tracks: int
     genres: list[str]
     href: str
     id: str
-    images: list[SpotifyImage]
-    tracks: list[SpotifyAlbumTrack]
-    artists: list[SpotifyArtist]
+    images: list[SpotifyImageDTO]
+    tracks: list[SpotifyAlbumTrackDTO]
+    artists: list[SpotifyArtistDTO]
     name: str
     release_date: date
     type: str
     uri: str
 
 
-class SpotifyTrack(BaseDTO):
+class SpotifyTrackDTO(BaseDTO):
     external_urls: dict[str, str]
     external_ids: dict[str, str]
-    album: SpotifyAlbum
-    artists: list[SpotifyArtist]
+    album: SpotifyAlbumDTO
+    artists: list[SpotifyArtistDTO]
     duration_ms: int
     explicit: bool
     href: str
@@ -89,8 +89,8 @@ class SpotifyTrack(BaseDTO):
 class SpotifyTrackResponseDTO(BaseResponseDTO):
     external_urls: dict[str, str]
     external_ids: dict[str, str]
-    album: SpotifyAlbum
-    artists: list[SpotifyArtist]
+    album: SpotifyAlbumDTO
+    artists: list[SpotifyArtistDTO]
     duration_ms: int
     explicit: bool
     href: str
@@ -110,7 +110,7 @@ class SpotifyTracksResponseDTO(BaseResponseDTO):
     offset: int
     previous: str
     total: int
-    tracks: list[SpotifyTrack]
+    tracks: list[SpotifyTrackDTO]
 
 
 class SpotifyAlbumResponseDTO(BaseResponseDTO):
@@ -120,9 +120,9 @@ class SpotifyAlbumResponseDTO(BaseResponseDTO):
     genres: list[str]
     href: str
     id: str
-    images: list[SpotifyImage]
-    tracks: list[SpotifyAlbumTrack]
-    artists: list[SpotifyArtist]
+    images: list[SpotifyImageDTO]
+    tracks: list[SpotifyAlbumTrackDTO]
+    artists: list[SpotifyArtistDTO]
     name: str
     release_date: date
     type: SpotifyAlbumType
@@ -135,35 +135,35 @@ class SpotifyAlbumsResponseDTO(BaseResponseDTO):
     offset: int
     previous: str
     total: int
-    items: list[SpotifyAlbum]
+    items: list[SpotifyAlbumDTO]
 
 
-class SearchTracks(BaseDTO):
+class SearchTracksDTO(BaseDTO):
     id: str
     type: str
     name: str
     preview_url: str
-    images: list[SpotifyImage]
+    images: list[SpotifyImageDTO]
     external_urls: dict[str, str]
 
 
-class SearchArtists(BaseDTO):
+class SearchArtistsDTO(BaseDTO):
     id: str
     type: str
     name: str
-    artists: list[SpotifyArtist]
+    artists: list[SpotifyArtistDTO]
     preview_url: str
     external_urls: dict[str, str]
     duration_ms: int
 
 
-class SearchAlbums(BaseDTO):
+class SearchAlbumsDTO(BaseDTO):
     id: str
     name: str
-    images: list[SpotifyImage]
+    images: list[SpotifyImageDTO]
     external_urls: dict[str, str]
     release_date: str
-    artists: list[SpotifyArtist]
+    artists: list[SpotifyArtistDTO]
     uri: str
     album_type: str
     total_tracks: int
@@ -175,6 +175,6 @@ class SearchResponseDTO(BaseResponseDTO):
     offset: int
     previous: str
     total: int
-    tracks: list[SpotifyTrack] | None = None
-    artists: list[SpotifyTrack] | None = None
-    albums: list[SpotifyAlbum] | None = None
+    tracks: list[SpotifyTrackDTO] | None = None
+    artists: list[SpotifyTrackDTO] | None = None
+    albums: list[SpotifyAlbumDTO] | None = None
