@@ -1,6 +1,6 @@
 from datetime import date, datetime
 
-from src.dtos.database.base import BaseResponseDTO, BaseRequestDTO
+from src.dtos.database.base import BaseResponseDTO, BaseRequestDTO, BaseDTO
 
 
 class SquadResponseDTO(BaseResponseDTO):
@@ -59,3 +59,13 @@ class UpdateSquadRequestDTO(BaseRequestDTO):
 
 class UpdateSquadResponseDTO(BaseResponseDTO):
     id: int
+
+
+class SquadDTO(BaseDTO):
+    id: int
+    title: str
+    description: str | None
+    picture_url: str | None
+
+    created_at: date
+    updated_at: datetime

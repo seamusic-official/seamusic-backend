@@ -30,7 +30,7 @@ class UserResponseDTO(BaseResponseDTO):
     followed_artists: list["ArtistDTO"] = list()
     saved_playlists: list["PlaylistDTO"] = list()  # type: ignore[name-defined]  # noqa: F821
     followed_producers: list["ProducerDTO"] = list()
-    followed_albums: list["AlbumDTO"] = list()  # type: ignore[name-defined]  # noqa: F821
+    saved_albums: list["AlbumDTO"] = list()  # type: ignore[name-defined]  # noqa: F821
     followed_tags: list[str] = list()
 
 
@@ -102,7 +102,7 @@ class UpdateUserRequestDTO(BaseRequestDTO):
     followed_artists_ids: list[int] | None = None
     saved_playlists_ids: list[int] | None = None
     followed_producers_ids: list[int] | None = None
-    followed_albums_ids: list[int] | None = None
+    saved_albums_ids: list[int] | None = None
     followed_tags: list[str] | None = None
 
 
@@ -220,7 +220,7 @@ class UpdateProducerResponseDTO(BaseResponseDTO):
     id: int
 
 
-class UserDTO:
+class UserDTO(BaseDTO):
     id: int
     username: str
     description: str | None = None
@@ -238,8 +238,6 @@ class UserDTO:
     created_at: date
     updated_at: datetime
 
-    followed_tags: list[str]
-
 
 class ArtistDTO(BaseDTO):
     id: int
@@ -247,7 +245,6 @@ class ArtistDTO(BaseDTO):
     description: str | None = None
     picture_url: str | None = None
     user_id: int
-    tags: list[str]
 
 
 class ProducerDTO(BaseDTO):
@@ -256,4 +253,3 @@ class ProducerDTO(BaseDTO):
     description: str | None = None
     picture_url: str | None = None
     user_id: int
-    tags: list[str]

@@ -86,5 +86,3 @@ class PlaylistDTO(BaseDTO):
 
     created_at: date
     updated_at: datetime
-
-    tags: list[str]

@@ -3,7 +3,11 @@ from datetime import datetime, date
 from src.dtos.database.base import BaseResponseDTO, BaseRequestDTO, BaseDTO
 
 
-class AlbumResponseDTO(BaseDTO):
+class AlbumRequestDTO(BaseRequestDTO):
+    id: int
+
+
+class AlbumResponseDTO(BaseResponseDTO):
     id: int
     title: str
     picture_url: str | None
@@ -88,7 +92,6 @@ class AlbumDTO(BaseDTO):
     picture_url: str | None
     views: int
     likes: int
-    tags: list[str]
     type: str
 
     created_at: date
