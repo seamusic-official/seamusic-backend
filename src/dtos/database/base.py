@@ -11,3 +11,8 @@ class BaseRequestDTO(BaseDTO):
 
 class BaseResponseDTO(BaseDTO):
     pass
+
+
+class ItemsRequestDTO(BaseRequestDTO):
+    offset: int = 0
+    limit: int = 10

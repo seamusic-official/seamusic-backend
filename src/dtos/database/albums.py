@@ -43,6 +43,10 @@ class AlbumsResponseDTO(BaseResponseDTO):
     albums: list[AlbumItemResponseDTO]
 
 
+class CountAlbumResponseDTO(BaseResponseDTO):
+    amount: int
+
+
 class ArtistAlbumsRequestDTO(BaseRequestDTO):
     artist_id: int
 
@@ -83,6 +87,10 @@ class UpdateAlbumRequestDTO(BaseRequestDTO):
 
 class UpdateAlbumResponseDTO(BaseResponseDTO):
     id: int
+
+
+class DeleteAlbumRequestDTO(BaseRequestDTO):
+    album_id: int
 
 
 class AlbumDTO(BaseDTO):
