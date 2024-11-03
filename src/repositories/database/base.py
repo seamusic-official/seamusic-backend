@@ -38,7 +38,7 @@ class SQLAlchemyRepository(BaseDatabaseRepository):
         async with self.sessionmaker() as session:
             await session.execute(statement)
 
-    async def get(self, table: type[Base], primary_key: Any) -> Base | None:
+    async def get(self, table: type[Base], primary_key: Any):  # type: ignore[no-untyped-def]
         async with self.sessionmaker() as session:
             return await session.get(table, primary_key)
 

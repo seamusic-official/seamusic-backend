@@ -1,6 +1,6 @@
 from datetime import datetime, date
 
-from src.dtos.database.base import BaseResponseDTO, BaseRequestDTO, BaseDTO
+from src.dtos.database.base import BaseResponseDTO, BaseRequestDTO, BaseDTO, ItemsResponseDTO
 
 
 class AlbumRequestDTO(BaseRequestDTO):
@@ -39,8 +39,8 @@ class AlbumItemResponseDTO(BaseResponseDTO):
     updated_at: datetime
 
 
-class AlbumsResponseDTO(BaseResponseDTO):
-    albums: list[AlbumItemResponseDTO]
+class AlbumsResponseDTO(ItemsResponseDTO[AlbumItemResponseDTO]):
+    pass
 
 
 class CountAlbumResponseDTO(BaseResponseDTO):
@@ -51,8 +51,8 @@ class ArtistAlbumsRequestDTO(BaseRequestDTO):
     artist_id: int
 
 
-class ArtistAlbumsResponseDTO(BaseResponseDTO):
-    albums: list[AlbumItemResponseDTO]
+class ArtistAlbumsResponseDTO(ItemsResponseDTO[AlbumItemResponseDTO]):
+    pass
 
 
 class CreateAlbumRequestDTO(BaseRequestDTO):
