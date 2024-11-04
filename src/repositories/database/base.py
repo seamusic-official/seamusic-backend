@@ -1,8 +1,10 @@
 from abc import ABC
 from dataclasses import dataclass
 from typing import Iterable, Any
+
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.sql import Executable
+
 from src.core.config import settings
 from src.models.base import Base
 
@@ -38,12 +40,16 @@ class SQLAlchemyRepository(BaseDatabaseRepository):
 
     async def get(self, table: type[Base], primary_key: Any):  # type: ignore[no-untyped-def]
         async with self.sessionmaker() as session:
-            yield await session.get(table, primary_key)
+            item = await session.get(table, primary_key)
+            await session.close()
+        return item
 
     async def scalar(self, statement: Executable) -> Any:
         async with self.sessionmaker() as session:
-            yield await session.scalar(statement)
+            item = await session.scalar(statement)
+        return item
 
     async def scalars(self, statement: Executable) -> Iterable:
         async with self.sessionmaker() as session:
-            yield await session.scalars(statement)
+            items = await session.scalars(statement)
+        return items

@@ -25,7 +25,7 @@ from src.repositories.database.base import SQLAlchemyRepository
 @dataclass
 class AlbumRepository(SQLAlchemyRepository):
     async def get_album(self, request: AlbumRequestDTO) -> AlbumResponseDTO | None:
-        model: Album | None = self.get(Album, request.id)
+        model: Album | None = await self.get(Album, request.id)
         print(model)
         return AlbumResponseDTO.model_validate(model) if model else None
 
