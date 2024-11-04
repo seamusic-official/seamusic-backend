@@ -21,7 +21,7 @@ class TestAlbumRepository:
     repository: AlbumRepository = init_albums_repository()
 
     @pytest.fixture(scope='class')
-    def create_album_request(self):
+    def create_album_request(self) -> CreateAlbumRequestDTO:
         return CreateAlbumRequestDTO(
             title="test",
             picture_url="test",
@@ -40,7 +40,7 @@ class TestAlbumRepository:
         return request.node.album_id
 
     @pytest.fixture(scope='class')
-    def update_album_request(self, album_id: int):
+    def update_album_request(self, album_id: int) -> UpdateAlbumRequestDTO:
         return UpdateAlbumRequestDTO(id=album_id)
 
     @pytest.mark.dependency(depends=['TestAlbumRepository::test_create_album'])
