@@ -1,12 +1,11 @@
 from typing import Callable, Any
 
 import pydantic
-from fastapi import FastAPI, Request, Depends, Response
+from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from src import exceptions as services
 from src.api.v1 import v1, exceptions as api
-from src.api.v1.utils.auth import get_current_user
 from src.models.auth import User
 
 
@@ -42,7 +41,7 @@ app = create_app()
 async def v1_exceptions_middleware(
     request: Request,
     call_next: Callable[[Request], Any],
-    user: User | None = Depends(get_current_user)
+    user: User | None  # = Depends(get_current_user)
 ) -> Response:
     if not user:
         raise api.UnauthorizedException(detail="Unauthorized")
