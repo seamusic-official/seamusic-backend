@@ -31,7 +31,7 @@ downgrade:
 	poetry run docker run app /bin/bash -c "poetry run alembic downgrade $(revision)"
 
 test:
-	poetry run docker-compose -f docker-compose.test.yml up --force-recreate --remove-orphans
+	poetry run docker-compose -f docker-compose.test.yml up --force-recreate --remove-orphans --abort-on-container-exit
 
 test-local:
 	poetry run alembic upgrade head
