@@ -61,8 +61,9 @@ from src.models.playlists import (
     playlists_to_tag_association,
     playlists_to_track_association,
     playlists_to_beat_association,
-    user_to_playlists_association,
     user_to_playlists_likes,
+    author_to_playlists_association,
+    user_to_playlists_views_association,
 )
 from src.models.soundkits import (
     Soundkit,
