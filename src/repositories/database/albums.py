@@ -25,7 +25,8 @@ from src.repositories.database.base import SQLAlchemyRepository
 @dataclass
 class AlbumRepository(SQLAlchemyRepository):
     async def get_album(self, request: AlbumRequestDTO) -> AlbumResponseDTO | None:
-        model: Album | None = await self.get(Album, request.id)
+        model: Album | None = self.get(Album, request.id)
+        print(model)
         return AlbumResponseDTO.model_validate(model) if model else None
 
     async def get_albums(self, page: ItemsRequestDTO) -> AlbumsResponseDTO:
@@ -88,6 +89,7 @@ class AlbumRepository(SQLAlchemyRepository):
             tracks=await self.scalars(select(Track).filter(Track.id.in_(album.tracks_ids))) if album.tracks_ids else existing_album.tracks,
             tags=await self.scalars(select(Tag).filter(Tag.name.in_(album.tags))) if album.tags else existing_album.tags,
         )
+        await self.merge(model)
         return UpdateAlbumResponseDTO(id=model.id)
 
     async def delete_album(self, request: DeleteAlbumRequestDTO) -> None:

@@ -45,11 +45,12 @@ class Beatpack(Base):
     )
     likers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         argument="User",
-        secondary=user_to_beatpacks_likes
+        secondary=user_to_beatpacks_likes,
+        overlaps="likers"
     )
     producers: Mapped[list["ProducerProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=producer_to_beatpacks_association,
-        back_populates="producers"
+        back_populates="beatpacks"
     )
     beats: Mapped[list["Beat"]] = relationship(secondary=beatpack_to_beat_association_table)  # type: ignore[name-defined]  # noqa: F821
     tags: Mapped[list["Tag"]] = relationship(secondary=beatpack_to_tag_association)  # type: ignore[name-defined]  # noqa: F821

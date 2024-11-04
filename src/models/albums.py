@@ -54,7 +54,7 @@ class Album(Base):
     )
     artists: Mapped[list["ArtistProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=album_to_artist_association,
-        back_populates="albums"
+        back_populates="album"
     )
     tracks: Mapped[list["Track"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=album_to_track_association

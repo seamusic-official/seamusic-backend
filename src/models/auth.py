@@ -126,14 +126,14 @@ class ArtistProfile(Base):
     updated_at: Mapped[datetime]
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-
+    users: Mapped[list["User"]] = relationship(secondary=user_to_artist_association, viewonly=True)
     followers: Mapped[list["User"]] = relationship(
         secondary=user_to_artist_association,
         back_populates="followed_artists"
     )
     tracks: Mapped[list["Track"]] = relationship(secondary=artist_to_track_association)  # type: ignore[name-defined]  # noqa: F821
     squads: Mapped[list["Squad"]] = relationship(secondary=artist_to_squad_association)  # type: ignore[name-defined]  # noqa: F821
-    albums: Mapped[list["Album"]] = relationship(secondary=album_to_artist_association)  # type: ignore[name-defined]  # noqa: F821
+    album: Mapped[list['Album']] = relationship(secondary=album_to_artist_association)  # type: ignore[name-defined]  # noqa: F821
     tags: Mapped[list["Tag"]] = relationship(secondary=artist_to_tags_association)  # type: ignore[name-defined]  # noqa: F821
 
 
@@ -155,7 +155,7 @@ class ProducerProfile(Base):
     )
     beats: Mapped[list["Beat"]] = relationship(secondary=producer_to_beat_association, back_populates="producers")  # type: ignore[name-defined]  # noqa: F821
     squads: Mapped[list["Squad"]] = relationship(secondary=producer_to_squad_association, back_populates="producers")  # type: ignore[name-defined]  # noqa: F821
-    tags: Mapped[list["Tag"]] = relationship(secondary=producer_to_soundkits_association)  # type: ignore[name-defined]  # noqa: F821
+    tags: Mapped[list["Tag"]] = relationship(secondary=producer_to_tags_association)  # type: ignore[name-defined]  # noqa: F821
     beatpacks: Mapped[list["Beatpack"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=producer_to_beatpacks_association,
         back_populates="producers"
