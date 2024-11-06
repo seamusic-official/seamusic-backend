@@ -22,13 +22,14 @@ class DatabaseRepositories(ABC):
 @dataclass
 class SQLAlchemyRepository(BaseDatabaseRepository):
 
-    engine = create_async_engine(url=settings.db_url, echo=settings.echo)
+    engine = create_async_engine(url=settings.db_url, echo=settings.echo, pool_pre_ping=True)
     sessionmaker = async_sessionmaker(engine, expire_on_commit=False)
 
     async def add(self, obj: Base) -> None:
         async with self.sessionmaker() as session:
             session.add(obj)
             await session.commit()
+            await self.engine.dispose()
 
     async def merge(self, obj: Base) -> None:
         async with self.sessionmaker() as session:
@@ -40,9 +41,7 @@ class SQLAlchemyRepository(BaseDatabaseRepository):
 
     async def get(self, table: type[Base], primary_key: Any):  # type: ignore[no-untyped-def]
         async with self.sessionmaker() as session:
-            item = await session.get(table, primary_key)
-            await session.close()
-        return item
+            return await session.get(table, primary_key)
 
     async def scalar(self, statement: Executable) -> Any:
         async with self.sessionmaker() as session:
