@@ -26,7 +26,12 @@ from src.repositories.database.base import SQLAlchemyRepository
 class AlbumRepository(SQLAlchemyRepository):
     async def get_album(self, request: AlbumRequestDTO) -> AlbumResponseDTO | None:
         model: Album | None = await self.get(Album, request.id)
-        return AlbumResponseDTO.model_validate(model) if model else None
+        AlbumResponse = AlbumResponseDTO(id=model.id, title=model.title,
+                                         picture_url=model.picture_url, description=model.description,
+                                         views=0, likes=0,
+                                         type=model.type, created_at=model.created_at,
+                                         updated_at=model.updated_at)
+        return AlbumResponse
 
     async def get_albums(self, page: ItemsRequestDTO) -> AlbumsResponseDTO:
         query: Executable = select(Album).offset(page.offset).limit(page.limit).order_by(func.count(Album.viewers.id).desc())
@@ -74,14 +79,14 @@ class AlbumRepository(SQLAlchemyRepository):
         return CreateAlbumResponseDTO(id=model.id)
 
     async def update_album(self, album: UpdateAlbumRequestDTO) -> UpdateAlbumResponseDTO:
-        existing_album: Album = await self.get(Album, album.id)
+        existing_album: Album | None = await self.get(Album, album.id)
         model = Album(
             id=album.id,
             title=album.title if album.title else existing_album.title,
             picture_url=album.picture_url if album.picture_url else existing_album.picture_url,
             description=album.description if album.description else existing_album.description,
             type=album.type if album.type else existing_album.type,
-            updated_a=album.updated_at if album.updated_at else existing_album.updated_at,
+            updated_at=album.updated_at if album.updated_at else existing_album.updated_at,
             viewers=await self.scalars(select(User).filter(User.id.in_(album.viewers_ids))) if album.viewers_ids else existing_album.viewers,
             likers=await self.scalars(select(User).filter(User.id.in_(album.likers_ids))) if album.likers_ids else existing_album.likers,
             artists=await self.scalars(select(ArtistProfile).filter(ArtistProfile.id.in_(album.artists_ids))) if album.artists_ids else existing_album.artists,
