@@ -41,7 +41,9 @@ class SQLAlchemyRepository(BaseDatabaseRepository):
 
     async def get(self, table: type[Base], primary_key: Any):  # type: ignore[no-untyped-def]
         async with self.sessionmaker() as session:
-            return await session.get(table, primary_key)
+            object = await session.get(table, primary_key)
+            await self.engine.dispose()
+            return object
 
     async def scalar(self, statement: Executable) -> Any:
         async with self.sessionmaker() as session:

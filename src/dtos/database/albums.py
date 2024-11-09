@@ -19,11 +19,11 @@ class AlbumResponseDTO(BaseResponseDTO):
     created_at: date
     updated_at: datetime
 
-    viewers: list["UserDTO"]  # type: ignore[name-defined]  # noqa: F821
-    likers: list["UserDTO"]  # type: ignore[name-defined]  # noqa: F821
-    artists: list["ArtistDTO"]  # type: ignore[name-defined]  # noqa: F821
-    tracks: list["TrackDTO"]  # type: ignore[name-defined]  # noqa: F821
-    tags: list[str]
+    viewers: list['UserDTO'] | None = None  # type: ignore[name-defined]  # noqa: F821
+    likers: list['UserDTO'] | None = None   # type: ignore[name-defined]  # noqa: F821
+    artists: list['ArtistDTO'] | None = None   # type: ignore[name-defined]  # noqa: F821
+    tracks: list['TrackDTO'] | None = None   # type: ignore[name-defined]  # noqa: F821
+    tags: list[str] | None = None
 
 
 class AlbumItemResponseDTO(BaseResponseDTO):

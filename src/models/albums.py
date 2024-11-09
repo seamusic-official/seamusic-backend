@@ -47,18 +47,23 @@ class Album(Base):
     updated_at: Mapped[datetime]
 
     viewers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        secondary=user_to_albums_views_association
+        secondary=user_to_albums_views_association,
+        lazy="selectin"
     )
     likers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        secondary=user_to_albums_likes
+        secondary=user_to_albums_likes,
+        lazy="selectin"
     )
     artists: Mapped[list["ArtistProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=album_to_artist_association,
-        back_populates="album"
+        back_populates="album",
+        lazy="selectin"
     )
     tracks: Mapped[list["Track"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        secondary=album_to_track_association
+        secondary=album_to_track_association,
+        lazy="selectin"
     )
     tags: Mapped[list["Tag"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        secondary=album_to_tag_association
+        secondary=album_to_tag_association,
+        lazy="selectin"
     )

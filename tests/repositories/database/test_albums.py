@@ -37,7 +37,7 @@ class TestAlbumRepository:
 
     @pytest.fixture(scope='session')
     async def album_id(self, request: pytest.FixtureRequest) -> int:
-        return request.node.album_id
+        return 1
 
     @pytest.fixture(scope='class')
     def update_album_request(self, album_id: int) -> UpdateAlbumRequestDTO:
