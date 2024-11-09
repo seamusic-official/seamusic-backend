@@ -4,7 +4,7 @@ from io import BytesIO
 
 from fastapi import UploadFile
 
-from src.exceptions import ServerError, InvalidRequestException
+from src.core.exceptions import ServerError, InvalidRequestException
 
 
 def unique_filename(file: UploadFile | None = None) -> str:

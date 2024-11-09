@@ -4,7 +4,7 @@ import pydantic
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
-from src import exceptions as services
+from src.core import exceptions as services
 from src.api.v1 import v1, exceptions as api
 from src.models.auth import User
 
