@@ -2,6 +2,7 @@ from abc import ABC
 from dataclasses import dataclass
 from typing import Iterable, Any
 
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.sql import Executable
 
@@ -39,11 +40,11 @@ class SQLAlchemyRepository(BaseDatabaseRepository):
         async with self.sessionmaker() as session:
             await session.execute(statement)
 
-    async def get(self, table: type[Base], primary_key: Any):  # type: ignore[no-untyped-def]
+    async def get(self, table: type[Base], id: Any):  # type: ignore[no-untyped-def]
         async with self.sessionmaker() as session:
-            object = await session.get(table, primary_key)
-            await self.engine.dispose()
-            return object
+            statement = select(table).filter_by(id=id)
+            model = await session.scalar(statement)
+        return model
 
     async def scalar(self, statement: Executable) -> Any:
         async with self.sessionmaker() as session:
