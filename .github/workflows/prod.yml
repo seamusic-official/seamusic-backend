@@ -20,4 +20,4 @@ jobs:
 
       - name: Deploy to remote server
         run: |
-          ssh -o StrictHostKeyChecking=root@185.251.90.58 'bash -s' < ./prod_deploy.sh 
+          ssh -o StrictHostKeyChecking=no root@185.251.90.58 'bash -s' < ./prod_deploy.sh
