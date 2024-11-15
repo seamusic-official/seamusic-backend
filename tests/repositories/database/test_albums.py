@@ -12,9 +12,7 @@ from src.dtos.database.albums import (
     DeleteAlbumRequestDTO,
     UpdateAlbumRequestDTO,
     UpdateAlbumResponseDTO,
-    
 )
-from src.dtos.database.auth import UserDTO
 from src.dtos.database.base import ItemsRequestDTO
 from src.repositories.database.albums import AlbumRepository, init_albums_repository
 
