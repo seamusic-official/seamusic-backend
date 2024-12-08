@@ -1,6 +1,7 @@
-from src.core.config import settings
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+
+from src.core.config import settings
 
 test_engine = create_async_engine(settings.db_url, echo=True)
 
