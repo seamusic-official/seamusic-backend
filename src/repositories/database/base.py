@@ -2,10 +2,11 @@ from abc import ABC
 from dataclasses import dataclass
 from typing import Iterable, Any
 
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.sql import Executable
 
+from src.core.config import settings
 from src.models.base import Base
-from src.repositories.database.db_connecter import DB
 
 engine = create_async_engine(
     url=settings.db_url,
@@ -28,13 +29,12 @@ class DatabaseRepositories(ABC):
 
 
 @dataclass
-class SQLAlchemyRepository(BaseDatabaseRepository, DB):
+class SQLAlchemyRepository(BaseDatabaseRepository):
 
     async def add(self, obj: Base) -> None:
         async with sessionmaker() as session:
             session.add(obj)
             await session.commit()
-            await self.engine().dispose()
 
     async def merge(self, obj: Base) -> None:
         async with sessionmaker() as session:
