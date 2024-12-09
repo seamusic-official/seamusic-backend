@@ -20,4 +20,7 @@ jobs:
 
       - name: Deploy to remote server
         run: |
-          ssh -o StrictHostKeyChecking=no root@185.251.90.58 'bash -s' < ./prod_deploy.sh
+          echo "$SSH_PRIVATE_KEY" > private_key
+          chmod 600 private_key
+          rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" . root@185.251.90.58:/root/seamusic/seamusic-backend-prod
+          ssh -i private_key -o StrictHostKeyChecking=no root@185.251.90.58 -v 'cd /root/seamusic/seamusic-backend-prod && make start for=dev'
