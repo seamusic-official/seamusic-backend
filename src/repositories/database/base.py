@@ -8,20 +8,18 @@ from sqlalchemy.sql import Executable
 from src.core.config import settings
 from src.models.base import Base
 
-
 engine = create_async_engine(url=settings.db_url, echo=settings.echo)
-sessionmaker = async_sessionmaker(
-    bind=engine,
-    expire_on_commit=False,
-)
+sessionmaker = async_sessionmaker(bind=engine, expire_on_commit=False)
 
 
 @dataclass
-class BaseDatabaseRepository(ABC): ...
+class BaseDatabaseRepository(ABC):
+    ...
 
 
 @dataclass
-class DatabaseRepositories(ABC): ...
+class DatabaseRepositories(ABC):
+    ...
 
 
 @dataclass
