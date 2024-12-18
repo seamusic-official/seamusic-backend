@@ -2,8 +2,8 @@
 #
 # from sqlalchemy.sql import Executable
 #
-# from src.models.base import Base
-# from src.repositories.database.base import SQLAlchemyRepository
+# from src_.models.base import Base
+# from src_.repositories.database.base import SQLAlchemyRepository
 #
 #
 # class TestSQLAlchemyRepository:

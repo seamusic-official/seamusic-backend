@@ -1,7 +1,7 @@
 # import pytest
 # from pydantic import EmailStr
 #
-# from src.dtos.database.auth import (
+# from src_.dtos.database.auth import (
 #     ArtistResponseDTO,
 #     ArtistsResponseDTO,
 #     CreateArtistRequestDTO,
@@ -15,7 +15,7 @@
 #     UserResponseDTO,
 #     UsersResponseDTO,
 # )
-# from src.repositories.database.auth import UsersRepository, init_users_repository, ArtistsRepository, \
+# from src_.repositories.database.auth import UsersRepository, init_users_repository, ArtistsRepository, \
 #     init_artists_repository, ProducersRepository, init_producers_repository
 #
 #

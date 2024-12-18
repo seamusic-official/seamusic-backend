@@ -1,12 +1,12 @@
 # import pytest
 #
-# from src.dtos.database.squads import (
+# from src_.dtos.database.squads import (
 #     CreateSquadRequestDTO,
 #     SquadsResponseDTO,
 #     SquadResponseDTO,
 #     UpdateSquadRequestDTO
 # )
-# from src.repositories.database.squads import SquadRepository, init_squads_repository
+# from src_.repositories.database.squads import SquadRepository, init_squads_repository
 #
 #
 # class TestSquadRepository:

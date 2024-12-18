@@ -41,7 +41,7 @@ jobs:
           virtualenvs-in-project: false
       - name: Install dependencies
         run: poetry install
-      - name: Run mypy for src
-        run: poetry run mypy -p src --cache-dir=/dev/null --config-file=pyproject.toml
+      - name: Run mypy for src_
+        run: poetry run mypy -p src_ --cache-dir=/dev/null --config-file=pyproject.toml
       - name: Run mypy for tests
         run: poetry run mypy -p tests --cache-dir=/dev/null --config-file=pyproject.toml

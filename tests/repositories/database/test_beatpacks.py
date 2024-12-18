@@ -1,12 +1,12 @@
 # import pytest
 #
-# from src.dtos.database.beatpacks import (
+# from src_.dtos.database.beatpacks import (
 #     BeatpackResponseDTO,
 #     BeatpacksResponseDTO,
 #     CreateBeatpackRequestDTO,
 #     UpdateBeatpackRequestDTO
 # )
-# from src.repositories.database.beatpacks import BeatpacksRepository, init_beatpacks_repository
+# from src_.repositories.database.beatpacks import BeatpacksRepository, init_beatpacks_repository
 #
 #
 # class TestBeatpacksRepository:
