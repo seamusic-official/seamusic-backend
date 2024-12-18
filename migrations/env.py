@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from migrations.models import *  # noqa: F401, F403
 from src.infrastructure.config import settings
-from src.infrastructure.postgres import Base
+from src.infrastructure.postgres.orm import Base
 
 config = context.config
 
