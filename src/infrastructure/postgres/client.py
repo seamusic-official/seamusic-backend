@@ -1,50 +1,56 @@
 from dataclasses import dataclass
+from enum import Enum
+from typing import AsyncGenerator
 
-from sqlalchemy.exc import NoResultFound
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from sqlalchemy import Executable
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 
-from src.domain.repositories import BaseDatabaseRepository
+from src.domain.repositories import BaseStorageRepositoryMixinSession, BaseStorageRepositoryMixin
 from src.infrastructure.config import settings
-from src.infrastructure.postgres.exceptions import NotFoundError
 from src.infrastructure.postgres.orm import Base
 
 engine = create_async_engine(url=settings.db_url, echo=settings.echo)
 sessionmaker = async_sessionmaker(bind=engine, expire_on_commit=False)
 
 
+class ExecuteAction(Enum):
+    scalars = 'scalars'
+    scalar = 'scalar'
+    execute = 'execute'
+
+
 @dataclass
-class SQLAlchemyRepository(BaseDatabaseRepository):
-    @staticmethod
-    async def read(obj_id: int, table: type[Base]) -> Base | None:
-        async with sessionmaker() as session:
-            try:
-                response = await session.get_one(table, obj_id)
-            except NoResultFound:
-                response = None
-        return response
+class Session(BaseStorageRepositoryMixinSession, AsyncSession):
+    async def read(self, obj_id: int, table: type[Base]) -> Base | None:
+        return await self.get(table, obj_id)
 
-    @staticmethod
-    async def write(obj: Base) -> None:
-        async with sessionmaker() as session:
-            session.add(obj)
-            await session.commit()
+    async def write(self, obj: Base) -> None:
+        self.add(obj)
 
-    @staticmethod
-    async def update(obj: Base) -> None:
-        async with sessionmaker() as session:
-            try:
-                await session.get_one(obj.__class__, obj.id)
-            except NoResultFound:
-                raise NotFoundError()
-            await session.merge(obj)
-            await session.commit()
+    async def update(self, obj: Base) -> None:
+        await self.get(obj.__class__, obj.id)
+        await self.merge(obj)
 
+    async def remove(self, table: type[Base], obj_id: int) -> None:
+        obj = await self.get(table, obj_id)
+        await self.delete(obj)
+
+    async def run(self, statement: Executable, action: ExecuteAction) -> Base | list[Base] | None:
+        if action == action.scalars:
+            return list(await self.scalars(statement))
+        elif action == action.scalar:
+            return await self.scalar(statement)
+        elif action == action.execute:
+            await self.execute(statement)
+
+
+@dataclass
+class SQLAlchemyRepository(BaseStorageRepositoryMixin):
     @staticmethod
-    async def delete(obj_id: int, table: type[Base]) -> None:
-        async with sessionmaker() as session:
+    async def start() -> AsyncGenerator[Session]:
+        async with Session() as session:
             try:
-                obj = await session.get_one(table, obj_id)
-                await session.delete(obj)
+                yield session
                 await session.commit()
-            except NoResultFound:
-                pass
+            except Exception:
+                await session.rollback()
