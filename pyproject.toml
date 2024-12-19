@@ -62,6 +62,7 @@ exclude =[
     ".vscode/",
     "*cache*",
     "__init__.py",
+    "migrations/models.py"
 ]
 
 [tool.mypy]
