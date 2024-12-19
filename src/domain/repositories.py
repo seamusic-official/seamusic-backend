@@ -4,28 +4,27 @@ from typing import AsyncGenerator, Any
 
 class BaseStorageRepositoryMixinSession(ABC):
     @abstractmethod
-    async def read(self, **kwargs) -> Any | None:
+    async def read(self, **kwargs) -> Any | None:  # type: ignore[no-untyped-def]
         raise NotImplementedError
 
     @abstractmethod
-    async def write(self, **kwargs) -> None:
+    async def write(self, **kwargs) -> None:  # type: ignore[no-untyped-def]
         raise NotImplementedError
 
     @abstractmethod
-    async def update(self, **kwargs) -> None:
+    async def update(self, **kwargs) -> None:  # type: ignore[no-untyped-def]
         raise NotImplementedError
 
     @abstractmethod
-    async def remove(self, **kwargs) -> None:
+    async def remove(self, **kwargs) -> None:  # type: ignore[no-untyped-def]
         raise NotImplementedError
 
     @abstractmethod
-    async def run(self, **kwargs) -> Any | None:
+    async def run(self, **kwargs) -> Any | None:  # type: ignore[no-untyped-def]
         raise NotImplementedError
 
 
 class BaseStorageRepositoryMixin(ABC):
-    @staticmethod
     @abstractmethod
-    async def start() -> AsyncGenerator[BaseStorageRepositoryMixinSession]:
+    async def start(self) -> AsyncGenerator[BaseStorageRepositoryMixinSession]:
         raise NotImplementedError

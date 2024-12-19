@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import AsyncGenerator
+from typing import AsyncGenerator, Any
 
 from sqlalchemy import Executable
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
@@ -21,21 +21,24 @@ class ExecuteAction(Enum):
 
 @dataclass
 class Session(BaseStorageRepositoryMixinSession, AsyncSession):
-    async def read(self, obj_id: int, table: type[Base]) -> Base | None:
-        return await self.get(table, obj_id)
+    table: type[Base]
 
-    async def write(self, obj: Base) -> None:
+    async def read(self, obj_id: int) -> Any | None:  # type: ignore[override]
+        return await self.get(self.table, obj_id)
+
+    async def write(self, obj) -> None:  # type: ignore[no-untyped-def, override]
         self.add(obj)
 
-    async def update(self, obj: Base) -> None:
-        await self.get(obj.__class__, obj.id)
-        await self.merge(obj)
+    async def update(self, obj: Base) -> None:  # type: ignore[override]
+        response = await self.get(obj.__class__, obj.id)
+        if response:
+            await self.merge(obj)
 
-    async def remove(self, table: type[Base], obj_id: int) -> None:
+    async def remove(self, table: type[Base], obj_id: int) -> None:  # type: ignore[override]
         obj = await self.get(table, obj_id)
         await self.delete(obj)
 
-    async def run(self, statement: Executable, action: ExecuteAction) -> Base | list[Base] | None:
+    async def run(self, statement: Executable, action: ExecuteAction) -> Base | list[Base] | None:  # type: ignore[return, override]
         if action == action.scalars:
             return list(await self.scalars(statement))
         elif action == action.scalar:
@@ -46,9 +49,10 @@ class Session(BaseStorageRepositoryMixinSession, AsyncSession):
 
 @dataclass
 class SQLAlchemyRepository(BaseStorageRepositoryMixin):
-    @staticmethod
-    async def start() -> AsyncGenerator[Session]:
-        async with Session() as session:
+    table: type[Base]
+
+    async def start(self) -> AsyncGenerator[Session]:  # type: ignore[override]
+        async with Session(table=self.table) as session:
             try:
                 yield session
                 await session.commit()

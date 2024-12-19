@@ -6,7 +6,6 @@ from src.infrastructure.s3.exceptions import ServerError, InvalidRequestExceptio
 
 
 def unique_filename(filename: str | None = None) -> str:
-
     if not filename:
         raise InvalidRequestException()
 
@@ -15,7 +14,7 @@ def unique_filename(filename: str | None = None) -> str:
         return f'track-{file_name.replace(" ", "-")}_{uuid.uuid4()}{file_extension}'
 
     except Exception as e:
-        raise ServerError(f"Failed to process the audio file: {str(e)}")
+        raise ServerError(f"Failed to process the file: {str(e)}")
 
 
 async def get_file_stream(data: bytes) -> BytesIO:
