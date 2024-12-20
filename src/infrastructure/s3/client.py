@@ -1,20 +1,66 @@
 import os
-import uuid
+from dataclasses import dataclass
 from io import BytesIO
+from types import TracebackType
+from typing import AsyncGenerator, Self
+from uuid import uuid4
 
-from src.infrastructure.s3.exceptions import ServerError, InvalidRequestException
+from boto3 import Session as Boto3Session, client as _client
+
+from src.domain.repositories import BaseStorageRepositoryMixin, BaseStorageRepositoryMixinSession
+from src.infrastructure.config import settings
 
 
-def unique_filename(filename: str | None = None) -> str:
-    if not filename:
-        raise InvalidRequestException()
+@dataclass
+class Session(BaseStorageRepositoryMixinSession):
+    session: Boto3Session = Boto3Session(
+        aws_access_key_id=settings.aws_access_key_id,
+        aws_secret_access_key=settings.aws_secret_access_key
+    )
+    client: _client = session.client(service_name='s3', endpoint_url='https://storage.yandexcloud.net')
+    bucket_name: str = settings.bucket_name
 
-    try:
-        file_name, file_extension = os.path.splitext(filename)
-        return f'track-{file_name.replace(" ", "-")}_{uuid.uuid4()}{file_extension}'
+    async def read(self, path: str, filename: str) -> str:
+        return os.path.join('https://storage.yandexcloud.net/', self.bucket_name, path, filename)
 
-    except Exception as e:
-        raise ServerError(f"Failed to process the file: {str(e)}")
+    async def write(self, path: str, filename: str, file_stream: BytesIO) -> str:
+        key = os.path.join(path, filename)
+        self.client.upload_fileobj(file_stream, self.bucket_name, key)
+        file_url = os.path.join('https://storage.yandexcloud.net/', self.bucket_name, key)
+        return file_url
+
+    async def update(self, path: str, filename: str, file_stream: BytesIO) -> str:
+        key = os.path.join(path, filename)
+        self.client.upload_fileobj(file_stream, self.bucket_name, key)
+        file_url = os.path.join('https://storage.yandexcloud.net/', self.bucket_name, key)
+        return file_url
+
+    async def remove(self, path: str, filename: str) -> None:
+        key = f'{path}/{filename}'
+        self.client.delete_object(Bucket=self.bucket_name, Key=key)
+
+    async def __aenter__(self) -> Self:
+        return self
+
+    async def __aexit__(
+        self,
+        exc_type: type[Exception] | None = None,
+        exc_val: Exception | None = None,
+        exc_tb: TracebackType | None = None,
+    ) -> None:
+        pass
+
+
+@dataclass
+class S3Repository(BaseStorageRepositoryMixin):
+    async def start(self) -> AsyncGenerator[Session]:
+        async with Session() as session:
+            yield session
+
+
+def unique_filename(filename: str) -> str:
+    file_name, file_extension = os.path.splitext(filename)
+    return f'{file_name.replace(' ', '-')}_{uuid4()}{file_extension}'
 
 
 async def get_file_stream(data: bytes) -> BytesIO:
