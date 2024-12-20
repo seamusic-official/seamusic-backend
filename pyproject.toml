@@ -73,6 +73,7 @@ disallow_subclassing_any = false
 disable_error_code = [
     "unused-ignore",
     "no-any-return",
+    "override",
 ]
 check_untyped_defs = false
 disallow_untyped_calls = true

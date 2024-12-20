@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     yandex_cloud_id: str = Field(default='', alias='YANDEX_CLOUD_ID')
     aws_access_key_id: str = Field(default='', alias='AWS_ACCESS_KEY_ID')
     aws_secret_access_key: str = Field(default='', alias='AWS_SECRET_ACCESS_KEY')
+    bucket_name: str = Field(default='', alias='BUCKET_NAME')
 
     spotify_client_id: str = Field(default='', alias='SPOTIFY_CLIENT_ID')
     spotify_client_secret: str = Field(default='', alias='SPOTIFY_CLIENT_SECRET')
@@ -31,8 +32,6 @@ class Settings(BaseSettings):
 
     jwt_secret_key: str = Field(default='', alias='JWT_SECRET_KEY')
     jwt_refresh_secret_key: str = Field(default='', alias='JWT_REFRESH_SECRET_KEY')
-
-    bucket_name: str = Field(default='', alias='BUCKET_NAME')
 
     email_address: EmailStr = Field(default='seamusimgmt@gmail.com', alias='EMAIL_ADDRESS')
     email_password: str = Field(default='', alias='EMAIL_PASSWORD')
