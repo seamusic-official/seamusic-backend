@@ -23,22 +23,22 @@ class ExecuteAction(Enum):
 class Session(BaseStorageRepositoryMixinSession, AsyncSession):
     table: type[Base]
 
-    async def read(self, obj_id: int) -> Any | None:  # type: ignore[override]
+    async def read(self, obj_id: int) -> Any | None:
         return await self.get(self.table, obj_id)
 
-    async def write(self, obj) -> None:  # type: ignore[no-untyped-def, override]
+    async def write(self, obj) -> None:  # type: ignore[no-untyped-def]
         self.add(obj)
 
-    async def update(self, obj: Base) -> None:  # type: ignore[override]
+    async def update(self, obj: Base) -> None:
         response = await self.get(obj.__class__, obj.id)
         if response:
             await self.merge(obj)
 
-    async def remove(self, table: type[Base], obj_id: int) -> None:  # type: ignore[override]
+    async def remove(self, table: type[Base], obj_id: int) -> None:
         obj = await self.get(table, obj_id)
         await self.delete(obj)
 
-    async def run(self, statement: Executable, action: ExecuteAction) -> Base | list[Base] | None:  # type: ignore[return, override]
+    async def run(self, statement: Executable, action: ExecuteAction) -> Base | list[Base] | None:  # type: ignore[return]
         if action == action.scalars:
             return list(await self.scalars(statement))
         elif action == action.scalar:
@@ -51,7 +51,7 @@ class Session(BaseStorageRepositoryMixinSession, AsyncSession):
 class SQLAlchemyRepository(BaseStorageRepositoryMixin):
     table: type[Base]
 
-    async def start(self) -> AsyncGenerator[Session]:  # type: ignore[override]
+    async def start(self) -> AsyncGenerator[Session]:
         async with Session(table=self.table) as session:
             try:
                 yield session

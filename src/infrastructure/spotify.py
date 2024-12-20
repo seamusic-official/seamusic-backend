@@ -36,7 +36,7 @@ class Response:
 
 @dataclass
 class Session(BaseStorageRepositoryMixinSession, ClientSession):
-    async def read(self, url: str, params: dict, headers: dict) -> Any | None:  # type: ignore[override]
+    async def read(self, url: str, params: dict, headers: dict) -> Any | None:
         response = await self.get(url=url, params=params, headers=headers)
         return Response(
             status=response.status,
@@ -44,7 +44,7 @@ class Session(BaseStorageRepositoryMixinSession, ClientSession):
             headers=dict(response.headers),
         )
 
-    async def write(self, url: str, data: dict, headers: dict) -> Response:  # type: ignore[override]
+    async def write(self, url: str, data: dict, headers: dict) -> Response:
         response = await self.post(url=url, data=data, headers=headers)
         return Response(
             status=response.status,
@@ -52,7 +52,7 @@ class Session(BaseStorageRepositoryMixinSession, ClientSession):
             headers=dict(response.headers),
         )
 
-    async def update(self, url: str, data: dict, headers: dict) -> Response:  # type: ignore[override]
+    async def update(self, url: str, data: dict, headers: dict) -> Response:
         response = await self.put(url=url, data=data, headers=headers)
         return Response(
             status=response.status,
@@ -60,7 +60,7 @@ class Session(BaseStorageRepositoryMixinSession, ClientSession):
             headers=dict(response.headers),
         )
 
-    async def remove(self, url: str, params: dict, headers: dict) -> Response:  # type: ignore[override]
+    async def remove(self, url: str, params: dict, headers: dict) -> Response:
         response = await self.delete(url=url, params=params, headers=headers)
         return Response(
             status=response.status,
@@ -68,7 +68,7 @@ class Session(BaseStorageRepositoryMixinSession, ClientSession):
             headers=dict(response.headers),
         )
 
-    async def run(self, request: Request) -> Response:  # type: ignore[override]
+    async def run(self, request: Request) -> Response:
         response = await self.request(
             method=str(request.method),
             url=request.url,
@@ -86,7 +86,7 @@ class Session(BaseStorageRepositoryMixinSession, ClientSession):
 
 @dataclass
 class SpotifyRepository(BaseStorageRepositoryMixin):
-    async def start(self) -> AsyncGenerator[Session]:  # type: ignore[override]
+    async def start(self) -> AsyncGenerator[Session]:
         async with Session() as session:
             yield session  # type: ignore[misc]
             await session.close()
