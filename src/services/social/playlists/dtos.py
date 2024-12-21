@@ -3,11 +3,10 @@ from typing import Generic, TypeVar, Literal
 
 from pydantic import EmailStr
 
-from src.domain.music.albums.dtos import BaseDTO, BaseRequestDTO, BaseResponseDTO
+from src.domain.social.playlists.dtos import BaseDTO, BaseRequestDTO, BaseResponseDTO
 from src.infrastructure.pages import get_page, get_has_next, get_has_previous
 
-ItemType = TypeVar('ItemType')
-AlbumType = Literal['album', 'single']
+ItemType = TypeVar("ItemType")
 AccessLevel = Literal['user', 'admin', 'superuser']
 PremiumLevel = Literal['none', 'bot', 'full']
 
@@ -31,20 +30,17 @@ class UserDTO(BaseDTO):
     updated_at: datetime
 
 
-class ArtistDTO(BaseDTO):
+class BeatDTO(BaseDTO):
     id: int
-    username: str
-    description: str | None = None
-    picture_url: str | None = None
-    user_id: int
+    title: str
+    description: str | None
+    picture_url: str | None
+    file_url: str
+    views: int
+    likes: int
 
-
-class ProducerDTO(BaseDTO):
-    id: int
-    username: str
-    description: str | None = None
-    picture_url: str | None = None
-    user_id: int
+    created_at: date
+    updated_at: datetime
 
 
 class TrackDTO(BaseDTO):
@@ -74,94 +70,77 @@ class ItemsResponseDTO(BaseResponseDTO, Generic[ItemType]):
     items: list[ItemType]
 
 
-class AlbumRequestDTO(BaseRequestDTO):
-    id: int
-
-
-class AlbumResponseDTO(BaseResponseDTO):
+class PlaylistResponseDTO(BaseResponseDTO):
     id: int
     title: str
-    picture_url: str | None
     description: str | None
-    type: AlbumType
+    picture_url: str | None
     views: int
     likes: int
 
     created_at: date
     updated_at: datetime
 
-    viewers: list[UserDTO] | None = None
-    likers: list[UserDTO] | None = None
-    artists: list[ArtistDTO] | None = None
-    tracks: list[TrackDTO] | None = None
-    tags: list[str] | None = None
-
-
-class AlbumItemResponseDTO(BaseResponseDTO):
-    id: int
-    title: str
-    picture_url: str | None
-    description: str | None
     views: int
     likes: int
-    type: AlbumType
+    authors: list[UserDTO]
+    beats: list[BeatDTO]
+    tracks: list[TrackDTO]
+    tags: list[str]
+
+
+class PlaylistItemResponseDTO(BaseResponseDTO):
+    id: int
+    title: str
+    description: str | None
+    picture_url: str | None
+    views: int
+    likes: int
 
     created_at: date
     updated_at: datetime
 
-
-class AlbumsResponseDTO(ItemsResponseDTO[AlbumItemResponseDTO]):
-    pass
+    tags: list[str]
 
 
-class CountAlbumResponseDTO(BaseResponseDTO):
-    amount: int
+class PlaylistsResponseDTO(BaseResponseDTO):
+    playlists: list[PlaylistItemResponseDTO]
 
 
-class ArtistAlbumsRequestDTO(BaseRequestDTO):
-    artist_id: int
-
-
-class ArtistAlbumsResponseDTO(ItemsResponseDTO[AlbumItemResponseDTO]):
-    pass
-
-
-class CreateAlbumRequestDTO(BaseRequestDTO):
+class CreatePlaylistRequestDTO(BaseRequestDTO):
+    id: int
     title: str
-    picture_url: str | None
     description: str | None
-    type: AlbumType
+    picture_url: str | None
 
-    created_at: date = date.today()
-    updated_at: datetime = datetime.now()
+    created_at: date
+    updated_at: datetime
+
+    tags: list[str]
 
 
-class CreateAlbumResponseDTO(BaseResponseDTO):
+class CreatePlaylistResponseDTO(BaseResponseDTO):
     id: int
 
 
-class UpdateAlbumRequestDTO(BaseRequestDTO):
+class UpdatePlaylistRequestDTO(BaseRequestDTO):
     id: int
-    title: str | None = None
-    picture_url: str | None = None
-    description: str | None = None
-    type: AlbumType | None = None
+    title: str
+    description: str | None
+    picture_url: str | None
 
-    updated_at: datetime = datetime.now()
+    updated_at: datetime
 
-    viewers_ids: list[int] | None = None
-    likers_ids: list[int] | None = None
-    artists_ids: list[int] | None = None
-    tracks_ids: list[int] | None = None
-    tags: list[str] | None = None
+    viewers_ids: list[int]
+    likers_ids: list[int]
+    authors_ids: list[int]
+    beats_ids: list[int]
+    tracks_ids: list[int]
+    tags: list[str]
 
 
-class UpdateAlbumResponseDTO(BaseResponseDTO):
+class UpdatePlaylistResponseDTO(BaseResponseDTO):
     id: int
-
-
-class DeleteAlbumRequestDTO(BaseRequestDTO):
-    album_id: int
 
 
 def get_items_response(  # type: ignore[no-untyped-def]
