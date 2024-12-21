@@ -67,7 +67,6 @@ class User(Base):
     created_at: Mapped[date]
     updated_at: Mapped[datetime]
 
-    messages: Mapped["Message"] = relationship("Message", back_populates="author")  # type: ignore[name-defined]  # noqa: F821
     licenses: Mapped[list["License"]] = relationship(secondary=user_to_licenses_association)  # type: ignore[name-defined]  # noqa: F821
     followed_squads: Mapped[list["Squad"]] = relationship(secondary=follower_to_squads_association, back_populates="followers")  # type: ignore[name-defined]  # noqa: F821
     followed_artists: Mapped[list["ArtistProfile"]] = relationship(secondary=user_to_artist_association, back_populates="users")  # type: ignore[name-defined]  # noqa: F821
