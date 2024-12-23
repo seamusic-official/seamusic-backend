@@ -3,7 +3,7 @@ version: '3.8'
 services:
   db:
     image: postgres:16.2
-    container_name: db
+    container_name: sm_db
     restart: always
     environment:
       - POSTGRES_DB=${DB_NAME}
@@ -14,7 +14,7 @@ services:
     volumes:
       - ./db:/var/lib/postgresql/data
     networks:
-      - backend
+      - sm_backend
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U ${DB_USER}']
       interval: 10s
@@ -25,7 +25,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: app
+    container_name: sm_app
     depends_on:
       db:
         condition: service_healthy
@@ -35,10 +35,10 @@ services:
     env_file:
       - .env
     volumes:
-      - ./:/backend/
+      - ./:/sm_backend/
     networks:
-      - backend
+      - sm_backend
 
 networks:
-  backend:
+  sm_backend:
     driver: "bridge"

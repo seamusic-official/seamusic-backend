@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   db_test:
-    container_name: db_test
+    container_name: sm_db_test
     image: postgres:16.2
     env_file:
       - .env.test
@@ -19,12 +19,12 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - backend
+      - sm_backend
   tests:
     build:
       context: .
       dockerfile: Dockerfile.test
-    container_name: tests
+    container_name: sm_tests
     depends_on:
       db_test:
         condition: service_healthy
@@ -33,10 +33,10 @@ services:
     env_file:
       - .env.test
     volumes:
-      - ./:/backend/
+      - ./:/sm_backend/
     networks:
-      - backend
+      - sm_backend
 
 networks:
-  backend:
+  sm_backend:
     driver: "bridge"
