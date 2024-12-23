@@ -4,7 +4,7 @@ from sqlalchemy import ForeignKey, Column, Table, Integer
 from sqlalchemy.orm import mapped_column, Mapped
 
 from src.infrastructure.postgres.orm import Base
-from src.services.auth.users.models import user_to_producer_association
+from src.app.auth.users.models import user_to_producer_association
 
 producer_to_beatpacks_association = Table(
     "producer_to_beatpacks_association",

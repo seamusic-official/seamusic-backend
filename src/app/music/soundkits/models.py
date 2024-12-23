@@ -4,8 +4,8 @@ from sqlalchemy import Column, Table, ForeignKey, Integer
 from sqlalchemy.orm import Mapped, relationship
 
 from src.infrastructure.postgres.orm import Base
-from src.services.auth.producers.models import producer_to_soundkits_association
-from src.services.social.views.models import user_to_soundkits_views_association
+from src.app.auth.producers.models import producer_to_soundkits_association
+from src.app.social.views.models import user_to_soundkits_views_association
 
 tag_to_soundkits_association = Table(
     "tag_to_soundkits_association",

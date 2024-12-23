@@ -3,7 +3,7 @@ version: '3.8'
 services:
   db:
     image: postgres:16.2
-    container_name: db
+    container_name: sm_db
     restart: always
     environment:
       - POSTGRES_DB=${DB_NAME}
@@ -14,7 +14,7 @@ services:
     volumes:
       - ./db:/var/lib/postgresql/data
     networks:
-      - backend
+      - sm-backend
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U ${DB_USER}']
       interval: 10s
@@ -25,7 +25,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: app
+    container_name: sm_app
     depends_on:
       db:
         condition: service_healthy
@@ -34,13 +34,13 @@ services:
     env_file:
       - .env
     volumes:
-      - ./:/backend/
+      - ./:/sm-backend/
     networks:
-      - backend
+      - sm-backend
 
 
   pgadmin:
-    container_name: pgadmin_app
+    container_name: sm_pgadmin_app
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: 'user@example.com'
@@ -48,8 +48,8 @@ services:
     ports:
       - "5050:80"
     networks:
-      - backend
+      - sm-backend
 
 networks:
-  backend:
+  sm-backend:
     driver: "bridge"

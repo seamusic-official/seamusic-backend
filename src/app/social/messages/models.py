@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, Table, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.infrastructure.postgres.orm import Base
-from src.services.social.chats.models import message_to_chat_association
+from src.app.social.chats.models import message_to_chat_association
 
 user_to_message_association = Table(
     "user_to_message_association",

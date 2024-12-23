@@ -4,7 +4,7 @@ from sqlalchemy import Table, ForeignKey, Column
 from sqlalchemy.orm import Mapped, relationship
 
 from src.infrastructure.postgres.orm import Base
-from src.services.social.views.models import user_to_playlists_views_association
+from src.app.social.views.models import user_to_playlists_views_association
 
 playlists_to_beat_association = Table(
     "playlists_to_beat_association",

@@ -4,7 +4,7 @@ from sqlalchemy import Column, Table, ForeignKey
 from sqlalchemy.orm import Mapped, relationship
 
 from src.infrastructure.postgres.orm import Base
-from src.services.social.views.models import user_to_albums_views_association
+from src.app.social.views.models import user_to_albums_views_association
 
 album_to_track_association = Table(
     "album_to_track_association",
