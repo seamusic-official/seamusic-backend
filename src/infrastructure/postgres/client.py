@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-from enum import Enum
-from typing import AsyncGenerator, Any
+from typing import AsyncGenerator, Any, Literal
 
 from sqlalchemy import Executable
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
@@ -11,12 +10,6 @@ from src.infrastructure.postgres.orm import Base
 
 engine = create_async_engine(url=settings.db_url, echo=settings.echo)
 sessionmaker = async_sessionmaker(bind=engine, expire_on_commit=False)
-
-
-class ExecuteAction(Enum):
-    scalars = 'scalars'
-    scalar = 'scalar'
-    execute = 'execute'
 
 
 @dataclass
@@ -38,12 +31,12 @@ class Session(BaseStorageRepositoryMixinSession, AsyncSession):
         obj = await self.get(table, obj_id)
         await self.delete(obj)
 
-    async def run(self, statement: Executable, action: ExecuteAction) -> Base | list[Base] | None:  # type: ignore[return]
-        if action == action.scalars:
+    async def run(self, statement: Executable, action: Literal['scalars', 'scalar', 'execute']) -> Base | list[Base] | None:  # type: ignore[return]
+        if action == 'scalars':
             return list(await self.scalars(statement))
-        elif action == action.scalar:
+        elif action == 'scalar':
             return await self.scalar(statement)
-        elif action == action.execute:
+        elif action == 'execute':
             await self.execute(statement)
 
 
