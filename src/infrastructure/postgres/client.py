@@ -12,7 +12,7 @@ sessionmaker = async_sessionmaker(bind=engine, expire_on_commit=False)
 
 
 @dataclass
-class Session(AsyncSession):
+class PostgresSessionMixin(AsyncSession):
     table: type[Base]
 
     async def read(self, obj_id: int) -> Any | None:
@@ -28,7 +28,7 @@ class Session(AsyncSession):
         obj = await self.get(self.table, obj_id)
         await self.delete(obj)
 
-    async def run(self, statement: Executable, action: Literal['scalars', 'scalar', 'execute']) -> Base | list[Base] | None:  # type: ignore[return]
+    async def run(self, statement: Executable, action: Literal['scalars', 'scalar', 'execute']) -> Base | list[Base] | int | None:  # type: ignore[return]
         if action == 'scalars':
             return list(await self.scalars(statement))
         elif action == 'scalar':
