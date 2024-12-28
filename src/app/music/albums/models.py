@@ -1,10 +1,10 @@
 from datetime import date, datetime
+from typing import Literal
 
 from sqlalchemy import Column, Table, ForeignKey
 from sqlalchemy.orm import Mapped, relationship
 
 from src.infrastructure.postgres.orm import Base
-from src.app.social.views.models import user_to_albums_views_association
 
 album_to_track_association = Table(
     "album_to_track_association",
@@ -27,13 +27,6 @@ album_to_tag_association = Table(
     Column("tag_id", ForeignKey("tags.id"), primary_key=True)
 )
 
-user_to_albums_likes = Table(
-    "user_to_albums_likes",
-    Base.metadata,
-    Column("album_id", ForeignKey("albums.id"), primary_key=True),
-    Column("user_id", ForeignKey("users.id"), primary_key=True)
-)
-
 
 class Album(Base):
     __tablename__ = "albums"
@@ -41,19 +34,13 @@ class Album(Base):
     title: Mapped[str]
     picture_url: Mapped[str | None]
     description: Mapped[str | None]
-    type: Mapped[str]
+    type: Mapped[Literal['album', 'single']]
 
     created_at: Mapped[date]
     updated_at: Mapped[datetime]
 
-    viewers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        secondary=user_to_albums_views_association,
-        lazy="selectin"
-    )
-    likers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        secondary=user_to_albums_likes,
-        lazy="selectin"
-    )
+    viewers_ids: Mapped[list[int]]
+    likers_ids: Mapped[list[int]]
     artists: Mapped[list["ArtistProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=album_to_artist_association,
         back_populates="album",

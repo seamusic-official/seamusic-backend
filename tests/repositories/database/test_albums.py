@@ -33,7 +33,7 @@ class TestAlbumRepository:
     async def test_create_album(self, create_album_request: CreateAlbumRequestDTO, request: pytest.FixtureRequest) -> None:
         response: CreateAlbumResponseDTO = await self.repository.create_album(album=create_album_request)
         assert isinstance(response, CreateAlbumResponseDTO)
-        request.node.album_id = response.id
+        request.node.id = response.id
 
     @pytest.fixture(scope='session')
     async def album_id(self, request: pytest.FixtureRequest) -> int:
@@ -45,19 +45,19 @@ class TestAlbumRepository:
 
     # @pytest.mark.dependency(depends=['TestAlbumRepository::test_create_album'])
     async def test_get_album(self, album_id: int) -> None:
-        response: AlbumResponseDTO | None = await self.repository.get_album(request=AlbumRequestDTO(id=album_id))
+        response: AlbumResponseDTO | None = await self.repository.get_album_by_id(request=AlbumRequestDTO(id=album_id))
         assert isinstance(response, AlbumResponseDTO | None)
 
     # @pytest.mark.dependency(depends=['TestAlbumRepository::test_create_album', 'TestAlbumRepository::test_get_album'])
     async def test_update_album(self, update_album_request: UpdateAlbumRequestDTO, request: pytest.FixtureRequest) -> None:
         response: UpdateAlbumResponseDTO = await self.repository.update_album(album=update_album_request)
         assert isinstance(response, UpdateAlbumResponseDTO)
-        request.node.album_id = response.id
+        request.node.id = response.id
 
     # @pytest.mark.dependency(depends=['TestAlbumRepository::test_create_album', 'TestAlbumRepository::test_update_album'])
     @pytest.mark.parametrize("page", [ItemsRequestDTO(offset=i, limit=10 - i) for i in range(10)])
     async def test_get_albums(self, page: ItemsRequestDTO) -> None:
-        response: AlbumsResponseDTO = await self.repository.get_albums(page=page)
+        response: AlbumsResponseDTO = await self.repository.get_popular_albums(page=page)
         assert isinstance(response, AlbumsResponseDTO)
 
     # @pytest.mark.dependency(depends=['TestAlbumRepository::test_create_album', 'TestAlbumRepository::test_update_album'])

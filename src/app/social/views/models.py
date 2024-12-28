@@ -2,13 +2,6 @@ from sqlalchemy import Column, Table, ForeignKey
 
 from src.infrastructure.postgres.orm import Base
 
-user_to_albums_views_association = Table(
-    "user_to_views_association",
-    Base.metadata,
-    Column("user_id", ForeignKey("users.id"), primary_key=True),
-    Column("album_id", ForeignKey("albums.id"), primary_key=True)
-)
-
 user_to_beatpacks_views_association = Table(
     "user_to_beatpacks_views_association",
     Base.metadata,

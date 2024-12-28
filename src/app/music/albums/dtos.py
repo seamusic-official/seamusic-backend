@@ -39,14 +39,6 @@ class ArtistDTO(BaseDTO):
     user_id: int
 
 
-class ProducerDTO(BaseDTO):
-    id: int
-    username: str
-    description: str | None = None
-    picture_url: str | None = None
-    user_id: int
-
-
 class TrackDTO(BaseDTO):
     id: int
     title: str
@@ -61,8 +53,8 @@ class TrackDTO(BaseDTO):
 
 
 class ItemsRequestDTO(BaseRequestDTO):
-    offset: int = 0
-    limit: int = 10
+    start: int = 1
+    size: int = 10
 
 
 class ItemsResponseDTO(BaseResponseDTO, Generic[ItemType]):
@@ -75,7 +67,8 @@ class ItemsResponseDTO(BaseResponseDTO, Generic[ItemType]):
 
 
 class AlbumRequestDTO(BaseRequestDTO):
-    id: int
+    album_id: int
+    user_id: int
 
 
 class AlbumResponseDTO(BaseResponseDTO):
@@ -90,11 +83,16 @@ class AlbumResponseDTO(BaseResponseDTO):
     created_at: date
     updated_at: datetime
 
-    viewers: list[UserDTO] | None = None
-    likers: list[UserDTO] | None = None
-    artists: list[ArtistDTO] | None = None
-    tracks: list[TrackDTO] | None = None
-    tags: list[str] | None = None
+    viewers_ids: list[int]
+    likers_ids: list[int]
+    artists: list[ArtistDTO]
+    tracks: list[TrackDTO]
+    tags: list[str]
+
+
+class AlbumExistanceRequestDTO(BaseRequestDTO):
+    artist_id: int
+    title: str
 
 
 class AlbumItemResponseDTO(BaseResponseDTO):
@@ -110,12 +108,20 @@ class AlbumItemResponseDTO(BaseResponseDTO):
     updated_at: datetime
 
 
-class AlbumsResponseDTO(ItemsResponseDTO[AlbumItemResponseDTO]):
+class PopularAlbumsResponseDTO(ItemsResponseDTO[AlbumItemResponseDTO]):
     pass
 
 
-class CountAlbumResponseDTO(BaseResponseDTO):
+class CountAlbumsResponseDTO(BaseResponseDTO):
     amount: int
+
+
+class ArtistIDRequest(BaseRequestDTO):
+    user_id: int
+
+
+class ArtistIDResponse(BaseResponseDTO):
+    artist_id: int
 
 
 class ArtistAlbumsRequestDTO(BaseRequestDTO):
@@ -128,12 +134,16 @@ class ArtistAlbumsResponseDTO(ItemsResponseDTO[AlbumItemResponseDTO]):
 
 class CreateAlbumRequestDTO(BaseRequestDTO):
     title: str
+    user_id: int
     picture_url: str | None
     description: str | None
     type: AlbumType
 
-    created_at: date = date.today()
-    updated_at: datetime = datetime.now()
+    artists_ids: list[int]
+    tags: list[str]
+
+    created_at: date
+    updated_at: datetime
 
 
 class CreateAlbumResponseDTO(BaseResponseDTO):
@@ -147,7 +157,7 @@ class UpdateAlbumRequestDTO(BaseRequestDTO):
     description: str | None = None
     type: AlbumType | None = None
 
-    updated_at: datetime = datetime.now()
+    updated_at: datetime | None = None
 
     viewers_ids: list[int] | None = None
     likers_ids: list[int] | None = None
