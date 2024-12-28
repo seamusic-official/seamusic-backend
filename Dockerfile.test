@@ -1,4 +1,4 @@
-FROM python:3.11.9
+FROM python:3.11.11
 
 COPY . /backend
 WORKDIR /backend
