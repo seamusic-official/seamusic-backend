@@ -4,8 +4,6 @@ from typing import Any, AsyncGenerator
 
 from aiohttp import ClientSession
 
-from src.domain.repositories import BaseStorageRepositoryMixinSession, BaseStorageRepositoryMixin
-
 
 class RequestMethod(Enum):
     get = 'get'
@@ -35,7 +33,7 @@ class Response:
 
 
 @dataclass
-class Session(BaseStorageRepositoryMixinSession, ClientSession):
+class Session(ClientSession):
     async def read(self, url: str, params: dict, headers: dict) -> Any | None:
         response = await self.get(url=url, params=params, headers=headers)
         return Response(
@@ -85,8 +83,8 @@ class Session(BaseStorageRepositoryMixinSession, ClientSession):
 
 
 @dataclass
-class SpotifyRepository(BaseStorageRepositoryMixin):
-    async def start(self) -> AsyncGenerator[Session]:
+class SpotifyRepository:
+    async def open(self) -> AsyncGenerator[Session]:
         async with Session() as session:
             yield session  # type: ignore[misc]
             await session.close()

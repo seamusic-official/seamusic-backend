@@ -7,12 +7,11 @@ from uuid import uuid4
 
 from boto3 import Session as Boto3Session, client as _client
 
-from src.domain.repositories import BaseStorageRepositoryMixin, BaseStorageRepositoryMixinSession
 from src.infrastructure.config import settings
 
 
 @dataclass
-class Session(BaseStorageRepositoryMixinSession):
+class Session:
     session: Boto3Session = Boto3Session(
         aws_access_key_id=settings.aws_access_key_id,
         aws_secret_access_key=settings.aws_secret_access_key
@@ -52,8 +51,8 @@ class Session(BaseStorageRepositoryMixinSession):
 
 
 @dataclass
-class S3Repository(BaseStorageRepositoryMixin):
-    async def start(self) -> AsyncGenerator[Session]:
+class S3Repository:
+    async def open(self): -> AsyncGenerator[Session]:
         async with Session() as session:
             yield session
 
