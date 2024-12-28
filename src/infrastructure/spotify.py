@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, AsyncGenerator
+from typing import Any
 
 from aiohttp import ClientSession
 
@@ -80,11 +80,3 @@ class Session(ClientSession):
             data=await response.json(),
             headers=dict(response.headers),
         )
-
-
-@dataclass
-class SpotifyRepository:
-    async def open(self) -> AsyncGenerator[Session]:
-        async with Session() as session:
-            yield session  # type: ignore[misc]
-            await session.close()

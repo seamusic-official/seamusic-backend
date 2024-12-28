@@ -2,7 +2,7 @@ import os
 from dataclasses import dataclass
 from io import BytesIO
 from types import TracebackType
-from typing import AsyncGenerator, Self
+from typing import Self
 from uuid import uuid4
 
 from boto3 import Session as Boto3Session, client as _client
@@ -48,13 +48,6 @@ class Session:
         exc_tb: TracebackType | None = None,
     ) -> None:
         pass
-
-
-@dataclass
-class S3Repository:
-    async def open(self): -> AsyncGenerator[Session]:
-        async with Session() as session:
-            yield session
 
 
 def unique_filename(filename: str) -> str:

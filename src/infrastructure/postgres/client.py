@@ -3,7 +3,6 @@ from typing import Any, Literal
 
 from sqlalchemy import Executable
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
-from src.domain.repositories import BaseStorageSession
 
 from src.infrastructure.config import settings
 from src.infrastructure.postgres.orm import Base
@@ -13,7 +12,7 @@ sessionmaker = async_sessionmaker(bind=engine, expire_on_commit=False)
 
 
 @dataclass
-class Session(BaseStorageSession, AsyncSession):
+class Session(AsyncSession):
     table: type[Base]
 
     async def read(self, obj_id: int) -> Any | None:
