@@ -30,6 +30,14 @@ class UserDTO(BaseDTO):
     updated_at: datetime
 
 
+class ProducerDTO(BaseDTO):
+    id: int
+    username: str
+    description: str | None = None
+    picture_url: str | None = None
+    user_id: int
+
+
 class ItemsRequestDTO(BaseRequestDTO):
     offset: int = 0
     limit: int = 10
