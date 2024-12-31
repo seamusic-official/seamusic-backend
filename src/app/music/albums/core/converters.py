@@ -22,8 +22,6 @@ class FromModelsConverter(BaseConverter):
             likes=len(album.likers_ids),
             created_at=album.created_at,
             updated_at=album.updated_at,
-            viewers_ids=album.viewers_ids,
-            likers_ids=album.likers_ids,
             artists=album.artists,
             tracks=album.tracks,
             tags=album.tags,

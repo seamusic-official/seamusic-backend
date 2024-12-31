@@ -4,7 +4,6 @@ from typing import Literal
 from sqlalchemy import Column, Table, ForeignKey
 from sqlalchemy.orm import Mapped, relationship
 
-from src.domain.music.albums.da.models import BaseModel
 from src.infrastructure.postgres.orm import Base
 
 album_to_track_association = Table(
@@ -29,7 +28,7 @@ album_to_tag_association = Table(
 )
 
 
-class Album(Base, BaseModel):
+class Album(Base):
     __tablename__ = "albums"
 
     title: Mapped[str]

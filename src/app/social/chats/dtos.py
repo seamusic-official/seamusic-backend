@@ -57,12 +57,12 @@ class ItemsResponseDTO(BaseResponseDTO, Generic[ItemType]):
 class ChatResponseDTO(BaseResponseDTO):
     id: int
     messages: list[MessageDTO]
-    participants: list[UserDTO, UserDTO]
+    participants: list[UserDTO]
 
 
 class ChatItemResponseDTO(BaseResponseDTO):
     id: int
-    participants: list[UserDTO, UserDTO]
+    participants: list[UserDTO]
 
 
 class MyChatsResponseDTO(BaseResponseDTO):

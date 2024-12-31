@@ -54,8 +54,6 @@ class SoundkitResponseDTO(BaseResponseDTO):
     created_at: date
     updated_at: datetime
 
-    views: int
-    likes: int
     producers: list[ProducerDTO]
     beats: list[BeatDTO]
     tags: list[str]

@@ -83,8 +83,6 @@ class AlbumResponseDTO(BaseResponseDTO, BaseModel):
     created_at: date
     updated_at: datetime
 
-    views: int
-    likes: int
     artists: list[ArtistDTO]
     tracks: list[TrackDTO]
     tags: list[str]
@@ -137,7 +135,6 @@ class CreateAlbumRequestDTO(BaseRequestDTO, BaseModel):
     user_id: int
     picture_url: str | None
     description: str | None
-    type: AlbumType
 
     artists_ids: list[int]
     tags: list[str]
@@ -152,9 +149,6 @@ class UpdateAlbumRequestDTO(BaseRequestDTO, BaseModel):
     title: str | None = None
     picture_url: str | None = None
     description: str | None = None
-    type: AlbumType | None = None
-
-    updated_at: datetime | None = None
 
     artists_ids: list[int] | None = None
     tracks_ids: list[int] | None = None

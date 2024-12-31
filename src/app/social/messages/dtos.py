@@ -32,7 +32,7 @@ class UserDTO(BaseDTO):
 
 class ChatDTO(BaseDTO):
     id: int
-    participants: list[UserDTO, UserDTO]
+    participants: list[UserDTO]
 
 
 class ItemsRequestDTO(BaseRequestDTO):

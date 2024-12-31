@@ -10,40 +10,40 @@ class BaseConverter(ABC):
 
     @staticmethod
     @abstractmethod
-    async def album_request(*args, **kwargs):
+    async def album_request(*args, **kwargs):  # type: ignore[no-untyped-def]
         raise NotImplementedError
 
     @staticmethod
     @abstractmethod
-    async def album_existance_request(*args, **kwargs):
+    async def album_existance_request(*args, **kwargs):  # type: ignore[no-untyped-def]
         raise NotImplementedError
 
     @staticmethod
     @abstractmethod
-    async def count_albums_request(*args, **kwargs):
+    async def count_albums_request(*args, **kwargs):  # type: ignore[no-untyped-def]
         raise NotImplementedError
 
     @staticmethod
     @abstractmethod
-    async def popular_albums_request(*args, **kwargs):
+    async def popular_albums_request(*args, **kwargs):  # type: ignore[no-untyped-def]
         raise NotImplementedError
 
     @staticmethod
     @abstractmethod
-    async def artist_id_by_user_id_request(*args, **kwargs):
+    async def artist_id_by_user_id_request(*args, **kwargs):  # type: ignore[no-untyped-def]
         raise NotImplementedError
 
     @staticmethod
     @abstractmethod
-    async def create_album_request(*args, **kwargs):
+    async def create_album_request(*args, **kwargs):  # type: ignore[no-untyped-def]
         raise NotImplementedError
 
     @staticmethod
     @abstractmethod
-    async def update_album_request(*args, **kwargs):
+    async def update_album_request(*args, **kwargs):  # type: ignore[no-untyped-def]
         raise NotImplementedError
 
     @staticmethod
     @abstractmethod
-    async def delete_album_request(*args, **kwargs):
+    async def delete_album_request(*args, **kwargs):  # type: ignore[no-untyped-def]
         raise NotImplementedError

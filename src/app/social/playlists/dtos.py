@@ -81,8 +81,6 @@ class PlaylistResponseDTO(BaseResponseDTO):
     created_at: date
     updated_at: datetime
 
-    views: int
-    likes: int
     authors: list[UserDTO]
     beats: list[BeatDTO]
     tracks: list[TrackDTO]

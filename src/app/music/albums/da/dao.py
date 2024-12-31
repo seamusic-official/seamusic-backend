@@ -24,7 +24,7 @@ class PostgresDAOImplementation(PostgresSessionMixin, DAO):
         return await self.run(select(Album).order_by(func.count(Album.viewers_ids)).offset(offset).limit(limit), 'scalars')
 
     async def count_albums(self) -> int:
-        return await self.run(select(func.count(Album)), 'scalar')
+        return await self.run(select(func.count(Album.id)), 'scalar')
 
     async def get_artist_id_by_user_id(self, user_id: int) -> int | None:
         return await self.run(select(ArtistProfile.id).filter(ArtistProfile.user_id == user_id), 'scalar')
@@ -43,7 +43,7 @@ class PostgresDAOImplementation(PostgresSessionMixin, DAO):
     async def __aenter__(self) -> Self:
         return self
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
+    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:  # type: ignore[no-untyped-def]
         await self.commit()
         await self.close()
 

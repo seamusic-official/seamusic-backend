@@ -41,8 +41,6 @@ class BeatResponseDTO(BaseResponseDTO):
     created_at: date
     updated_at: datetime
 
-    views: int
-    likes: int
     producers: list[ProducerDTO]
     tags: list[str]
 
