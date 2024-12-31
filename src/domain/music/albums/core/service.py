@@ -1,11 +1,15 @@
 from abc import ABC, abstractmethod
 
-from src.domain.music.albums.dao import BaseDAO
-from src.domain.music.albums.dtos import BaseRequestDTO, BaseResponseDTO
+from src.domain.music.albums.core.converter import BaseConverter as CoreConverter
+from src.domain.music.albums.core.dtos import BaseRequestDTO, BaseResponseDTO
+from src.domain.music.albums.da.converter import BaseConverter as DAConverter
+from src.domain.music.albums.da.dao import DAO
 
 
 class BaseService(ABC):
-    dao: BaseDAO
+    dao_impl: type[DAO]
+    dao_converter: type[DAConverter]
+    core_converter: type[CoreConverter]
 
     @abstractmethod
     async def get_album(self, request: BaseRequestDTO) -> BaseResponseDTO:
