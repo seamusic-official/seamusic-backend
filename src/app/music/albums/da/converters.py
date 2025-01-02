@@ -12,7 +12,7 @@ from src.domain.music.albums.da.converter import BaseConverter
 
 
 @dataclass
-class FromDTOConverter(BaseConverter):
+class DTOConverter(BaseConverter):
     dao_implementation: PostgresDAOImplementation
 
     @staticmethod
@@ -99,5 +99,5 @@ class FromDTOConverter(BaseConverter):
         return {'album_id': album_id}
 
 
-def get_from_dto_converter() -> type[FromDTOConverter]:
-    return FromDTOConverter
+def get_from_dto_converter() -> type[DTOConverter]:
+    return DTOConverter

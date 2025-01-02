@@ -7,7 +7,7 @@ from src.domain.music.albums.da.dao import DAO
 
 
 @dataclass
-class FromModelsConverter(BaseConverter):
+class ModelsConverter(BaseConverter):
     dao_implementation: DAO
 
     @staticmethod
@@ -69,5 +69,5 @@ class FromModelsConverter(BaseConverter):
         return None
 
 
-def get_from_models_converter() -> type[FromModelsConverter]:
-    return FromModelsConverter
+def get_from_models_converter() -> type[ModelsConverter]:
+    return ModelsConverter
