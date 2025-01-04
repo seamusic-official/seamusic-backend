@@ -1,7 +1,7 @@
 from datetime import date, datetime
 
 from sqlalchemy import Table, ForeignKey, Integer, Column
-from sqlalchemy.orm import Mapped, relationship
+from sqlalchemy.orm import Mapped, relationship, mapped_column
 
 from src.infrastructure.postgres.orm import Base
 
@@ -30,6 +30,7 @@ producer_to_squad_association = Table(
 class Squad(Base):
     __tablename__ = "squads"
 
+    id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str]
     description: Mapped[str | None]
     picture_url: Mapped[str | None]

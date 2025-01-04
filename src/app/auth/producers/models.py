@@ -3,8 +3,8 @@ from datetime import datetime, date
 from sqlalchemy import ForeignKey, Column, Table, Integer
 from sqlalchemy.orm import mapped_column, Mapped
 
-from src.infrastructure.postgres.orm import Base
 from src.app.auth.users.models import user_to_producer_association
+from src.infrastructure.postgres.orm import Base
 
 producer_to_beatpacks_association = Table(
     "producer_to_beatpacks_association",
@@ -31,6 +31,7 @@ producer_to_tags_association = Table(
 class ProducerProfile(Base):
     __tablename__ = "producer_profiles"
 
+    id: Mapped[int] = mapped_column(primary_key=True)
     username: Mapped[str]
     description: Mapped[str]
     picture_url: Mapped[str]

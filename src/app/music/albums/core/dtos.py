@@ -3,7 +3,23 @@ from typing import Generic, TypeVar, Literal
 
 from pydantic import EmailStr, BaseModel
 
-from src.domain.music.albums.core.dtos import BaseDTO, BaseRequestDTO, BaseResponseDTO
+from src.domain.music.albums.core.dtos import (
+    BasePopularAlbumsRequestDTO,
+    BasePopularAlbumsResponseDTO,
+    BaseUserDTO,
+    BaseArtistDTO,
+    BaseTrackDTO,
+    BaseItemsRequestDTO,
+    BaseAlbumRequestDTO,
+    BaseAlbumResponseDTO,
+    BaseAlbumItemResponseDTO,
+    BaseArtistAlbumsRequestDTO,
+    BaseCreateAlbumRequestDTO,
+    BaseDeleteAlbumRequestDTO,
+    BaseUpdateAlbumResponseDTO,
+    BaseUpdateAlbumRequestDTO,
+    BaseCreateAlbumResponseDTO,
+)
 from src.infrastructure.pages import get_page, get_has_next, get_has_previous
 
 ItemType = TypeVar('ItemType')
@@ -12,7 +28,7 @@ AccessLevel = Literal['user', 'admin', 'superuser']
 PremiumLevel = Literal['none', 'bot', 'full']
 
 
-class UserDTO(BaseDTO, BaseModel):
+class UserDTO(BaseUserDTO, BaseModel):
     id: int
     username: str
     description: str | None = None
@@ -31,7 +47,7 @@ class UserDTO(BaseDTO, BaseModel):
     updated_at: datetime
 
 
-class ArtistDTO(BaseDTO, BaseModel):
+class ArtistDTO(BaseArtistDTO, BaseModel):
     id: int
     username: str
     description: str | None = None
@@ -39,7 +55,7 @@ class ArtistDTO(BaseDTO, BaseModel):
     user_id: int
 
 
-class TrackDTO(BaseDTO, BaseModel):
+class TrackDTO(BaseTrackDTO, BaseModel):
     id: int
     title: str
     description: str | None
@@ -52,12 +68,12 @@ class TrackDTO(BaseDTO, BaseModel):
     updated_at: datetime
 
 
-class ItemsRequestDTO(BaseRequestDTO, BaseModel):
+class ItemsRequestDTO(BaseItemsRequestDTO, BaseModel):
     start: int = 1
     size: int = 10
 
 
-class ItemsResponseDTO(BaseResponseDTO, Generic[ItemType], BaseModel):
+class ItemsResponseDTO(Generic[ItemType], BaseModel):
     total: int
     page: int
     has_next: bool
@@ -66,12 +82,12 @@ class ItemsResponseDTO(BaseResponseDTO, Generic[ItemType], BaseModel):
     items: list[ItemType]
 
 
-class AlbumRequestDTO(BaseRequestDTO, BaseModel):
+class AlbumRequestDTO(BaseAlbumRequestDTO, BaseModel):
     album_id: int
     user_id: int
 
 
-class AlbumResponseDTO(BaseResponseDTO, BaseModel):
+class AlbumResponseDTO(BaseAlbumResponseDTO, BaseModel):
     id: int
     title: str
     picture_url: str | None
@@ -88,12 +104,7 @@ class AlbumResponseDTO(BaseResponseDTO, BaseModel):
     tags: list[str]
 
 
-class AlbumExistanceRequestDTO(BaseRequestDTO, BaseModel):
-    artist_id: int
-    title: str
-
-
-class AlbumItemResponseDTO(BaseResponseDTO, BaseModel):
+class AlbumItemResponseDTO(BaseAlbumItemResponseDTO, BaseModel):
     id: int
     title: str
     picture_url: str | None
@@ -106,23 +117,19 @@ class AlbumItemResponseDTO(BaseResponseDTO, BaseModel):
     updated_at: datetime
 
 
-class PopularAlbumsResponseDTO(ItemsResponseDTO[AlbumItemResponseDTO], BaseModel):
-    pass
-
-
-class CountAlbumsResponseDTO(BaseResponseDTO, BaseModel):
-    amount: int
-
-
-class ArtistIDRequest(BaseRequestDTO, BaseModel):
+class PopularAlbumsRequestDTO(BasePopularAlbumsRequestDTO):
     user_id: int
 
 
-class ArtistIDResponse(BaseResponseDTO, BaseModel):
-    artist_id: int
+class PopularAlbumsResponseDTO(  # type: ignore[misc]
+    ItemsResponseDTO[AlbumItemResponseDTO],
+    BasePopularAlbumsResponseDTO,
+    BaseModel
+):
+    pass
 
 
-class ArtistAlbumsRequestDTO(BaseRequestDTO, BaseModel):
+class ArtistAlbumsRequestDTO(BaseArtistAlbumsRequestDTO, BaseModel):
     artist_id: int
 
 
@@ -130,7 +137,7 @@ class ArtistAlbumsResponseDTO(ItemsResponseDTO[AlbumItemResponseDTO], BaseModel)
     pass
 
 
-class CreateAlbumRequestDTO(BaseRequestDTO, BaseModel):
+class CreateAlbumRequestDTO(BaseCreateAlbumRequestDTO, BaseModel):
     title: str
     user_id: int
     picture_url: str | None
@@ -140,11 +147,11 @@ class CreateAlbumRequestDTO(BaseRequestDTO, BaseModel):
     tags: list[str]
 
 
-class CreateAlbumResponseDTO(BaseResponseDTO, BaseModel):
+class CreateAlbumResponseDTO(BaseCreateAlbumResponseDTO, BaseModel):
     id: int
 
 
-class UpdateAlbumRequestDTO(BaseRequestDTO, BaseModel):
+class UpdateAlbumRequestDTO(BaseUpdateAlbumRequestDTO, BaseModel):
     id: int
     title: str | None = None
     picture_url: str | None = None
@@ -155,11 +162,11 @@ class UpdateAlbumRequestDTO(BaseRequestDTO, BaseModel):
     tags: list[str] | None = None
 
 
-class UpdateAlbumResponseDTO(BaseResponseDTO, BaseModel):
+class UpdateAlbumResponseDTO(BaseUpdateAlbumResponseDTO, BaseModel):
     id: int
 
 
-class DeleteAlbumRequestDTO(BaseRequestDTO, BaseModel):
+class DeleteAlbumRequestDTO(BaseDeleteAlbumRequestDTO, BaseModel):
     album_id: int
 
 

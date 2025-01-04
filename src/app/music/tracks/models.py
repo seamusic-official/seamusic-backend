@@ -1,10 +1,9 @@
 from datetime import datetime, date
 
 from sqlalchemy import Column, ForeignKey, Table
-from sqlalchemy.orm import Mapped, relationship
+from sqlalchemy.orm import Mapped, relationship, mapped_column
 
 from src.infrastructure.postgres.orm import Base
-from src.app.social.views.models import user_to_tracks_views_association
 
 track_to_tag_association = Table(
     'track_to_tag_association',
@@ -31,6 +30,7 @@ user_to_tracks_likes = Table(
 class Track(Base):
     __tablename__ = "tracks"
 
+    id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str]
     description: Mapped[str | None]
     picture_url: Mapped[str | None]
@@ -39,10 +39,7 @@ class Track(Base):
     created_at: Mapped[date]
     updated_at: Mapped[datetime]
 
-    viewers: Mapped[list["User"]] = relationship(secondary=user_to_tracks_views_association)  # type: ignore[name-defined]  # noqa: F821
-    likers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        argument="User",
-        secondary=user_to_tracks_likes
-    )
+    viewers_ids: Mapped[list[int]]
+    likers_ids: Mapped[list[int]]
     producers: Mapped[list["ProducerProfile"]] = relationship(secondary=track_to_producer_association)  # type: ignore[name-defined]  # noqa: F821
     tags: Mapped[list["Tag"]] = relationship(secondary=track_to_tag_association)  # type: ignore[name-defined]  # noqa: F821

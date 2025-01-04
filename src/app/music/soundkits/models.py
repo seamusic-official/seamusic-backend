@@ -1,11 +1,11 @@
 from datetime import date, datetime
 
 from sqlalchemy import Column, Table, ForeignKey, Integer
-from sqlalchemy.orm import Mapped, relationship
-
-from src.infrastructure.postgres.orm import Base
-from src.app.auth.producers.models import producer_to_soundkits_association
+from sqlalchemy.orm import Mapped, relationship, mapped_column
 from src.app.social.views.models import user_to_soundkits_views_association
+
+from src.app.auth.producers.models import producer_to_soundkits_association
+from src.infrastructure.postgres.orm import Base
 
 tag_to_soundkits_association = Table(
     "tag_to_soundkits_association",
@@ -33,6 +33,7 @@ user_to_soundkits_likes = Table(
 class Soundkit(Base):
     __tablename__ = "soundkits"
 
+    id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str]
     description: Mapped[str | None]
     picture_url: Mapped[str | None]

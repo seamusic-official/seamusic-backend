@@ -1,11 +1,11 @@
 from datetime import datetime, date
 
 from sqlalchemy import Table, ForeignKey, Column
-from sqlalchemy.orm import Mapped, relationship
-
-from src.infrastructure.postgres.orm import Base
-from src.app.auth.producers.models import producer_to_beatpacks_association
+from sqlalchemy.orm import Mapped, relationship, mapped_column
 from src.app.social.views.models import user_to_beatpacks_views_association
+
+from src.app.auth.producers.models import producer_to_beatpacks_association
+from src.infrastructure.postgres.orm import Base
 
 beatpack_to_beat_association_table = Table(
     "beatpack_to_beat_association_table",
@@ -33,6 +33,7 @@ user_to_beatpacks_likes = Table(
 class Beatpack(Base):
     __tablename__ = "beatpacks"
 
+    id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str]
     description: Mapped[str | None]
 

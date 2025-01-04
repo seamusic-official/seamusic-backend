@@ -1,5 +1,5 @@
 from sqlalchemy import Integer, Column, ForeignKey, Table
-from sqlalchemy.orm import Mapped, relationship
+from sqlalchemy.orm import Mapped, relationship, mapped_column
 
 from src.infrastructure.postgres.orm import Base
 
@@ -21,5 +21,6 @@ message_to_chat_association = Table(
 class Chat(Base):
     __tablename__ = "chat"
 
+    id: Mapped[int] = mapped_column(primary_key=True)
     messages: Mapped[list["Message"]] = relationship(secondary=message_to_chat_association, back_populates="chat")  # type: ignore[name-defined]  # noqa: F821
     participants: Mapped[list["User"]] = relationship(secondary=user_to_chat_association)  # type: ignore[name-defined]  # noqa: F821

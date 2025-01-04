@@ -1,14 +1,15 @@
 from datetime import datetime, date
 
-from sqlalchemy.orm import Mapped, relationship
+from sqlalchemy.orm import Mapped, relationship, mapped_column
 
-from src.infrastructure.postgres.orm import Base
 from src.app.auth.users.models import user_to_licenses_association
+from src.infrastructure.postgres.orm import Base
 
 
 class License(Base):
     __tablename__ = "licenses"
 
+    id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str]
     text: Mapped[str]
     description: Mapped[str]

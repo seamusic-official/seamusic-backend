@@ -1,10 +1,10 @@
 from datetime import date, datetime
 
 from sqlalchemy import Table, Column, ForeignKey
-from sqlalchemy.orm import Mapped, relationship
+from sqlalchemy.orm import Mapped, relationship, mapped_column
+from src.app.social.views.models import user_to_beats_views_association
 
 from src.infrastructure.postgres.orm import Base
-from src.app.social.views.models import user_to_beats_views_association
 
 tag_to_beat_association = Table(
     "tag_to_beat_association",
@@ -31,6 +31,7 @@ user_to_beats_likes = Table(
 class Beat(Base):
     __tablename__ = "beats"
 
+    id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str]
     description: Mapped[str | None]
     picture_url: Mapped[str | None]

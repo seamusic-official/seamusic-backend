@@ -3,8 +3,8 @@ from datetime import datetime
 from sqlalchemy import Column, Integer, Table, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.infrastructure.postgres.orm import Base
 from src.app.social.chats.models import message_to_chat_association
+from src.infrastructure.postgres.orm import Base
 
 user_to_message_association = Table(
     "user_to_message_association",
@@ -17,8 +17,8 @@ user_to_message_association = Table(
 class Message(Base):
     __tablename__ = "messages"
 
+    id: Mapped[int] = mapped_column(primary_key=True)
     text: Mapped[str]
-
     author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
     created_at: Mapped[datetime]

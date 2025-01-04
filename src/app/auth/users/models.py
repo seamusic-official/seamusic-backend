@@ -1,7 +1,7 @@
 from datetime import date, datetime
 
 from sqlalchemy import Table, ForeignKey, Integer, Column
-from sqlalchemy.orm import Mapped, relationship
+from sqlalchemy.orm import Mapped, relationship, mapped_column
 
 from src.infrastructure.postgres.orm import Base
 
@@ -51,6 +51,7 @@ user_to_playlists_association = Table(
 class User(Base):
     __tablename__ = "users"
 
+    id: Mapped[int] = mapped_column(primary_key=True)
     username: Mapped[str]
     description: Mapped[str | None]
     email: Mapped[str]

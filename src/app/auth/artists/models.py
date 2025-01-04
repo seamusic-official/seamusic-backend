@@ -3,8 +3,8 @@ from datetime import date, datetime
 from sqlalchemy import Table, Integer, ForeignKey, Column
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.infrastructure.postgres.orm import Base
 from src.app.auth.users.models import user_to_artist_association
+from src.infrastructure.postgres.orm import Base
 
 artist_to_track_association = Table(
     "artist_to_track_association",
@@ -24,6 +24,7 @@ artist_to_tags_association = Table(
 class ArtistProfile(Base):
     __tablename__ = "artist_profiles"
 
+    id: Mapped[int] = mapped_column(primary_key=True)
     username: Mapped[str]
     description: Mapped[str]
     picture_url: Mapped[str]

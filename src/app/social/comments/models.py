@@ -16,6 +16,7 @@ user_to_comments_association = Table(
 class Comment(Base):
     __tablename__ = "comments"
 
+    id: Mapped[int] = mapped_column(primary_key=True)
     text: Mapped[str]
     author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
