@@ -143,7 +143,6 @@ class BaseCreateAlbumResponseDTO(ABC):
 class BaseUpdateAlbumRequestDTO(ABC):
     id: int
     title: str | None = None
-    picture_url: str | None = None
     description: str | None = None
 
     artists_ids: Sequence[int] | None = None

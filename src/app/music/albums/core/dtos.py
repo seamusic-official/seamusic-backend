@@ -121,7 +121,7 @@ class AlbumItemResponseDTO(BaseAlbumItemResponseDTO, BaseModel):
     updated_at: datetime
 
 
-class PopularAlbumsRequestDTO(BasePopularAlbumsRequestDTO):
+class PopularAlbumsRequestDTO(BasePopularAlbumsRequestDTO, BaseModel):
     user_id: int
 
 
@@ -145,17 +145,17 @@ class ArtistAlbumsResponseDTO(  # type: ignore[misc]
     pass
 
 
-class LikeAlbumRequestDTO(BaseLikeAlbumRequestDTO):
+class LikeAlbumRequestDTO(BaseLikeAlbumRequestDTO, BaseModel):
     album_id: int
     user_id: int
 
 
-class UnlikeAlbumRequestDTO(BaseUnlikeAlbumRequestDTO):
+class UnlikeAlbumRequestDTO(BaseUnlikeAlbumRequestDTO, BaseModel):
     album_id: int
     user_id: int
 
 
-class UpdateAlbumCoverRequestDTO(BaseUpdateAlbumCoverRequestDTO):
+class UpdateAlbumCoverRequestDTO(BaseUpdateAlbumCoverRequestDTO, BaseModel):
     album_id: int
     user_id: int
     data: bytes
