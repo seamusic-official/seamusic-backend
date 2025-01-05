@@ -74,7 +74,6 @@ class SItemsRequest(BaseSItemsRequest, BaseModel):
 
 class SAlbumRequest(BaseSAlbumRequest, BaseModel):
     album_id: int
-    user_id: int
 
 
 class SAlbumResponse(BaseSAlbumResponse, BaseModel):

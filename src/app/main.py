@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from src.app.music.albums.api.app import router as albums
+from src.app.music.albums.api.routes import router as albums
 
 app = FastAPI(
     title='SeaMusic',
