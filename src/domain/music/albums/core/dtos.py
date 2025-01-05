@@ -132,10 +132,7 @@ class BaseUpdateAlbumCoverRequestDTO(ABC):
 class BaseCreateAlbumRequestDTO(ABC):
     title: str
     user_id: int
-    picture_url: str | None
     description: str | None
-
-    artists_ids: Sequence[int]
     tags: Sequence[str]
 
 
