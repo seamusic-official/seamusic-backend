@@ -137,12 +137,12 @@ class ArtistAlbumsRequestDTO(BaseArtistAlbumsRequestDTO, BaseModel):
     artist_id: int
 
 
-class ArtistAlbumsResponseDTO(  # type: ignore[misc]
+class ArtistAlbumsResponseDTO(
     BaseArtistAlbumsResponseDTO,
-    ItemsResponseDTO[AlbumItemResponseDTO],
     BaseModel,
 ):
-    pass
+    total: int
+    items: list[AlbumItemResponseDTO]
 
 
 class LikeAlbumRequestDTO(BaseLikeAlbumRequestDTO, BaseModel):
@@ -174,6 +174,7 @@ class CreateAlbumResponseDTO(BaseCreateAlbumResponseDTO, BaseModel):
 
 class UpdateAlbumRequestDTO(BaseUpdateAlbumRequestDTO, BaseModel):
     id: int
+    user_id: int
     title: str | None = None
     picture_url: str | None = None
     description: str | None = None
@@ -189,6 +190,7 @@ class UpdateAlbumResponseDTO(BaseUpdateAlbumResponseDTO, BaseModel):
 
 class DeleteAlbumRequestDTO(BaseDeleteAlbumRequestDTO, BaseModel):
     album_id: int
+    user_id: int
 
 
 def get_items_response(  # type: ignore[no-untyped-def]

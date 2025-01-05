@@ -63,14 +63,11 @@ class BaseService(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_artists_albums(self, artist_id: int, start: int, size: int) -> BaseArtistAlbumsResponseDTO:
+    async def get_artists_albums(self, artist_id: int) -> BaseArtistAlbumsResponseDTO:
         """
         Gets specified artist's albums
 
         :param artist_id: artist's numeric identificator
-        :param start: start point where objects start being taken from storage.
-            Another words, this is just the beginning of the page
-        :param size: object's length
         :return: DTO with albums' sequence
         :raise NotImplementedError: when called directly by abstract class instance
         :raise ArtistNotFoundError: when specified artist doesn't exist in storage
@@ -142,6 +139,7 @@ class BaseService(ABC):
     async def update_album(
         self,
         album_id: int,
+        user_id: int,
         title: str | None = None,
         description: str | None = None,
         artists_ids: Sequence[int] | None = None,
@@ -159,19 +157,23 @@ class BaseService(ABC):
         :param artists_ids: sequence of collaborating artists' ids
         :param tracks_ids: sequence of included tracks' ids
         :param tags: sequence of album's tags
+        :param user_id: current user's numeric identificator
         :return: DTO with the album's numeric identificator
         :raise NotImplementedError: when called directly by abstract class instance
         :raise AlbumNotFoundError: when album doesn't exist in storage
+        :raise NoArtistRightsError: when a user doesn't have an access to this album
         """
         raise NotImplementedError
 
     @abstractmethod
-    async def delete_album(self, album_id: int) -> None:
+    async def delete_album(self, album_id: int, user_id: int) -> None:
         """
         Deletes an album
 
         :param album_id: album's numeric identificator
+        :param user_id: current user's numeric identificator
         :raise NotImplementedError: when called directly by abstract class instance
         :raise AlbumNotFoundError: when album doesn't exist in storage
+        :raise NoArtistRightsError: when a user doesn't have an access to this album
         """
         raise NotImplementedError

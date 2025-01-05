@@ -116,9 +116,8 @@ class Service(BaseService):
             ), items)),
         )
 
-    async def get_artists_albums(self, artist_id: int, start: int, size: int) -> ArtistAlbumsResponseDTO:
+    async def get_artists_albums(self, artist_id: int) -> ArtistAlbumsResponseDTO:
         request = ArtistAlbumsRequestDTO(artist_id=artist_id)
-        page = ItemsRequestDTO(start=start, size=size)
         async with self.dao_impl_factory() as session:
             artists_exists = await session.get_artist_existance_by_id(artist_id=request.artist_id)
             if artists_exists:
@@ -129,11 +128,7 @@ class Service(BaseService):
             raise ArtistNotFoundError()
 
         return ArtistAlbumsResponseDTO(
-            size=page.size,
-            has_next=get_has_next(size=page.size, start=page.start, total=total),
-            has_previous=get_has_previous(start=page.start, size=page.size),
             total=total,
-            page=get_page(start=page.start, size=page.size),
             items=list(map(
                 lambda album: AlbumItemResponseDTO(
                     id=album.id,
@@ -230,6 +225,7 @@ class Service(BaseService):
     async def update_album(
         self,
         album_id: int,
+        user_id: int,
         title: str | None = None,
         description: str | None = None,
         artists_ids: list[int] | None = None,
@@ -238,6 +234,7 @@ class Service(BaseService):
     ) -> UpdateAlbumResponseDTO:
         request = UpdateAlbumRequestDTO(
             id=album_id,
+            user_id=user_id,
             title=title,
             description=description,
             artists_ids=artists_ids,
@@ -245,37 +242,49 @@ class Service(BaseService):
             tags=tags,
         )
         async with self.dao_impl_factory() as session:
-            album_exists = await session.get_album_existance_by_id(album_id=request.id)
+            album = await session.get_album_by_id(album_id=request.id)
+            album_exists = bool(album)
             if album_exists:
-                album_id = await session.update_album(
-                    album_id=request.id,
-                    title=request.title,
-                    picture_url=request.picture_url,
-                    description=request.description,
-                    album_type=None if not request.tracks_ids else 'single' if len(request.tracks_ids) == 1 else 'album',
-                    updated_at=datetime.now(),
-                    created_at=None,
-                    viewers_ids=None,
-                    likers_ids=None,
-                    artists_ids=request.artists_ids,
-                    tracks_ids=request.tracks_ids,
-                    tags=request.tags,
-                )
+                album_artists_ids = list(map(lambda artist: artist.id, album.artists))
+                artist_id = await session.get_artist_id_by_user_id(user_id=request.user_id)
+                if artist_id in album_artists_ids:
+                    album_id = await session.update_album(
+                        album_id=request.id,
+                        title=request.title,
+                        picture_url=request.picture_url,
+                        description=request.description,
+                        album_type=None if not request.tracks_ids else 'single' if len(request.tracks_ids) == 1 else 'album',
+                        updated_at=datetime.now(),
+                        created_at=None,
+                        viewers_ids=None,
+                        likers_ids=None,
+                        artists_ids=request.artists_ids,
+                        tracks_ids=request.tracks_ids,
+                        tags=request.tags,
+                    )
 
         if not album_exists:
             raise AlbumNotFoundError()
+        if artist_id not in album_artists_ids:
+            raise NoArtistRightsError()
 
         return UpdateAlbumResponseDTO(id=album_id)
 
-    async def delete_album(self, album_id: int) -> None:
-        request = DeleteAlbumRequestDTO(album_id=album_id)
+    async def delete_album(self, album_id: int, user_id: int) -> None:
+        request = DeleteAlbumRequestDTO(album_id=album_id, user_id=user_id)
         async with self.dao_impl_factory() as session:
-            album_exists = await session.get_album_existance_by_id(album_id=request.album_id)
+            album = await session.get_album_by_id(album_id=request.album_id)
+            album_exists = bool(album)
             if album_exists:
-                await session.delete_album(album_id=request.album_id)
+                album_artists_ids = list(map(lambda artist: artist.id, album.artists))
+                artist_id = await session.get_artist_id_by_user_id(user_id=request.user_id)
+                if artist_id in album_artists_ids:
+                    await session.delete_album(album_id=request.album_id)
 
         if not album_exists:
             raise AlbumNotFoundError()
+        if artist_id not in album_artists_ids:
+            raise NoArtistRightsError()
 
 
 def get_service() -> Service:

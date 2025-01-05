@@ -106,10 +106,6 @@ class BaseArtistAlbumsRequestDTO(ABC):
 
 class BaseArtistAlbumsResponseDTO(ABC):
     total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
     items: Sequence[BaseAlbumItemResponseDTO]
 
 
@@ -142,6 +138,7 @@ class BaseCreateAlbumResponseDTO(ABC):
 
 class BaseUpdateAlbumRequestDTO(ABC):
     id: int
+    user_id: int
     title: str | None = None
     description: str | None = None
 
@@ -156,3 +153,4 @@ class BaseUpdateAlbumResponseDTO(ABC):
 
 class BaseDeleteAlbumRequestDTO(ABC):
     album_id: int
+    user_id: int
