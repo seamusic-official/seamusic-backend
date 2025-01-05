@@ -8,3 +8,7 @@ class AlbumAlreasyExistsError(Exception):
 
 class NoArtistRightsError(Exception):
     """You are not an artist"""
+
+
+class ArtistNotFoundError(Exception):
+    """Artist not found"""

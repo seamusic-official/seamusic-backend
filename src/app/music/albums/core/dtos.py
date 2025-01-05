@@ -19,6 +19,10 @@ from src.domain.music.albums.core.dtos import (
     BaseUpdateAlbumResponseDTO,
     BaseUpdateAlbumRequestDTO,
     BaseCreateAlbumResponseDTO,
+    BaseArtistAlbumsResponseDTO,
+    BaseLikeAlbumRequestDTO,
+    BaseUnlikeAlbumRequestDTO,
+    BaseUpdateAlbumCoverRequestDTO,
 )
 from src.infrastructure.pages import get_page, get_has_next, get_has_previous
 
@@ -122,9 +126,9 @@ class PopularAlbumsRequestDTO(BasePopularAlbumsRequestDTO):
 
 
 class PopularAlbumsResponseDTO(  # type: ignore[misc]
-    ItemsResponseDTO[AlbumItemResponseDTO],
     BasePopularAlbumsResponseDTO,
-    BaseModel
+    ItemsResponseDTO[AlbumItemResponseDTO],
+    BaseModel,
 ):
     pass
 
@@ -133,8 +137,24 @@ class ArtistAlbumsRequestDTO(BaseArtistAlbumsRequestDTO, BaseModel):
     artist_id: int
 
 
-class ArtistAlbumsResponseDTO(ItemsResponseDTO[AlbumItemResponseDTO], BaseModel):
+class ArtistAlbumsResponseDTO(BaseArtistAlbumsResponseDTO, ItemsResponseDTO[AlbumItemResponseDTO], BaseModel):
     pass
+
+
+class LikeAlbumRequestDTO(BaseLikeAlbumRequestDTO):
+    album_id: int
+    user_id: int
+
+
+class UnlikeAlbumRequestDTO(BaseUnlikeAlbumRequestDTO):
+    album_id: int
+    user_id: int
+
+
+class UpdateAlbumCoverRequestDTO(BaseUpdateAlbumCoverRequestDTO):
+    album_id: int
+    user_id: int
+    data: bytes
 
 
 class CreateAlbumRequestDTO(BaseCreateAlbumRequestDTO, BaseModel):

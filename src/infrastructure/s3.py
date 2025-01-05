@@ -55,6 +55,6 @@ def unique_filename(filename: str) -> str:
     return f'{file_name.replace(' ', '-')}_{uuid4()}{file_extension}'
 
 
-async def get_file_stream(data: bytes) -> BytesIO:
+def get_file_stream(data: bytes) -> BytesIO:
     # await file.read()
     return BytesIO(data)

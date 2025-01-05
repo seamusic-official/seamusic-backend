@@ -29,11 +29,20 @@ class PostgresDAOImplementation(PostgresSessionMixin, DAO):
     async def get_popular_albums(self, start: int, size: int) -> list[Album]:
         return await self.run(select(Album).order_by(func.count(Album.viewers_ids)).offset(start - 1).limit(size), 'scalars')
 
+    async def count_artist_albums(self, artist_id: int) -> int:
+        return await self.run(select(func.count(ArtistProfile.albums)).filter(ArtistProfile.id == artist_id), 'scalar')
+
     async def count_albums(self) -> int:
         return await self.run(select(func.count(Album.id)), 'scalar')
 
     async def get_artist_id_by_user_id(self, user_id: int) -> int | None:
         return await self.run(select(ArtistProfile.id).filter(ArtistProfile.user_id == user_id), 'scalar')
+
+    async def get_artist_existance_by_id(self, artist_id: int) -> bool:
+        return bool(await self.run(select(ArtistProfile.id).filter(ArtistProfile.id == artist_id), 'scalar'))
+
+    async def get_artist_albums(self, artist_id: int) -> list[Album]:
+        return list(await self.run(select(ArtistProfile.albums).filter(ArtistProfile.id == artist_id).order_by(Album.created_at.desc()), 'scalars'))
 
     async def create_album(
         self,

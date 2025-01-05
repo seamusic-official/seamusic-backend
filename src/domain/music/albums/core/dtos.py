@@ -113,6 +113,22 @@ class BaseArtistAlbumsResponseDTO(ABC):
     items: Sequence[BaseAlbumItemResponseDTO]
 
 
+class BaseLikeAlbumRequestDTO(ABC):
+    album_id: int
+    user_id: int
+
+
+class BaseUnlikeAlbumRequestDTO(ABC):
+    album_id: int
+    user_id: int
+
+
+class BaseUpdateAlbumCoverRequestDTO(ABC):
+    album_id: int
+    user_id: int
+    data: bytes
+
+
 class BaseCreateAlbumRequestDTO(ABC):
     title: str
     user_id: int
