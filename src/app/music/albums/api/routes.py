@@ -28,7 +28,7 @@ class Router(BaseRouter):
         request: SAlbumRequest = Depends(SAlbumRequest),
         service: BaseService = Depends(get_service),
         curren_user: CurrentUser = Depends(get_current_user),
-    ):
+    ) -> SAlbumResponse:
         album = await service.get_album(album_id=request.album_id, user_id=curren_user.id)
         return SAlbumResponse(
             id=album.id,
