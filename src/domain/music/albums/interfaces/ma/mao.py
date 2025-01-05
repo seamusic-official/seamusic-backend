@@ -1,5 +1,7 @@
 from abc import abstractmethod
 from dataclasses import dataclass
+from types import TracebackType
+from typing import Self
 
 from src.domain.music.albums.interfaces.base import BaseInterface
 
@@ -34,3 +36,14 @@ class MAO(BaseInterface):
         :raise NotImplementedError: when called directly by abstract class instance
         """
         raise NotImplementedError
+
+    async def __aenter__(self) -> Self:
+        return self
+
+    async def __aexit__(
+        self,
+        exc_type: type[Exception] | None = None,
+        exc_val: Exception | None = None,
+        exc_tb: TracebackType | None = None,
+    ) -> None:
+        pass

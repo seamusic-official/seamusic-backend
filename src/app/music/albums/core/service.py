@@ -193,7 +193,7 @@ class Service(BaseService):
                 if not album_exists:
                     album_id = await session.create_album(
                         title=request.title,
-                        picture_url=request.picture_url,
+                        picture_url=None,
                         description=request.description,
                         album_type='album',
                         created_at=date.today(),

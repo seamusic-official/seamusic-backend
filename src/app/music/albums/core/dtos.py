@@ -137,7 +137,11 @@ class ArtistAlbumsRequestDTO(BaseArtistAlbumsRequestDTO, BaseModel):
     artist_id: int
 
 
-class ArtistAlbumsResponseDTO(BaseArtistAlbumsResponseDTO, ItemsResponseDTO[AlbumItemResponseDTO], BaseModel):
+class ArtistAlbumsResponseDTO(  # type: ignore[misc]
+    BaseArtistAlbumsResponseDTO,
+    ItemsResponseDTO[AlbumItemResponseDTO],
+    BaseModel,
+):
     pass
 
 
