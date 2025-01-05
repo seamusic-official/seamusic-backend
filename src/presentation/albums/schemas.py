@@ -1,6 +1,7 @@
 from datetime import date, datetime
 from typing import Literal
 
+from fastapi import UploadFile
 from pydantic import BaseModel, EmailStr
 
 from src.domain.music.albums.api.schemas import (
@@ -124,32 +125,24 @@ class SArtistAlbumsRequest(BaseSArtistAlbumsRequest, BaseModel):
 
 class SArtistAlbumsResponse(BaseSArtistAlbumsResponse, BaseModel):
     total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
     items: list[SAlbumItemResponse]
 
 
 class SLikeAlbumRequest(BaseSLikeAlbumRequest, BaseModel):
     album_id: int
-    user_id: int
 
 
 class SUnlikeAlbumRequest(BaseSUnlikeAlbumRequest, BaseModel):
     album_id: int
-    user_id: int
 
 
 class SUpdateAlbumCoverRequest(BaseSUpdateAlbumCoverRequest, BaseModel):
     album_id: int
-    user_id: int
-    data: bytes
+    file: UploadFile
 
 
 class SCreateAlbumRequest(BaseSCreateAlbumRequest, BaseModel):
     title: str
-    user_id: int
     description: str | None
     tags: list[str]
 

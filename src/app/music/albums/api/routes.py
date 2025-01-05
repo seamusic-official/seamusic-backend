@@ -14,6 +14,15 @@ from src.presentation.albums.schemas import (
     SAlbumItemResponse,
     SPopularAlbumsResponse,
     SItemsRequest,
+    SArtistAlbumsRequest,
+    SArtistAlbumsResponse,
+    SUpdateAlbumCoverRequest,
+    SLikeAlbumRequest,
+    SCreateAlbumRequest,
+    SCreateAlbumResponse,
+    SUpdateAlbumRequest,
+    SUpdateAlbumResponse,
+    SDeleteAlbumRequest,
 )
 
 router = APIRouter(prefix='/albums')
@@ -76,8 +85,8 @@ class Router(BaseRouter):
         )
 
     @router.get(
-        path='/popular',
-        summary='Get a list of popular albums',
+        path='/',
+        summary='Get popular albums',
         response_model=SPopularAlbumsResponse,
         status_code=status.HTTP_200_OK,
     )
@@ -85,9 +94,9 @@ class Router(BaseRouter):
         self,
         page: SItemsRequest = Depends(SItemsRequest),
         service: BaseService = Depends(get_service),
-        curren_user: CurrentUser = Depends(get_current_user),
+        current_user: CurrentUser = Depends(get_current_user),
     ) -> SPopularAlbumsResponse:
-        albums = await service.get_popular_albums(user_id=curren_user.id, start=page.start, size=page.size)
+        albums = await service.get_popular_albums(user_id=current_user.id, start=page.start, size=page.size)
         return SPopularAlbumsResponse(
             has_next=albums.has_next,
             has_previous=albums.has_previous,
@@ -108,4 +117,142 @@ class Router(BaseRouter):
                 ),
                 albums.items,
             ))
+        )
+
+    @router.get(
+        path='/artist/{artist_id}',
+        summary='Get albums made by specified artist',
+        response_model=SArtistAlbumsResponse,
+        status_code=status.HTTP_200_OK,
+    )
+    async def get_artist_albums(
+        self,
+        request: SArtistAlbumsRequest = Depends(SArtistAlbumsRequest),
+        service: BaseService = Depends(get_service),
+    ) -> SArtistAlbumsResponse:
+        response = await service.get_artists_albums(artist_id=request.artist_id)
+        return SArtistAlbumsResponse(
+            total=response.total,
+            items=list(map(
+                lambda item: SAlbumItemResponse(
+                    id=item.id,
+                    title=item.title,
+                    picture_url=item.picture_url,
+                    description=item.description,
+                    views=item.views,
+                    likes=item.likes,
+                    type=item.type,
+                    created_at=item.created_at,
+                    updated_at=item.updated_at,
+                ),
+                response.items,
+            )),
+        )
+
+    @router.put(
+        path='/{album_id}/cover',
+        summary='Update an album cover',
+        status_code=status.HTTP_202_ACCEPTED,
+    )
+    async def update_cover(
+        self,
+        request: SUpdateAlbumCoverRequest = Depends(SUpdateAlbumCoverRequest),
+        service: BaseService = Depends(get_service),
+        current_user: CurrentUser = Depends(get_current_user),
+    ) -> None:
+        await service.update_cover(
+            album_id=request.album_id,
+            user_id=current_user.id,
+            data=await request.file.read()
+        )
+
+    @router.patch(
+        path='/{album_id}/like',
+        summary='Like an album',
+        status_code=status.HTTP_202_ACCEPTED,
+    )
+    async def like_album(
+        self,
+        request: SLikeAlbumRequest = Depends(SLikeAlbumRequest),
+        service: BaseService = Depends(get_service),
+        current_user: CurrentUser = Depends(get_current_user),
+    ) -> None:
+        await service.like_album(
+            user_id=current_user.id,
+            album_id=request.album_id,
+        )
+
+    @router.patch(
+        path='/{album_id}/unlike',
+        summary='Unlike an album',
+        status_code=status.HTTP_202_ACCEPTED,
+    )
+    async def unlike_album(
+        self,
+        request: SLikeAlbumRequest = Depends(SLikeAlbumRequest),
+        service: BaseService = Depends(get_service),
+        current_user: CurrentUser = Depends(get_current_user),
+    ) -> None:
+        await service.unlike_album(
+            user_id=current_user.id,
+            album_id=request.album_id,
+        )
+
+    @router.post(
+        path='/new',
+        summary='Create a new album',
+        response_model=SCreateAlbumResponse,
+        status_code=status.HTTP_201_CREATED,
+    )
+    async def create_album(
+        self,
+        request: SCreateAlbumRequest = Depends(SCreateAlbumRequest),
+        service: BaseService = Depends(get_service),
+        current_user: CurrentUser = Depends(get_current_user),
+    ) -> SCreateAlbumResponse:
+        response = await service.create_album(
+            user_id=current_user.id,
+            title=request.title,
+            description=request.description,
+            tags=request.tags,
+        )
+        return SCreateAlbumResponse(id=response.id)
+
+    @router.put(
+        path='/{album_id}',
+        summary='Update an album',
+        response_model=SUpdateAlbumResponse,
+        status_code=status.HTTP_201_CREATED,
+    )
+    async def update_album(
+        self,
+        request: SUpdateAlbumRequest = Depends(SUpdateAlbumRequest),
+        service: BaseService = Depends(get_service),
+        current_user: CurrentUser = Depends(get_current_user),
+    ) -> SUpdateAlbumResponse:
+        response = await service.update_album(
+            album_id=request.id,
+            user_id=current_user.id,
+            title=request.title,
+            description=request.description,
+            artists_ids=request.artists_ids,
+            tracks_ids=request.tracks_ids,
+            tags=request.tags,
+        )
+        return SUpdateAlbumResponse(id=response.id)
+
+    @router.delete(
+        path='/{album_id}',
+        summary='Delete an album',
+        status_code=status.HTTP_202_ACCEPTED,
+    )
+    async def delete_album(
+        self,
+        request: SDeleteAlbumRequest = Depends(SDeleteAlbumRequest),
+        service: BaseService = Depends(get_service),
+        current_user: CurrentUser = Depends(get_current_user),
+    ) -> None:
+        await service.delete_album(
+            album_id=request.album_id,
+            user_id=current_user.id,
         )

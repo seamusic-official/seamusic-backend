@@ -1,6 +1,6 @@
 from abc import ABC
 from datetime import date, datetime
-from typing import Literal, Sequence
+from typing import Literal, Sequence, Any
 
 
 class BaseSUser(ABC):
@@ -50,7 +50,6 @@ class BaseSItemsRequest(ABC):
 
 class BaseSAlbumRequest(ABC):
     album_id: int
-    user_id: int
 
 
 class BaseSAlbumResponse(ABC):
@@ -102,32 +101,24 @@ class BaseSArtistAlbumsRequest(ABC):
 
 class BaseSArtistAlbumsResponse(ABC):
     total: int
-    page: int
-    has_next: bool
-    has_previous: bool
-    size: int
     items: Sequence[BaseSAlbumItemResponse]
 
 
 class BaseSLikeAlbumRequest(ABC):
     album_id: int
-    user_id: int
 
 
 class BaseSUnlikeAlbumRequest(ABC):
     album_id: int
-    user_id: int
 
 
 class BaseSUpdateAlbumCoverRequest(ABC):
     album_id: int
-    user_id: int
-    data: bytes
+    file: Any
 
 
 class BaseSCreateAlbumRequest(ABC):
     title: str
-    user_id: int
     description: str | None
     tags: Sequence[str]
 
