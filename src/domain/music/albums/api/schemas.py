@@ -83,10 +83,6 @@ class BaseSAlbumItemResponse(ABC):
     updated_at: datetime
 
 
-class BaseSPopularAlbumsRequest(ABC):
-    user_id: int
-
-
 class BaseSPopularAlbumsResponse(ABC):
     total: int
     page: int

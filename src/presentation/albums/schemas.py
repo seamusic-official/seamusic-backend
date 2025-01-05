@@ -11,7 +11,6 @@ from src.domain.music.albums.api.schemas import (
     BaseSAlbumRequest,
     BaseSAlbumResponse,
     BaseSAlbumItemResponse,
-    BaseSPopularAlbumsRequest,
     BaseSPopularAlbumsResponse,
     BaseSCountAlbumsResponse,
     BaseSArtistAlbumsRequest,
@@ -104,10 +103,6 @@ class SAlbumItemResponse(BaseSAlbumItemResponse, BaseModel):
 
     created_at: date
     updated_at: datetime
-
-
-class SPopularAlbumsRequest(BaseSPopularAlbumsRequest, BaseModel):
-    user_id: int
 
 
 class SPopularAlbumsResponse(BaseSPopularAlbumsResponse, BaseModel):
