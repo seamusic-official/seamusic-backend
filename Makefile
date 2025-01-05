@@ -3,7 +3,7 @@ install:
 
 run-local:
 	poetry run alembic upgrade head
-	poetry run uvicorn src.api.app:app --host 0.0.0.0 --port 8000 --reload --reload-dir . --log-config=log_config.ini --log-level=debug
+	poetry run uvicorn src.app.main:app --host 0.0.0.0 --port 8000 --reload --reload-dir . --log-config=log_config.ini --log-level=debug
 
 build:
 	poetry run docker-compose -f docker-compose.$(for).yml build

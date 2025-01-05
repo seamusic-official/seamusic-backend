@@ -2,7 +2,6 @@ from datetime import datetime, date
 
 from sqlalchemy import Table, ForeignKey, Column
 from sqlalchemy.orm import Mapped, relationship, mapped_column
-from src.app.social.views.models import user_to_beatpacks_views_association
 
 from src.app.auth.producers.models import producer_to_beatpacks_association
 from src.infrastructure.postgres.orm import Base
@@ -21,14 +20,6 @@ beatpack_to_tag_association = Table(
     Column("tag_id", ForeignKey('tags.id'), primary_key=True),
 )
 
-user_to_beatpacks_likes = Table(
-    "user_to_beatpacks_likes",
-    Base.metadata,
-    Column("beatpacks_id", ForeignKey("beatpacks.id"), primary_key=True),
-    Column("user_id", ForeignKey("users.id"), primary_key=True),
-    extend_existing=True
-)
-
 
 class Beatpack(Base):
     __tablename__ = "beatpacks"
@@ -40,15 +31,8 @@ class Beatpack(Base):
     created_at: Mapped[date]
     updated_at: Mapped[datetime]
 
-    viewers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        argument="User",
-        secondary=user_to_beatpacks_views_association
-    )
-    likers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        argument="User",
-        secondary=user_to_beatpacks_likes,
-        overlaps="likers"
-    )
+    viewers_ids: Mapped[list[int]]
+    likers_ids: Mapped[list[int]]
     producers: Mapped[list["ProducerProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=producer_to_beatpacks_association,
         back_populates="beatpacks"

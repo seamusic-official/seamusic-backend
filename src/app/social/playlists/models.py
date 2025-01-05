@@ -2,7 +2,6 @@ from datetime import date, datetime
 
 from sqlalchemy import Table, ForeignKey, Column
 from sqlalchemy.orm import Mapped, relationship, mapped_column
-from src.app.social.views.models import user_to_playlists_views_association
 
 from src.infrastructure.postgres.orm import Base
 
@@ -27,13 +26,6 @@ playlists_to_tag_association = Table(
     Column("tag_id", ForeignKey("tags.id"), primary_key=True)
 )
 
-user_to_playlists_likes = Table(
-    "user_to_playlists_likes",
-    Base.metadata,
-    Column("playlist_id", ForeignKey("playlists.id"), primary_key=True),
-    Column("user_id", ForeignKey("users.id"), primary_key=True)
-)
-
 author_to_playlists_association = Table(
     "user_to_playlists_author_association",
     Base.metadata,
@@ -53,14 +45,8 @@ class Playlist(Base):
     created_at: Mapped[date]
     updated_at: Mapped[datetime]
 
-    viewers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        argument="User",
-        secondary=user_to_playlists_views_association
-    )
-    likers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        argument="User",
-        secondary=user_to_playlists_likes
-    )
+    viewers_ids: Mapped[list[int]]
+    likers_ids: Mapped[list[int]]
     authors: Mapped[list["User"]] = relationship(secondary=author_to_playlists_association)   # type: ignore[name-defined]  # noqa: F821
     beats: Mapped[list["Beat"]] = relationship(secondary=playlists_to_beat_association)   # type: ignore[name-defined]  # noqa: F821
     tracks: Mapped[list["Track"]] = relationship(secondary=playlists_to_track_association)   # type: ignore[name-defined]  # noqa: F821

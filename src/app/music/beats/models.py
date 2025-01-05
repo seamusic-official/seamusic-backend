@@ -2,7 +2,6 @@ from datetime import date, datetime
 
 from sqlalchemy import Table, Column, ForeignKey
 from sqlalchemy.orm import Mapped, relationship, mapped_column
-from src.app.social.views.models import user_to_beats_views_association
 
 from src.infrastructure.postgres.orm import Base
 
@@ -20,13 +19,6 @@ producer_to_beat_association = Table(
     Column("beat_id", ForeignKey("beats.id"), primary_key=True)
 )
 
-user_to_beats_likes = Table(
-    "user_to_beatpacks_likes",
-    Base.metadata,
-    Column("beat_id", ForeignKey("beats.id"), primary_key=True),
-    Column("user_id", ForeignKey("users.id"), primary_key=True)
-)
-
 
 class Beat(Base):
     __tablename__ = "beats"
@@ -40,14 +32,8 @@ class Beat(Base):
     created_at: Mapped[date]
     updated_at: Mapped[datetime]
 
-    viewers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        argument="User",
-        secondary=user_to_beats_views_association
-    )
-    likers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        argument="User",
-        secondary=user_to_beats_likes
-    )
+    viewers_ids: Mapped[list[int]]
+    likers_ids: Mapped[list[int]]
     producers: Mapped[list["ProducerProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=producer_to_beat_association,
         back_populates="beats"

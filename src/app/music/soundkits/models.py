@@ -2,7 +2,6 @@ from datetime import date, datetime
 
 from sqlalchemy import Column, Table, ForeignKey, Integer
 from sqlalchemy.orm import Mapped, relationship, mapped_column
-from src.app.social.views.models import user_to_soundkits_views_association
 
 from src.app.auth.producers.models import producer_to_soundkits_association
 from src.infrastructure.postgres.orm import Base
@@ -22,13 +21,6 @@ beat_to_soundkits_association = Table(
 
 )
 
-user_to_soundkits_likes = Table(
-    "user_to_soundkits_likes",
-    Base.metadata,
-    Column("soundkit_id", ForeignKey("soundkits.id"), primary_key=True),
-    Column("user_id", ForeignKey("users.id"), primary_key=True)
-)
-
 
 class Soundkit(Base):
     __tablename__ = "soundkits"
@@ -42,14 +34,8 @@ class Soundkit(Base):
     created_at: Mapped[date]
     updated_at: Mapped[datetime]
 
-    viewers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        argument="User",
-        secondary=user_to_soundkits_views_association
-    )
-    likers: Mapped[list["User"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
-        argument="User",
-        secondary=user_to_soundkits_likes
-    )
+    viewers_ids: Mapped[list[int]]
+    likers_ids: Mapped[list[int]]
     producers: Mapped[list["ProducerProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=producer_to_soundkits_association,
         back_populates="soundkits"
