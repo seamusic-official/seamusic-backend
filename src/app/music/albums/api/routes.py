@@ -109,6 +109,3 @@ class Router(BaseRouter):
                 albums.items,
             ))
         )
-
-
-    @router.get()
