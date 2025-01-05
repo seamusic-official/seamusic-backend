@@ -52,7 +52,7 @@ class Session:
 
 def unique_filename(filename: str) -> str:
     file_name, file_extension = os.path.splitext(filename)
-    return f'{file_name.replace(' ', '-')}_{uuid4()}{file_extension}'
+    return f'{file_name.replace(" ", "-")}_{uuid4()}{file_extension}'
 
 
 def get_file_stream(data: bytes) -> BytesIO:
