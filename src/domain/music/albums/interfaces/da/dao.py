@@ -25,7 +25,7 @@ class DAO(BaseInterface):
     """
 
     @abstractmethod
-    async def get_album_by_id(self, album_id: int) -> BaseAlbumModel:
+    async def get_album_by_id(self, album_id: int) -> BaseAlbumModel | None:
         """
         Gets album by its identificator
 
@@ -105,7 +105,7 @@ class DAO(BaseInterface):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_artist_id_by_user_id(self, user_id: int) -> int:
+    async def get_artist_id_by_user_id(self, user_id: int) -> int | None:
         """
         Gets a numeric identificator of an artist linked to a specified user
 

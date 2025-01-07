@@ -28,7 +28,7 @@ class PostgresSessionMixin(AsyncSession):
         obj = await self.get(self.table, obj_id)
         await self.delete(obj)
 
-    async def run(self, statement: Executable, action: Literal['scalars', 'scalar', 'execute']):  # type: ignore[return, no-untyped-def]
+    async def run(self, statement: Executable, action: Literal['scalars', 'scalar', 'execute']):  # type: ignore[no-untyped-def]
         if action == 'scalars':
             return list(await self.scalars(statement))
         elif action == 'scalar':

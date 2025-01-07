@@ -245,7 +245,7 @@ class Service(BaseService):
             album = await session.get_album_by_id(album_id=request.id)
             album_exists = bool(album)
             if album_exists:
-                album_artists_ids = list(map(lambda artist: artist.id, album.artists))
+                album_artists_ids = list(map(lambda artist: artist.id, album.artists))  # type: ignore[union-attr]
                 artist_id = await session.get_artist_id_by_user_id(user_id=request.user_id)
                 if artist_id in album_artists_ids:
                     album_id = await session.update_album(
@@ -276,7 +276,7 @@ class Service(BaseService):
             album = await session.get_album_by_id(album_id=request.album_id)
             album_exists = bool(album)
             if album_exists:
-                album_artists_ids = list(map(lambda artist: artist.id, album.artists))
+                album_artists_ids = list(map(lambda artist: artist.id, album.artists))  # type: ignore[union-attr]
                 artist_id = await session.get_artist_id_by_user_id(user_id=request.user_id)
                 if artist_id in album_artists_ids:
                     await session.delete_album(album_id=request.album_id)
