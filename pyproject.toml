@@ -1,8 +1,18 @@
+[project]
+name = "SeaMusic"
+description = "API for musical collaborations service"
+version = "0.1.0"
+authors = [
+    {name="Maxim Kolyadin", email="koladinmaksim246@gmail.com"},
+]
+readme = "README.md"
+requires-python = "^3.11.11"
+license-files = []
+dynamic = ["version"]
+
+
 [tool.poetry]
 name = "src"
-version = "0.1.0"
-description = "Musical web service"
-authors = ["Maxim Kolyadin <koladinmaksim246@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -23,7 +33,7 @@ passlib = "^1.7.4"
 pydantic = "^2.8.2"
 pydantic-settings = "^2.4.0"
 pyjwt = "2.9.0"
-python = "^3.11"
+python = "^3.11.11"
 python-dotenv = "^1.0.1"
 python-multipart = "^0.0.12"
 redis = "^5.0.8"
@@ -42,11 +52,11 @@ iniconfig = "^2.0.0"
 mypy = "^1.11.1"
 pytest = "^8.3.2"
 pytest-asyncio = "^0.23.8"
-pytest-dependency = "^0.6.0"
 python-dateutil = "^2.9.0.post0"
-python-jose="^3.3.0"
-pytest-mock = "^3.14.0"
+pytest-dependency = "^0.6.0"
 pytest-dotenv = "^0.5.2"
+pytest-mock = "^3.14.0"
+python-jose="^3.3.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -62,7 +72,7 @@ exclude =[
     ".vscode/",
     "*cache*",
     "__init__.py",
-    "migrations/models.py"
+    "migrations/models.py",
 ]
 
 [tool.mypy]
@@ -71,9 +81,7 @@ warn_redundant_casts = true
 warn_unused_ignores = true
 disallow_subclassing_any = false
 disable_error_code = [
-    "unused-ignore",
     "no-any-return",
-    "override",
 ]
 check_untyped_defs = false
 disallow_untyped_calls = true
