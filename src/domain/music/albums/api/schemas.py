@@ -1,4 +1,5 @@
 from abc import ABC
+from dataclasses import dataclass
 from datetime import date, datetime
 from typing import Literal, Sequence, Any
 
@@ -43,6 +44,7 @@ class BaseSTrack(ABC):
     updated_at: datetime
 
 
+@dataclass
 class BaseSItemsRequest(ABC):
     start: int = 1
     size: int = 10
