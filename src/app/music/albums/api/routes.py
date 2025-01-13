@@ -23,6 +23,7 @@ from src.presentation.albums.schemas import (
     SUpdateAlbumRequest,
     SUpdateAlbumResponse,
     SDeleteAlbumRequest,
+    SUnlikeAlbumRequest,
 )
 
 router = APIRouter(prefix='/albums')
@@ -189,7 +190,7 @@ class Router(BaseRouter):
     )
     async def unlike_album(
         self,
-        request: SLikeAlbumRequest = Depends(SLikeAlbumRequest),
+        request: SUnlikeAlbumRequest = Depends(SLikeAlbumRequest),
         service: BaseService = Depends(get_service),
         current_user: CurrentUser = Depends(get_current_user),
     ) -> None:
