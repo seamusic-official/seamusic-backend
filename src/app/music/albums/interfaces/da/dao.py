@@ -26,7 +26,7 @@ class PostgresDAOImplementation(PostgresSessionMixin, DAO):
     async def get_album_existance_by_id(self, album_id: int) -> bool:
         return bool(await self.run(select(Album).filter(Album.id == album_id), 'scalar'))
 
-    async def get_popular_albums(self, start: int, size: int) -> list[Album]:
+    async def get_popular_albums(self, start: int, size: int) -> list[Album]:  # type: ignore[override]
         return await self.run(select(Album).order_by(func.count(Album.viewers_ids)).offset(start - 1).limit(size), 'scalars')
 
     async def count_artist_albums(self, artist_id: int) -> int:
@@ -41,7 +41,7 @@ class PostgresDAOImplementation(PostgresSessionMixin, DAO):
     async def get_artist_existance_by_id(self, artist_id: int) -> bool:
         return bool(await self.run(select(ArtistProfile.id).filter(ArtistProfile.id == artist_id), 'scalar'))
 
-    async def get_artist_albums(self, artist_id: int) -> list[Album]:
+    async def get_artist_albums(self, artist_id: int) -> list[Album]:  # type: ignore[override]
         return list(await self.run(select(ArtistProfile.albums).filter(ArtistProfile.id == artist_id).order_by(Album.created_at.desc()), 'scalars'))
 
     async def create_album(

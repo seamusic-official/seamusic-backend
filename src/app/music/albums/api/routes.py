@@ -26,7 +26,7 @@ from src.presentation.albums.schemas import (
     SUnlikeAlbumRequest,
 )
 
-router = APIRouter(prefix='/albums')
+router_v1 = APIRouter(prefix='/albums')
 
 
 def get_service() -> BaseService:
@@ -35,7 +35,7 @@ def get_service() -> BaseService:
 
 @dataclass
 class Router(BaseRouter):
-    @router.get(
+    @router_v1.get(
         path='/{album_id}',
         summary='Get an album by it\'s id',
         response_model=SAlbumResponse,
@@ -45,9 +45,9 @@ class Router(BaseRouter):
         self,
         request: SAlbumRequest = Depends(SAlbumRequest),
         service: BaseService = Depends(get_service),
-        curren_user: CurrentUser = Depends(get_current_user),
+        current_user: CurrentUser = Depends(get_current_user),
     ) -> SAlbumResponse:
-        album = await service.get_album(album_id=request.album_id, user_id=curren_user.id)
+        album = await service.get_album(album_id=request.album_id, user_id=current_user.id)
         return SAlbumResponse(
             id=album.id,
             title=album.title,
@@ -85,7 +85,7 @@ class Router(BaseRouter):
             tags=list(album.tags),
         )
 
-    @router.get(
+    @router_v1.get(
         path='/',
         summary='Get popular albums',
         response_model=SPopularAlbumsResponse,
@@ -120,7 +120,7 @@ class Router(BaseRouter):
             ))
         )
 
-    @router.get(
+    @router_v1.get(
         path='/artist/{artist_id}',
         summary='Get albums made by specified artist',
         response_model=SArtistAlbumsResponse,
@@ -150,7 +150,7 @@ class Router(BaseRouter):
             )),
         )
 
-    @router.put(
+    @router_v1.put(
         path='/{album_id}/cover',
         summary='Update an album cover',
         status_code=status.HTTP_202_ACCEPTED,
@@ -167,7 +167,7 @@ class Router(BaseRouter):
             data=await request.file.read()
         )
 
-    @router.patch(
+    @router_v1.patch(
         path='/{album_id}/like',
         summary='Like an album',
         status_code=status.HTTP_202_ACCEPTED,
@@ -183,7 +183,7 @@ class Router(BaseRouter):
             album_id=request.album_id,
         )
 
-    @router.patch(
+    @router_v1.patch(
         path='/{album_id}/unlike',
         summary='Unlike an album',
         status_code=status.HTTP_202_ACCEPTED,
@@ -199,7 +199,7 @@ class Router(BaseRouter):
             album_id=request.album_id,
         )
 
-    @router.post(
+    @router_v1.post(
         path='/new',
         summary='Create a new album',
         response_model=SCreateAlbumResponse,
@@ -219,7 +219,7 @@ class Router(BaseRouter):
         )
         return SCreateAlbumResponse(id=response.id)
 
-    @router.put(
+    @router_v1.put(
         path='/{album_id}',
         summary='Update an album',
         response_model=SUpdateAlbumResponse,
@@ -242,12 +242,12 @@ class Router(BaseRouter):
         )
         return SUpdateAlbumResponse(id=response.id)
 
-    @router.delete(
+    @router_v1.delete(
         path='/{album_id}',
         summary='Delete an album',
         status_code=status.HTTP_202_ACCEPTED,
     )
-    async def delete_album(
+    async def delete_album(  # type: ignore[override]
         self,
         request: SDeleteAlbumRequest = Depends(SDeleteAlbumRequest),
         service: BaseService = Depends(get_service),

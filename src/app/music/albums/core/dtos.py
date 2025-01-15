@@ -103,8 +103,8 @@ class AlbumResponseDTO(BaseAlbumResponseDTO, BaseModel):
     created_at: date
     updated_at: datetime
 
-    artists: list[ArtistDTO]
-    tracks: list[TrackDTO]
+    artists: list[ArtistDTO]  # type: ignore[assignment]
+    tracks: list[TrackDTO]  # type: ignore[assignment]
     tags: list[str]
 
 
@@ -142,7 +142,7 @@ class ArtistAlbumsResponseDTO(
     BaseModel,
 ):
     total: int
-    items: list[AlbumItemResponseDTO]
+    items: list[AlbumItemResponseDTO]  # type: ignore[assignment]
 
 
 class LikeAlbumRequestDTO(BaseLikeAlbumRequestDTO, BaseModel):
