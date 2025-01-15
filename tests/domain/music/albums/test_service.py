@@ -2,7 +2,6 @@ from typing import Sequence
 
 import pytest
 
-from src.app.music.albums.core.service import get_service
 from src.domain.music.albums.core.service import BaseService
 from src.domain.music.albums.interfaces.da.dao import DAO
 from src.domain.music.albums.interfaces.ma.mao import MAO
@@ -47,7 +46,10 @@ class TestBaseService:
 
     @pytest.fixture(scope='class')
     def service(self):
-        return get_service()
+        return BaseService(
+            dao_impl_factory=lambda: DAO(),
+            mao_impl_factory=lambda: MAO(),
+        )
 
     async def test_abstract_get_album(self, album_id: int, user_id: int, service: BaseService) -> None:
         async with pytest.raises(NotImplementedError):
