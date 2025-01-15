@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from datetime import date, datetime
-from typing import Literal, Self, Sequence
+from typing import Literal, Self
 
 from src.domain.music.albums.interfaces.base import BaseInterface
 from src.domain.music.albums.interfaces.da.models import BaseAlbumModel
@@ -59,26 +59,26 @@ class DAO(BaseInterface):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_popular_albums(self, start: int, size: int) -> Sequence[BaseAlbumModel]:
+    async def get_popular_albums(self, start: int, size: int) -> list[BaseAlbumModel]:
         """
-        Gets a paginated sequence with albums sorted by their views
+        Gets a paginated list with albums sorted by their views
 
         :param start: start point where objects start being taken from storage.
             Another words, this is just the beginning of the page
         :param size: object's length
-        :return: paginated sequence with albums
+        :return: paginated list with albums
         :raise NotImplementedError: when called directly by abstract class instance
         """
         raise NotImplementedError
 
     @abstractmethod
-    async def get_artist_albums(self, artist_id: int) -> Sequence[BaseAlbumModel]:
+    async def get_artist_albums(self, artist_id: int) -> list[BaseAlbumModel]:
         """
-        Gets a non-paginated sequence with specified artist's albums sorted by
+        Gets a non-paginated list with specified artist's albums sorted by
         their creation date
 
         :param artist_id: artist's numeric identificator
-        :return: non-paginated sequence with albums
+        :return: non-paginated list with albums
         :raise NotImplementedError: when called directly by abstract class instance
         """
         raise NotImplementedError
@@ -133,11 +133,11 @@ class DAO(BaseInterface):
         album_type: Literal['album', 'single'],
         created_at: date,
         updated_at: datetime,
-        viewers_ids: Sequence[int],
-        likers_ids: Sequence[int],
-        artists_ids: Sequence[int],
-        tracks_ids: Sequence[int],
-        tags: Sequence[str],
+        viewers_ids: list[int],
+        likers_ids: list[int],
+        artists_ids: list[int],
+        tracks_ids: list[int],
+        tags: list[str],
         picture_url: str | None = None,
         description: str | None = None,
     ) -> int:
@@ -150,7 +150,7 @@ class DAO(BaseInterface):
         :param album_type: single or album
         :param created_at: creation date
         :param updated_at: last update date & time
-        :param viewers_ids: Sequence of numeric identificator of viewers who've seen it
+        :param viewers_ids: list of numeric identificator of viewers who've seen it
         :param likers_ids: numeric identificators of viewers who've liked it
         :param artists_ids: numeric identificators of artist who work on this album
         :param tracks_ids: numeric identificators of tracks included in this album
@@ -170,11 +170,11 @@ class DAO(BaseInterface):
         album_type: Literal['album', 'single'] | None = None,
         created_at: date | None = None,
         updated_at: datetime | None = None,
-        viewers_ids: Sequence[int] | None = None,
-        likers_ids: Sequence[int] | None = None,
-        artists_ids: Sequence[int] | None = None,
-        tracks_ids: Sequence[int] | None = None,
-        tags: Sequence[str] | None = None,
+        viewers_ids: list[int] | None = None,
+        likers_ids: list[int] | None = None,
+        artists_ids: list[int] | None = None,
+        tracks_ids: list[int] | None = None,
+        tags: list[str] | None = None,
     ) -> int:
         """
         Updates an existing album in storage. Almost every argument is optional
@@ -188,7 +188,7 @@ class DAO(BaseInterface):
         :param album_type: single or album
         :param created_at: creation date
         :param updated_at: last update date & time
-        :param viewers_ids: Sequence of numeric identificator of viewers who've seen it
+        :param viewers_ids: list of numeric identificator of viewers who've seen it
         :param likers_ids: numeric identificators of viewers who've liked it
         :param artists_ids: numeric identificators of artist who work on this album
         :param tracks_ids: numeric identificators of tracks included in this album

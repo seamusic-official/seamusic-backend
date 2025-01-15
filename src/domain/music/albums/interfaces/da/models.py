@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from typing import Literal, Sequence
+from typing import Literal
 
 
 class BaseAlbumModel:
@@ -12,8 +12,8 @@ class BaseAlbumModel:
     created_at: date
     updated_at: datetime
 
-    viewers_ids: Sequence[int]
-    likers_ids: Sequence[int]
-    artists: Sequence['BaseArtistModel']  # type: ignore[name-defined]  # noqa: F821
-    tracks: Sequence['BaseTrackModel']  # type: ignore[name-defined]  # noqa: F821
-    tags: Sequence['BaseTagModel']  # type: ignore[name-defined]  # noqa: F821
+    viewers_ids: list[int]
+    likers_ids: list[int]
+    artists: list['BaseArtistModel']  # type: ignore[name-defined]  # noqa: F821
+    tracks: list['BaseTrackModel']  # type: ignore[name-defined]  # noqa: F821
+    tags: list['BaseTagModel']  # type: ignore[name-defined]  # noqa: F821
