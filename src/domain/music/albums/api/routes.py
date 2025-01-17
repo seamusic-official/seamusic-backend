@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 from src.domain.music.albums.api.schemas import (
@@ -22,6 +22,7 @@ from src.domain.music.albums.core.service import BaseService
 
 @dataclass
 class BaseRouter(ABC):
+    @abstractmethod
     async def get_album(
         self,
         request: BaseSAlbumRequest,
@@ -30,6 +31,7 @@ class BaseRouter(ABC):
     ) -> BaseSAlbumResponse:
         raise NotImplementedError
 
+    @abstractmethod
     async def get_popular_albums(
         self,
         page: BaseSItemsRequest,
@@ -38,6 +40,7 @@ class BaseRouter(ABC):
     ) -> BaseSPopularAlbumsResponse:
         raise NotImplementedError
 
+    @abstractmethod
     async def get_artist_albums(
         self,
         request: BaseSArtistAlbumsRequest,
@@ -46,6 +49,7 @@ class BaseRouter(ABC):
     ) -> BaseSArtistAlbumsResponse:
         raise NotImplementedError
 
+    @abstractmethod
     async def update_cover(
         self,
         request: BaseSUpdateAlbumCoverRequest,
@@ -54,6 +58,7 @@ class BaseRouter(ABC):
     ) -> None:
         raise NotImplementedError
 
+    @abstractmethod
     async def like_album(
         self,
         request: BaseSLikeAlbumRequest,
@@ -62,6 +67,7 @@ class BaseRouter(ABC):
     ) -> None:
         raise NotImplementedError
 
+    @abstractmethod
     async def unlike_album(
         self,
         request: BaseSUnlikeAlbumRequest,
@@ -70,6 +76,7 @@ class BaseRouter(ABC):
     ) -> None:
         raise NotImplementedError
 
+    @abstractmethod
     async def create_album(
         self,
         request: BaseSCreateAlbumRequest,
@@ -78,6 +85,7 @@ class BaseRouter(ABC):
     ) -> BaseSCreateAlbumResponse:
         raise NotImplementedError
 
+    @abstractmethod
     async def update_album(
         self,
         request: BaseSUpdateAlbumRequest,
@@ -86,6 +94,7 @@ class BaseRouter(ABC):
     ) -> BaseSUpdateAlbumResponse:
         raise NotImplementedError
 
+    @abstractmethod
     async def delete_album(
         self,
         request: BaseSDeleteAlbumRequest,
