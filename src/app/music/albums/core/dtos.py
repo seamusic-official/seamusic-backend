@@ -77,7 +77,7 @@ class ItemsRequestDTO(BaseItemsRequestDTO, BaseModel):
     size: int = 10
 
 
-class ItemsResponseDTO(Generic[ItemType], BaseModel):
+class ItemsResponseDTO(BaseModel, Generic[ItemType]):
     total: int
     page: int
     has_next: bool
