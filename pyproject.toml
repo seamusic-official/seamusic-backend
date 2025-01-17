@@ -11,7 +11,6 @@ license-files = []
 dynamic = ["version"]
 
 [tool.poetry]
-name = "seamusic"
 package-mode = false
 readme = "README.md"
 
