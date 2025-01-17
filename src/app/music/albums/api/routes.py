@@ -41,7 +41,7 @@ class Router(BaseRouter):
         response_model=SAlbumResponse,
         status_code=status.HTTP_200_OK,
     )
-    async def get_album(
+    async def get_album(  # type: ignore[override]
         self,
         request: SAlbumRequest = Depends(SAlbumRequest),
         service: BaseService = Depends(get_service),
@@ -91,7 +91,7 @@ class Router(BaseRouter):
         response_model=SPopularAlbumsResponse,
         status_code=status.HTTP_200_OK,
     )
-    async def get_popular_albums(
+    async def get_popular_albums(  # type: ignore[override]
         self,
         page: SItemsRequest = Depends(SItemsRequest),
         service: BaseService = Depends(get_service),
@@ -126,7 +126,7 @@ class Router(BaseRouter):
         response_model=SArtistAlbumsResponse,
         status_code=status.HTTP_200_OK,
     )
-    async def get_artist_albums(
+    async def get_artist_albums(  # type: ignore[override]
         self,
         request: SArtistAlbumsRequest = Depends(SArtistAlbumsRequest),
         service: BaseService = Depends(get_service),
@@ -155,7 +155,7 @@ class Router(BaseRouter):
         summary='Update an album cover',
         status_code=status.HTTP_202_ACCEPTED,
     )
-    async def update_cover(
+    async def update_cover(  # type: ignore[override]
         self,
         request: SUpdateAlbumCoverRequest = Depends(SUpdateAlbumCoverRequest),
         service: BaseService = Depends(get_service),
@@ -172,7 +172,7 @@ class Router(BaseRouter):
         summary='Like an album',
         status_code=status.HTTP_202_ACCEPTED,
     )
-    async def like_album(
+    async def like_album(  # type: ignore[override]
         self,
         request: SLikeAlbumRequest = Depends(SLikeAlbumRequest),
         service: BaseService = Depends(get_service),
@@ -188,7 +188,7 @@ class Router(BaseRouter):
         summary='Unlike an album',
         status_code=status.HTTP_202_ACCEPTED,
     )
-    async def unlike_album(
+    async def unlike_album(  # type: ignore[override]
         self,
         request: SUnlikeAlbumRequest = Depends(SLikeAlbumRequest),
         service: BaseService = Depends(get_service),
@@ -205,7 +205,7 @@ class Router(BaseRouter):
         response_model=SCreateAlbumResponse,
         status_code=status.HTTP_201_CREATED,
     )
-    async def create_album(
+    async def create_album(  # type: ignore[override]
         self,
         request: SCreateAlbumRequest = Depends(SCreateAlbumRequest),
         service: BaseService = Depends(get_service),
@@ -225,7 +225,7 @@ class Router(BaseRouter):
         response_model=SUpdateAlbumResponse,
         status_code=status.HTTP_201_CREATED,
     )
-    async def update_album(
+    async def update_album(  # type: ignore[override]
         self,
         request: SUpdateAlbumRequest = Depends(SUpdateAlbumRequest),
         service: BaseService = Depends(get_service),
