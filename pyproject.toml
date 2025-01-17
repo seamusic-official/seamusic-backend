@@ -40,6 +40,7 @@ requests = "^2.32.3"
 sqlalchemy = "^2.0.32"
 types-requests = "^2.32.0.20240712"
 uvicorn = "^0.30.6"
+poetry = "^2.0.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"
