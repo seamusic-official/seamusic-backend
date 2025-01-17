@@ -1,6 +1,6 @@
 from abc import ABC
 from datetime import date, datetime
-from typing import Literal, Sequence
+from typing import Literal
 
 
 class BaseUserDTO(ABC):
@@ -65,9 +65,9 @@ class BaseAlbumResponseDTO(ABC):
     created_at: date
     updated_at: datetime
 
-    artists: Sequence[BaseArtistDTO]
-    tracks: Sequence[BaseTrackDTO]
-    tags: Sequence[str]
+    artists: list[BaseArtistDTO]
+    tracks: list[BaseTrackDTO]
+    tags: list[str]
 
 
 class BaseAlbumItemResponseDTO(ABC):
@@ -93,7 +93,7 @@ class BasePopularAlbumsResponseDTO(ABC):
     has_next: bool
     has_previous: bool
     size: int
-    items: Sequence[BaseAlbumItemResponseDTO]
+    items: list[BaseAlbumItemResponseDTO]
 
 
 class BaseCountAlbumsResponseDTO(ABC):
@@ -106,7 +106,7 @@ class BaseArtistAlbumsRequestDTO(ABC):
 
 class BaseArtistAlbumsResponseDTO(ABC):
     total: int
-    items: Sequence[BaseAlbumItemResponseDTO]
+    items: list[BaseAlbumItemResponseDTO]
 
 
 class BaseLikeAlbumRequestDTO(ABC):
@@ -129,7 +129,7 @@ class BaseCreateAlbumRequestDTO(ABC):
     title: str
     user_id: int
     description: str | None
-    tags: Sequence[str]
+    tags: list[str]
 
 
 class BaseCreateAlbumResponseDTO(ABC):
@@ -142,9 +142,9 @@ class BaseUpdateAlbumRequestDTO(ABC):
     title: str | None = None
     description: str | None = None
 
-    artists_ids: Sequence[int] | None = None
-    tracks_ids: Sequence[int] | None = None
-    tags: Sequence[str] | None = None
+    artists_ids: list[int] | None = None
+    tracks_ids: list[int] | None = None
+    tags: list[str] | None = None
 
 
 class BaseUpdateAlbumResponseDTO(ABC):

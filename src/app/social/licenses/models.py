@@ -3,7 +3,7 @@ from datetime import datetime, date
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 
 from src.app.auth.users.models import user_to_licenses_association
-from src.infrastructure.postgres.orm import Base
+from src.infrastructure.postgres import Base
 
 
 class License(Base):

@@ -1,14 +1,24 @@
+from collections.abc import Sequence as _Sequence
 from dataclasses import dataclass
-from typing import Any, Literal
+from typing import Any, Literal, Annotated, Generic, TypeVar
 
-from sqlalchemy import Executable
+from sqlalchemy import Executable, ARRAY
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from src.infrastructure.config import settings
-from src.infrastructure.postgres.orm import Base
 
 engine = create_async_engine(url=settings.db_url, echo=settings.echo)
 sessionmaker = async_sessionmaker(bind=engine, expire_on_commit=False)
+Type = TypeVar('Type')
+
+
+class Base(DeclarativeBase):
+    __abstract__ = True
+
+
+class Sequence(Generic[Type], Mapped[Annotated[_Sequence[Type], mapped_column(ARRAY(Type))]]):
+    pass
 
 
 @dataclass

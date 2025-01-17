@@ -150,10 +150,10 @@ class Service(BaseService):
         async with self.dao_impl_factory() as session:
             album = await session.get_album_by_id(album_id=request.album_id)
             album_exists = bool(album)
-            if album_exists and request.user_id not in album.likers_ids:
-                likers_ids = list(album.likers_ids).copy()
+            if album_exists and request.user_id not in album.likers_ids:  # type: ignore[union-attr]
+                likers_ids = list(album.likers_ids).copy()  # type: ignore[union-attr]
                 likers_ids.append(request.user_id)
-                await session.update_album(album_id=album.id, likers_ids=likers_ids)
+                await session.update_album(album_id=album.id, likers_ids=likers_ids)  # type: ignore[union-attr]
 
         if not album_exists:
             raise AlbumNotFoundError()
@@ -163,10 +163,10 @@ class Service(BaseService):
         async with self.dao_impl_factory() as session:
             album = await session.get_album_by_id(album_id=request.album_id)
             album_exists = bool(album)
-            if album_exists and request.user_id in album.likers_ids:
-                likers_ids = list(album.likers_ids).copy()
+            if album_exists and request.user_id in album.likers_ids:  # type: ignore[union-attr]
+                likers_ids = list(album.likers_ids).copy()  # type: ignore[union-attr]
                 likers_ids.remove(request.user_id)
-                await session.update_album(album_id=album.id, likers_ids=likers_ids)
+                await session.update_album(album_id=album.id, likers_ids=likers_ids)  # type: ignore[union-attr]
 
         if not album_exists:
             raise AlbumNotFoundError()
@@ -177,7 +177,7 @@ class Service(BaseService):
             artist_id = await dao_session.get_artist_id_by_user_id(user_id=request.user_id)
             album = await dao_session.get_album_by_id(album_id=request.album_id)
             artist_exists = bool(artist_id)
-            album_artist_ids = list(map(lambda artist: artist.id, album.artists))
+            album_artist_ids = list(map(lambda artist: artist.id, album.artists))  # type: ignore[union-attr]
             artists_rights = artist_id in album_artist_ids
             if artist_exists and artists_rights:
                 async with self.mao_impl_factory() as mao_session:
@@ -199,7 +199,7 @@ class Service(BaseService):
             artist_id = await session.get_artist_id_by_user_id(user_id=request.user_id)
             artist_exists = bool(artist_id)
             if artist_exists:
-                album_exists = await session.get_album_existance_by_title(artist_id=artist_id, title=request.title)
+                album_exists = await session.get_album_existance_by_title(artist_id=artist_id, title=request.title)  # type: ignore[arg-type]
                 if not album_exists:
                     album_id = await session.create_album(
                         title=request.title,
@@ -210,7 +210,7 @@ class Service(BaseService):
                         updated_at=datetime.now(),
                         viewers_ids=list(),
                         likers_ids=list(),
-                        artists_ids=[artist_id],
+                        artists_ids=[artist_id],  # type: ignore[list-item]
                         tracks_ids=list(),
                         tags=request.tags,
                     )

@@ -16,7 +16,7 @@ jobs:
       - name: Install and configure Poetry
         uses: snok/install-poetry@v1
         with:
-          version: 1.5.1
+          version: 2.0.1
           virtualenvs-create: true
           virtualenvs-in-project: false
       - name: Install dependencies
@@ -36,7 +36,7 @@ jobs:
       - name: Install and configure Poetry
         uses: snok/install-poetry@v1
         with:
-          version: 1.5.1
+          version: 2.0.1
           virtualenvs-create: true
           virtualenvs-in-project: false
       - name: Install dependencies
@@ -45,3 +45,5 @@ jobs:
         run: poetry run mypy -p src --cache-dir=/dev/null --config-file=pyproject.toml
       - name: Run mypy for tests
         run: poetry run mypy -p tests --cache-dir=/dev/null --config-file=pyproject.toml
+      - name: Run mypy for migrations
+        run: poetry run mypy -p migrations --cache-dir=/dev/null --config-file=pyproject.toml

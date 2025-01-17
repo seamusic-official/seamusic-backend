@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Callable, Sequence
+from typing import Callable
 
 from src.domain.music.albums.core.dtos import (
     BaseAlbumResponseDTO,
@@ -118,7 +118,7 @@ class BaseService(ABC):
         title: str,
         user_id: int,
         description: str | None,
-        tags: Sequence[str],
+        tags: list[str],
     ) -> BaseCreateAlbumResponseDTO:
         """
         Creates a new album
@@ -142,9 +142,9 @@ class BaseService(ABC):
         user_id: int,
         title: str | None = None,
         description: str | None = None,
-        artists_ids: Sequence[int] | None = None,
-        tracks_ids: Sequence[int] | None = None,
-        tags: Sequence[str] | None = None,
+        artists_ids: list[int] | None = None,
+        tracks_ids: list[int] | None = None,
+        tags: list[str] | None = None,
     ) -> BaseUpdateAlbumResponseDTO:
         """
         Updates an existing album. Almost every argument is optional

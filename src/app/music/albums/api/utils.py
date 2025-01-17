@@ -1,12 +1,13 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel
+
+from src.domain.music.albums.api.schemas import BaseCurrentUser
 
 
 # from src.domain.auth.users.core.service import BaseService
 
 
-class CurrentUser(BaseModel):
+class CurrentUser(BaseCurrentUser, BaseModel):
     id: int
-    model_config = ConfigDict(extra='ignore')
 
 
 async def get_current_user() -> CurrentUser:

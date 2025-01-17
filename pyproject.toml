@@ -10,7 +10,6 @@ requires-python = "^3.11.11"
 license-files = []
 dynamic = ["version"]
 
-
 [tool.poetry]
 package-mode = false
 readme = "README.md"
@@ -41,6 +40,7 @@ requests = "^2.32.3"
 sqlalchemy = "^2.0.32"
 types-requests = "^2.32.0.20240712"
 uvicorn = "^0.30.6"
+poetry = "^2.0.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"
@@ -93,3 +93,7 @@ ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+filterwarnings = [
+    "error",
+    "ignore::UserWarning",
+]

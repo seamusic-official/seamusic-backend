@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy.orm import Mapped, mapped_column
 
-from src.infrastructure.postgres.orm import Base
+from src.infrastructure.postgres import Base
 
 
 class Notification(Base):

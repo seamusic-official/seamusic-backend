@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy import ForeignKey, Integer, Column, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.infrastructure.postgres.orm import Base
+from src.infrastructure.postgres import Base
 
 user_to_comments_association = Table(
     "user_to_comments_association",

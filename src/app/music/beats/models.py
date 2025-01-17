@@ -3,7 +3,7 @@ from datetime import date, datetime
 from sqlalchemy import Table, Column, ForeignKey
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 
-from src.infrastructure.postgres.orm import Base
+from src.infrastructure.postgres import Base, Sequence
 
 tag_to_beat_association = Table(
     "tag_to_beat_association",
@@ -32,8 +32,8 @@ class Beat(Base):
     created_at: Mapped[date]
     updated_at: Mapped[datetime]
 
-    viewers_ids: Mapped[list[int]]
-    likers_ids: Mapped[list[int]]
+    viewers_ids: Sequence[int]
+    likers_ids: Sequence[int]
     producers: Mapped[list["ProducerProfile"]] = relationship(  # type: ignore[name-defined]  # noqa: F821
         secondary=producer_to_beat_association,
         back_populates="beats"
