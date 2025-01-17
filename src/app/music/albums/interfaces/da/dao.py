@@ -9,7 +9,7 @@ from src.app.music.albums.interfaces.da.models import Album
 from src.app.music.tracks.models import Track
 from src.app.social.tags.models import Tag
 from src.domain.music.albums.interfaces.da.dao import DAO
-from src.infrastructure.postgres.client import PostgresSessionMixin
+from src.infrastructure.postgres import PostgresSessionMixin
 
 
 @dataclass

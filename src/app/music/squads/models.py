@@ -3,7 +3,7 @@ from datetime import date, datetime
 from sqlalchemy import Table, ForeignKey, Integer, Column
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 
-from src.infrastructure.postgres.orm import Base
+from src.infrastructure.postgres import Base
 
 follower_to_squads_association = Table(
     "follower_to_squads_association",

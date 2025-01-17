@@ -1,10 +1,12 @@
 from datetime import datetime, date
 
 from sqlalchemy import ForeignKey, Column, Table, Integer
-from sqlalchemy.orm import mapped_column, Mapped
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.app.auth.users.models import user_to_producer_association
-from src.infrastructure.postgres.orm import Base
+from src.app.music.beats.models import producer_to_beat_association
+from src.app.music.squads.models import producer_to_squad_association
+from src.infrastructure.postgres import Base
 
 producer_to_beatpacks_association = Table(
     "producer_to_beatpacks_association",

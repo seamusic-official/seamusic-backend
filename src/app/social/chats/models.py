@@ -1,7 +1,7 @@
 from sqlalchemy import Integer, Column, ForeignKey, Table
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 
-from src.infrastructure.postgres.orm import Base
+from src.infrastructure.postgres import Base
 
 user_to_chat_association = Table(
     "user_to_chat_association",
